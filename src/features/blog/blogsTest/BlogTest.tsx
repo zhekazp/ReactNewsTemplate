@@ -5,43 +5,39 @@ import { AppDispatch } from "../../../store";
 import { deleteBlog, editBlog, IBlogTest } from "./blogSliceTest";
 import { NavLink } from "react-router-dom";
 
-
 interface IProps {
   blog: IBlogTest;
   index: number;
 }
 
-const BlogTest: FC<IProps> = ({
-  blog,
-  index
-}) => {
+const BlogTest: FC<IProps> = ({ blog, index }) => {
   const [isEdit, setIsEdit] = React.useState(false);
   const textRef: RefObject<HTMLTextAreaElement> = useRef(null); // { current: document.getElementById() }'
 
   const dispatch: AppDispatch = useDispatch();
 
   const handleDeleteBlog = () => {
-    dispatch(deleteBlog(index))
+    dispatch(deleteBlog(index));
   };
 
   const handleClickSave = () => {
     if (textRef.current) {
-      dispatch(editBlog({
-        id: index,
-        title: textRef.current.value,
-        body: textRef.current.value,
-        updatedAt: new Date()
-        // authorId
-      }));
+      dispatch(
+        editBlog({
+          id: index,
+          title: textRef.current.value,
+          body: textRef.current.value,
+          updatedAt: new Date(),
+          // authorId
+        })
+      );
       setIsEdit(false);
     }
   };
 
-
   return (
-    
     <div>
-      <div className="card-body">
+      <div className="card">
         {isEdit ? (
           <div>
             <textarea
@@ -57,19 +53,17 @@ const BlogTest: FC<IProps> = ({
             </button>
           </div>
         ) : (
+          <div className="card-body">
             <div>
-               <NavLink
-              className='user-card-navlink'
-              to={`/blog/${blog.id}`}
-              >
-              <div className='user-info'>
-                <p className="user-card-navlink_title">{blog.title}</p>
-              </div>
-            </NavLink>
-            <small className="text-muted me-5">
-              Updated on: {new Date(blog.updatedAt).toLocaleString()}
-            </small>
-            {/* <button
+              <NavLink className="user-card-navlink" to={`/blog/${blog.id}`}>
+                <div className="">
+                  <p className="card-title">{blog.title}</p>
+                </div>
+              </NavLink>
+              <small className="text-muted me-5">
+                Updated on: {new Date(blog.updatedAt).toLocaleString()}
+              </small>
+              {/* <button
               onClick={() => setIsEdit(true)}
               className="btn btn-warning btn-sm me-2"
             >
@@ -79,6 +73,7 @@ const BlogTest: FC<IProps> = ({
               Del
             </button> */}
             </div>
+          </div>
         )}
       </div>
     </div>

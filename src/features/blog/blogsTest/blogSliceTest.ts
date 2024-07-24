@@ -64,14 +64,10 @@ export interface IBlogFetchTest {
         state.blogsTest = state.blogsTest.filter((_, index) => action.payload !== index);
       },
       editBlog(state, action: PayloadAction<IBlogTest>) {
-        if (
-          state.blogsTest[action.payload.id].title !== action.payload.title
-        ) {
-          state.blogsTest = sortByDate(
-            state.blogsTest.map((e, index) =>
-              index === action.payload.id ? action.payload : e
-            )
-          );
+        const index = state.blogsTest.findIndex(blog => blog.id === action.payload.id);
+        if (index !== -1) {
+          state.blogsTest[index] = action.payload;
+          state.blogsTest = sortByDate(state.blogsTest);
         }
       },
     },
