@@ -2,7 +2,7 @@ import React, { FC, RefObject, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { AppDispatch, RootState } from "../../../store";
-import { deleteBlog, editBlog, IBlogTest } from "./blogSliceTest";
+import { deleteBlog, editBlog} from "./blogSliceTest";
 
 const BlogDetailsTest: FC = () => {
   const { blogsTest } = useSelector((state: RootState) => state.blogSliceTest);
