@@ -12,12 +12,12 @@ src/
 │   ├── About.tsx                # Страница "О нас"
 │   ├── Contact.tsx              # Страница "Контакты"
 │   ├── Blog.tsx                 # Страница "Блог"
-│   ├── Advertisement.tsx        # Страница "Реклама"
+│   ├── Advertisement.tsx        # Страница "Аренда"
 │   ├── News.tsx                 # Страница "Новости"
 │   ├── NewsDetail.tsx           # Страница детали новости
 │   ├── Login.tsx                # Страница входа
 │   ├── Register.tsx             # Страница регистрации
-│   ├── UserProfile.tsx          # Страница личного кабинета
+│   └── UserProfile.tsx          # Страница личного кабинета
 ├── features/
 │   ├── contactUs/
 │   │   ├── contactUsSlice.ts    # Слайс для контактной формы

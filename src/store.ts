@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-
-// Заглушка редьюсера
-const dummyReducer = (state = {}, action: any) => state;
+import newsReducer from "./features/news/newsSlice";
+import contactUsReducer from "./features/contactUs/contactUsSlice";
 
 const store = configureStore({
     reducer: {
-        dummy: dummyReducer,
+       news: newsReducer,
+       contactForm: contactUsReducer,
     }
 })
 

@@ -3,6 +3,7 @@ import { uid } from 'uid'
 import { menu } from "../util/elements.jsx";
 import Nav from 'react-bootstrap/Nav';
 import { menuItems } from '../config/menuConfig.js';
+import Navigation from './header/Navigation.js';
 
 
 const Footer = () => {
@@ -12,14 +13,7 @@ const current=0;
     <div className="fBlock">
         <div className="fTopBlock">
             <div className="container">
-                <ul className="buttonMenu">
-                    {menuItems.map((item, index) =>
-                        <li key={uid()}>
-                            <a className={current === index ? 'mActive footerA' : "footerA"}
-                                href="">{item.title}</a>
-                        </li>
-                    )}
-                </ul>
+                <Navigation />
             </div>
         </div>
         <div className="fInfo">

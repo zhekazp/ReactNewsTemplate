@@ -1,6 +1,6 @@
 import { menu } from "../util/elements,jsx"
 import { uid } from "uid"
-import Nav from 'react-bootstrap/Nav';
+// import Nav from 'react-bootstrap/Nav';
 
 const Footer = () => {
     const current = 0;
