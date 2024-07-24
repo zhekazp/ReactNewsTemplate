@@ -49,54 +49,61 @@ const BlogDetailsTest: FC = () => {
   }
 
   return (
-    <div className="container mt-4 d-flex justify-content-center">
+    <div className="container mt-4">
       {isEdit ? (
-        <div>
-          <p>Edit Title: </p>
-          <textarea
-            ref={titleRef}
-            defaultValue={currentBlog.title}
-            className="form-control mb-2"
-          />
-          <p>Edit Body: </p>
-          <textarea
-            ref={bodyRef}
-            defaultValue={currentBlog.body}
-            className="form-control mb-2"
-          />
-          <button
-            onClick={handleClickSave}
-            className="btn btn-success btn-sm me-2"
-          >
-            Save
-          </button>
+        <div className="d-flex flex-column align-items-center">
+          <div className="w-75">
+            <p>Edit Title: </p>
+            <textarea
+              ref={titleRef}
+              defaultValue={currentBlog.title}
+              className="form-control mb-2"
+              style={{ minHeight: '50px' }}
+            />
+            <p>Edit Body: </p>
+            <textarea
+              ref={bodyRef}
+              defaultValue={currentBlog.body}
+              className="form-control mb-2"
+              style={{ minHeight: '200px' }}
+            />
+            <button
+              onClick={handleClickSave}
+              className="btn btn-success btn-sm me-2"
+            >
+              Save
+            </button>
+          </div>
         </div>
       ) : (
-        <div
-          className="card mb-3"
-          style={{ boxShadow: "0 4px 8px rgba(0,0,0,0.1)", width: "400px" }}
-        >
+        <div className="card mb-3 mx-auto" style={{ boxShadow: '0 4px 8px rgba(0,0,0,0.1)', maxWidth: '800px' }}>
           <div className="card-body text-center">
-            <div className="d-flex flex-column align-items-center text-center p-3 py-5" />
-            <h4 className="text-center mb-4">{currentBlog.title}</h4>
-            <p>{currentBlog.body}</p>
-            <button
-              onClick={() => setIsEdit(true)}
-              className="btn btn-warning btn-sm me-2"
-            >
-              Edit
-            </button>
-            <button onClick={handleDeleteBlog} className="btn btn-danger btn-sm">
-              Del
-            </button>
-            <button
-              onClick={() => {
-                navigate("/blog");
-              }}
-              className="btn btn-secondary mt-3"
-            >
-              Close
-            </button>
+            <div className="d-flex flex-column align-items-center text-center p-3 py-5">
+              <h2 className="text-center mb-4">{currentBlog.title}</h2>
+              <p className="text-justify">{currentBlog.body}</p>
+              <div className="d-flex justify-content-center mt-3">
+                <button
+                  onClick={() => setIsEdit(true)}
+                  className="btn btn-warning btn-sm me-2"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={handleDeleteBlog}
+                  className="btn btn-danger btn-sm me-2"
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/blog');
+                  }}
+                  className="btn btn-secondary btn-sm"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
