@@ -1,86 +1,80 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
 import NewsComponent from '../features/news/NewsComponent';
-import { fetchNews } from '../features/news/newsSlice';
+import { fetchNews, fetchNewsBySection, INewsItem } from '../features/news/newsSlice';
+import  Dropdown  from 'react-bootstrap/DropDown';
 
 const News = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { newsArr, status } = useSelector((state: RootState) => state.news);
+
+  const { newsArr, status, sections } = useSelector((state: RootState) => state.news);
+  const [selectedSection, setSelectedSection] = useState<string | null>(null);
 
   useEffect(() => {
+    // dispatch(fetchNews());
+
+    if (selectedSection) {
+      dispatch(fetchNewsBySection(selectedSection));
+  } else{
     dispatch(fetchNews());
-  }, [dispatch]); 
-  useEffect(() => {
-    console.log("News status:", status);
-    console.log("News items:", newsArr);
-  }, [status, newsArr]);
+  }
+
+
+  }, [dispatch, selectedSection]);
+
+
+
+
+  const handleSelect = (eventKey: string | null) => {
+    if (eventKey) {
+      setSelectedSection(eventKey);
+  }
+  };
+
   return (
-    <div>
-      {status === "loading" && (
-                <div className="spinner-border text-warning" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </div>
-            )}
-            { status === 'success' && (newsArr.map((newsItem) => (
-              <NewsComponent
-                key={newsItem.id}
-                newsItem={newsItem}
-              />)
-            ))}
-            {status === "error" && (
-                <>Error!</>
-            )}
+    <section>
+      <div className='container d-flex'>
+        <div className='news-aside'>
+          <Dropdown onSelect={handleSelect}>
+            <Dropdown.Toggle variant="success" id="dropdown-basic">
+            {selectedSection || "Select Section"}
+            </Dropdown.Toggle>
 
+            <Dropdown.Menu>
+            {sections.map((section) => (
+                                <Dropdown.Item 
+                                    key={section} 
+                                    eventKey={section}
+                                >
+                                    {section}
+                                </Dropdown.Item>
+                            ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+        <div className='news-content'>
+          {status === "loading" && (
+            <div className="spinner-border text-warning" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          )}
+          {status === 'success' && (newsArr.map((newsItem) => (
+            <NewsComponent
+              key={newsItem.id}
+              newsItem={newsItem}
+            />)
+          ))}
+          {status === "error" && (
+            <>Error!</>
+          )}
+        </div>
+      </div>
 
-    </div>
-    )
+    </section>
+  )
 }
 
 export default News
 
 
-
-
-
-// import React from 'react'
-// import { AppDispatch, RootState } from '../store';
-// import { useDispatch, useSelector } from 'react-redux';
-// import NewsComponent from '../features/news/NewsComponent';
-
-// const News = () => {
-//   const { newsItems, status } = useSelector((state: RootState) => state.news);
-//   const dispatch: AppDispatch = useDispatch();
-
-//   return (
-//     <div>
-//       <div className="container mt-4">
-//           <h1 className="mb-4 text-center">News List</h1>
-//          { newsItems.map((newsItem) => (
-//               <NewsComponent
-//                 key={newsItem.id}
-//                 newsItem={newsItem}
-//               />
-//             ))}
-//           {/* <div>
-//             {status === "loading" && (
-//                 <div className="spinner-border text-warning" role="status">
-//                     <span className="visually-hidden">Loading...</span>
-//                 </div>
-//             )}
-//             { status === 'success' && newsItems.map((newsItem) => (
-//               <NewsComponent
-//                 key={newsItem.id}
-//                 newsItem={newsItem}
-//               />
-//             ))}
-//             {status === "error" && (
-//                 <>Error!</>
-//             )}
-//           </div> */}
-//         </div>
-//     </div>
-//   )
-// }
-
-// export default News

@@ -10,6 +10,7 @@ import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import News from "./pages/News";
 import './style/main.css'
+import NewsDetail from "./pages/NewsDetail";
 // import NewsDetail from "./pages/NewsDetail";
 
 
@@ -30,6 +31,7 @@ function App() {
             <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
                 <Route path="news/" element={<News />} />
+                <Route path="news/:id" element={<NewsDetail />} />
                 <Route path="blog" element={<Blog />} />
                 <Route path="advertisement" element={<Advertisement />} />
                 <Route path="about" element={<AboutUs />} />
