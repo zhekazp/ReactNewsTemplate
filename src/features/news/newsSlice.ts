@@ -28,12 +28,14 @@ export interface initialNewsState {
     status: null | "loading" | "success" | "error";
     selectedNews: INewsItem | null;
     sections: string[];
+    // regions: { [key: number]: string };
 }
 const initialState: initialNewsState = {
     newsArr: [],
     status: null,
     selectedNews: null,
     sections: [],
+    // regions: {},
 };
 export const fetchNews = createAsyncThunk<INewsItem[], void, { state: RootState }>(
     'news/fetchNews', async () => {
@@ -51,6 +53,16 @@ export const fetchNewsBySection = createAsyncThunk<INewsItem[], string, { state:
         const data = (await axios.get<INewsItem[]>(`/api/news/section/${sectionName}`)).data;
         return data;
     });
+    export const fetchRegionsBySection = createAsyncThunk<{ [key: number]: string }, void, { state: RootState }>(
+        'news/fetchRegionsBySection', async () => {
+            const data = (await axios.get<{ regionId: number; regionName: string }[]>('/api/news/findBy')).data;
+            const regions = data.reduce((acc: { [key: number]: string }, region) => {
+                acc[region.regionId] = region.regionName;
+                return acc;
+            }, {});
+            return regions;
+        }
+    );
 
 const newsSlice = createSlice({
     name: 'news',

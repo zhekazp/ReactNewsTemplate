@@ -40,7 +40,8 @@ const NewsDetail: FC = () => {
     };
     
   return (
-    <div>
+    <section>
+         <div className='container'>
          {status === "loading" && (
                 <div className="spinner-border text-warning" role="status">
                     <span className="visually-hidden">Loading...</span>
@@ -64,8 +65,9 @@ const NewsDetail: FC = () => {
             {status === "error" && (
                 <>Error load newsItem!</>
             )}
+         </div>
        
-    </div>
+    </section>
   )
 }
 

@@ -34,7 +34,7 @@ const News = () => {
 
   return (
     <section>
-      <div className='container d-flex'>
+      <div className='container d-flex '>
         <div className='news-aside'>
           <Dropdown onSelect={handleSelect}>
             <Dropdown.Toggle variant="success" id="dropdown-basic">
@@ -53,7 +53,7 @@ const News = () => {
             </Dropdown.Menu>
           </Dropdown>
         </div>
-        <div className='news-content'>
+        <div className='news-content d-flex flex-wrap'>
           {status === "loading" && (
             <div className="spinner-border text-warning" role="status">
               <span className="visually-hidden">Loading...</span>
@@ -61,9 +61,9 @@ const News = () => {
           )}
           {status === 'success' && (newsArr.map((newsItem) => (
             <NewsComponent
-              key={newsItem.id}
-              newsItem={newsItem}
-            />)
+            key={newsItem.id}
+            newsItem={newsItem}
+          /> )
           ))}
           {status === "error" && (
             <>Error!</>
