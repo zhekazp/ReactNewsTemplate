@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { AppDispatch, RootState } from "../store";
 import { sendForm, updateForm } from "../features/contactUs/contactUsSlice";
-// import style from '../styles/ContactUs.module.css'
+// import '../styles/ContactUs.css'
 
 interface Errors {
     name?: string;

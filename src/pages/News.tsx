@@ -2,23 +2,24 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
 import NewsComponent from '../features/news/NewsComponent';
-import { fetchNews, fetchNewsBySection, INewsItem } from '../features/news/newsSlice';
+import { fetchNews,   INewsItem } from '../features/news/newsSlice';
 import  Dropdown  from 'react-bootstrap/DropDown';
+import '../style/news.css'
 
 const News = () => {
   const dispatch: AppDispatch = useDispatch();
 
-  const { newsArr, status, sections } = useSelector((state: RootState) => state.news);
+  const { newsArr, status } = useSelector((state: RootState) => state.news);
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
 
   useEffect(() => {
     // dispatch(fetchNews());
 
-    if (selectedSection) {
-      dispatch(fetchNewsBySection(selectedSection));
-  } else{
+  //   if (selectedSection) {
+  //     dispatch(fetchRegionsBySection(selectedSection));
+  // } else{
     dispatch(fetchNews());
-  }
+  // }
 
 
   }, [dispatch, selectedSection]);
@@ -33,8 +34,8 @@ const News = () => {
   };
 
   return (
-    <section>
-      <div className='container d-flex '>
+    <section className= "">
+      <div className='container d-flex news_content'>
         <div className='news-aside'>
           <Dropdown onSelect={handleSelect}>
             <Dropdown.Toggle variant="success" id="dropdown-basic">
@@ -42,14 +43,14 @@ const News = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-            {sections.map((section) => (
+            {/* {news.map((section) => (
                                 <Dropdown.Item 
                                     key={section} 
                                     eventKey={section}
                                 >
                                     {section}
                                 </Dropdown.Item>
-                            ))}
+                            ))} */}
             </Dropdown.Menu>
           </Dropdown>
         </div>

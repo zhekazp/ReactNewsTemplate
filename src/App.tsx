@@ -36,6 +36,8 @@ function App() {
                 <Route path="advertisement" element={<Advertisement />} />
                 <Route path="about" element={<AboutUs />} />
                 <Route path="contact" element={<ContactUs />} />
+
+                <Route path="/news/:sectionName" element={<News />} />
                 </Route>
             </Routes>
         </>
