@@ -9,7 +9,8 @@ a, .news_content a{
     color: #fff;
 }
 .news_content .news_img{
-    width: 250px;
+    height: 180px;
+    width: 100%;
 }
 
 .news_content, .news_comments, .newsItem_content{
@@ -48,4 +49,7 @@ a, .news_content a{
 .filter_block{
     background-color: #000;
     margin-bottom: 10px;
+}
+.news-meta{
+
 }

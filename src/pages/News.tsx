@@ -50,7 +50,7 @@ const News = () => {
     <section className="">
       <div className='container d-flex news_content'>
         <div className='news-aside col-md-5 col-lg-4'>
-          <div className='filter_block'>
+          <div className='filter_block d-flex flex-column'>
             <h3>Filter by Section</h3>
             {sections.map((section) => (
               <label key={section}>
@@ -64,7 +64,7 @@ const News = () => {
               </label>
             ))}
           </div>
-          <div className='filter_block'>
+          <div className='filter_block d-flex flex-column'>
             <h3>Filter by Region</h3>
             {regions.map((region) => (
               <label key={region}>

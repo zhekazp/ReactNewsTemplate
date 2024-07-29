@@ -55,8 +55,8 @@ const NewsDetail: FC = () => {
                         <div className='newsItem_content'>
                             <img src={newsItem.titleImageWide} alt={newsItem.title} />
                             <h1>{newsItem.title}</h1>
-                            <div className='news-meta'>
-                                <p>{formatDate(newsItem.date)}</p>
+                            <div className='news-meta d-flex align-items-center my-4'>
+                                <p className='m-0'>{formatDate(newsItem.date)}</p>
                                 <button onClick={() => handleReaction(true, false)}>
                                 <span className='activity_sm_block'><FontAwesomeIcon icon={faThumbsUp} /><span className='activity_counter'>{newsItem.likeCount}</span></span>
                             </button>
@@ -72,6 +72,33 @@ const NewsDetail: FC = () => {
                             <h2>Comments:</h2>
                             <div className='comment-form'>
                                 <h3>Leave a Comment:</h3>
+                                <form>
+                                    {/* <div className='form-group'>
+                                        <label htmlFor='authorName'>Name:</label>
+                                        <input
+                                            type='text'
+                                            id='authorName'
+                                            value={authorName}
+                                            onChange={(e) => setAuthorName(e.target.value)}
+                                            required
+                                            className='form-control'
+                                        />
+                                    </div> */}
+                                    <div className='form-group'>
+                                        <label htmlFor='comment'>Enter your comment:</label>
+                                        <textarea
+                                            id='comment'
+                                            value={comment}
+                                            onChange={(e) => setComment(e.target.value)}
+                                            required
+                                            className='form-control'
+                                        />
+                                    </div>
+                                    <button type='submit' className='btn btn-primary' disabled={submitting}>
+                                        {submitting ? 'Submitting...' : 'Submit'}
+                                    </button>
+                                </form>
+
                                 {newsItem.commentsCount === 0 && <p>There are no comments yet</p>}
                                 {comments.map(comment => (
                                     <div key={comment.id} className="comment">
