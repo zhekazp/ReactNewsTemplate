@@ -4,7 +4,7 @@ a, .news_content a{
     text-decoration: none;
 }
 
- .newsItem_content, .news_comments{
+ .newsItem_content, .news_comments, .news-aside{
     background-color: #292b2d;
     color: #fff;
 }
@@ -41,4 +41,11 @@ a, .news_content a{
     align-items: center;
     border-radius: 50%;
     border: 1px solid #fff;
+}
+.news-aside{
+    padding: 10px;
+}
+.filter_block{
+    background-color: #000;
+    margin-bottom: 10px;
 }

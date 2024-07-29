@@ -21,7 +21,7 @@ export interface INewsItem {
 
 export interface NewsResponse {
     pageCount: number;
-    currentPage: number;
+    currentPage: number; 
     newsDataPage: INewsItem[];
 }
 export interface IComment {
@@ -31,7 +31,11 @@ export interface IComment {
     commentDate: string;
     comment: string;
 }
-
+export interface ReactionPayload {
+    newsId: number;
+    liked: boolean;
+    disliked: boolean;
+}
 export interface CommentsResponse {
     comments: IComment[];
 }
@@ -43,6 +47,8 @@ export interface initialNewsState {
     pageCount: number;
     currentPage: number;
     comments: IComment[];
+    sections: string[];
+    regions: string[];
 }
 const initialState: initialNewsState = {
     newsArr: [],
@@ -51,6 +57,8 @@ const initialState: initialNewsState = {
     pageCount: 0,
     currentPage: 0,
     comments: [],
+    sections: [],
+    regions: [],
 
 };
 
@@ -72,6 +80,13 @@ export const fetchNewsById = createAsyncThunk<INewsItem, number, { state: RootSt
         return data;
     }
 );
+export const fetchPutReaction = createAsyncThunk<INewsItem, ReactionPayload, { state: RootState }>(
+    'news/fetchPutReaction', async (payload) => {
+        const { newsId, liked, disliked } = payload;
+        const data = (await axios.put<INewsItem>(`/api/news/reaction`, { newsId, liked, disliked })).data;
+        return data;
+    }
+);
 export const fetchComments = createAsyncThunk<CommentsResponse, number, { state: RootState }>(
     'news/fetchComments', async (newsId, { rejectWithValue }) => {
         try {
@@ -85,6 +100,20 @@ export const fetchComments = createAsyncThunk<CommentsResponse, number, { state:
                 return rejectWithValue(error.message);
             }
         }
+    }
+);
+
+export const fetchFilteredNews = createAsyncThunk<NewsResponse, { page: number; section?: string; region?: string }, { state: RootState }>(
+    'news/fetchFilteredNews',
+    async ({ page, section = '', region = '' }) => {
+        const params = new URLSearchParams({
+            page: page.toString(),
+            section,
+            region
+        });
+
+        const response = await axios.get<NewsResponse>(`/api/news/findBy?${params.toString()}`);
+        return response.data;
     }
 );
 
@@ -114,7 +143,16 @@ const newsSlice = createSlice({
                 // state.sections = Array.from(new Set(action.payload.map(news => news.sectionName)));
 
                 state.newsArr = action.payload.newsDataPage;
-                // state.sections = Array.from(new Set(action.payload.newsDataPage.map(news => news.sectionName)));
+                const sectionsSet = new Set<string>();
+                const regionsSet = new Set<string>();
+
+                action.payload.newsDataPage.forEach(news => {
+                    sectionsSet.add(news.sectionName);
+                    regionsSet.add(news.regionName);
+                });
+
+                state.sections = Array.from(sectionsSet);
+                state.regions = Array.from(regionsSet);
                 state.pageCount = action.payload.pageCount;
                 state.currentPage = action.payload.currentPage;
             })
@@ -144,29 +182,31 @@ const newsSlice = createSlice({
             .addCase(fetchComments.rejected, (state, action) => {
                 state.status = 'error';
                 console.error("Failed to fetch comments by newsID::", action.error.message);
+            })
+            .addCase(fetchPutReaction.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchPutReaction.fulfilled, (state, action) => {
+                state.status = 'success';
+                state.selectedNews = action.payload;
+            })
+            .addCase(fetchPutReaction.rejected, (state, action) => {
+                state.status = 'error';
+                console.error('Failed to put reaction:', action.error.message);
+            })
+            .addCase(fetchFilteredNews.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchFilteredNews.fulfilled, (state, action) => {
+                state.status = 'success';
+                state.newsArr = action.payload.newsDataPage;
+                state.pageCount = action.payload.pageCount;
+                state.currentPage = action.payload.currentPage;
+            })
+            .addCase(fetchFilteredNews.rejected, (state, action) => {
+                state.status = 'error';
+                console.error("Failed to fetch filtered news:", action.error.message);
             });
-        // .addCase(fetchRegionsBySection.pending, (state) => {
-        //     state.status = 'loading';
-        // })
-        // .addCase(fetchRegionsBySection.fulfilled, (state, action) => {
-        //     state.status = 'success';
-        //     // state.newsArr = action.payload;
-
-        //     // state.status = 'success';
-        //     // const regionsMap = action.payload.reduce((acc, region) => {
-        //     //     acc[region.regionId] = region.regionName;
-        //     //     return acc;
-        //     // }, {} as { [key: number]: string });
-        //     // state.regions = regionsMap;
-
-        //     state.newsArr = action.payload.newsDataPage; // Обновляем newsArr с данными из fetchRegionsBySection
-        //     state.pageCount = action.payload.pageCount;
-        //     state.currentPage = action.payload.currentPage;
-        // })
-        // .addCase(fetchRegionsBySection.rejected, (state, action) => {
-        //     state.status = 'error';
-        //     console.error("Failed to fetch news by section:", action.error.message);
-        // });
 
     }
 })

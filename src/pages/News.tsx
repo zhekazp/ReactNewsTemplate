@@ -2,59 +2,88 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
 import NewsComponent from '../features/news/NewsComponent';
-import { fetchNews,   INewsItem } from '../features/news/newsSlice';
-import  Dropdown  from 'react-bootstrap/DropDown';
+import { fetchFilteredNews, fetchNews, INewsItem } from '../features/news/newsSlice';
+import Dropdown from 'react-bootstrap/DropDown';
 import '../style/news.css'
 
 const News = () => {
   const dispatch: AppDispatch = useDispatch();
 
-  const { newsArr, status } = useSelector((state: RootState) => state.news);
-  const [selectedSection, setSelectedSection] = useState<string | null>(null);
+  const { newsArr, status, sections = [], regions = [] } = useSelector((state: RootState) => state.news);
+
+  const [selectedSection, setSelectedSection] = useState<string | undefined>(undefined);
+  const [selectedRegion, setSelectedRegion] = useState<string | undefined>(undefined);
+  // const [currentPage, setCurrentPage] = useState(0);
+  // const [page, setPage] = useState(0);
+
+  // useEffect(() => {
+  //   // dispatch(fetchNews());
+
+  // //   if (selectedSection) {
+  // //     dispatch(fetchRegionsBySection(selectedSection));
+  // // } else{
+  //   dispatch(fetchNews());
+  // // }
+
+
+  // }, [dispatch, selectedSection]);
 
   useEffect(() => {
-    // dispatch(fetchNews());
-
-  //   if (selectedSection) {
-  //     dispatch(fetchRegionsBySection(selectedSection));
-  // } else{
     dispatch(fetchNews());
-  // }
+  }, [dispatch]);
 
-
-  }, [dispatch, selectedSection]);
-
-
-
-
-  const handleSelect = (eventKey: string | null) => {
-    if (eventKey) {
-      setSelectedSection(eventKey);
-  }
+  const handleFilter = () => {
+    dispatch(fetchFilteredNews({
+      page: 0,
+      section: selectedSection || '',
+      region: selectedRegion || ''
+    }));
   };
 
-  return (
-    <section className= "">
-      <div className='container d-flex news_content'>
-        <div className='news-aside'>
-          <Dropdown onSelect={handleSelect}>
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
-            {selectedSection || "Select Section"}
-            </Dropdown.Toggle>
+  // const handleSelect = (eventKey: string | null) => {
+  //   if (eventKey) {
+  //     setSelectedSection(eventKey);
+  // }
+  // };
 
-            <Dropdown.Menu>
-            {/* {news.map((section) => (
-                                <Dropdown.Item 
-                                    key={section} 
-                                    eventKey={section}
-                                >
-                                    {section}
-                                </Dropdown.Item>
-                            ))} */}
-            </Dropdown.Menu>
-          </Dropdown>
+  return (
+    <section className="">
+      <div className='container d-flex news_content'>
+        <div className='news-aside col-md-5 col-lg-4'>
+          <div className='filter_block'>
+            <h3>Filter by Section</h3>
+            {sections.map((section) => (
+              <label key={section}>
+                <input
+                  type="radio"
+                  name="section"
+                  value={section}
+                  checked={selectedSection === section}
+                  onChange={(e) => setSelectedSection(e.target.value)}
+                /> {section}
+              </label>
+            ))}
+          </div>
+          <div className='filter_block'>
+            <h3>Filter by Region</h3>
+            {regions.map((region) => (
+              <label key={region}>
+                <input
+                  type="radio"
+                  name="region"
+                  value={region}
+                  checked={selectedRegion === region}
+                  onChange={(e) => setSelectedRegion(e.target.value)}
+                  disabled={selectedSection !== 'inland'}
+                /> {region}
+              </label>
+            ))}
+
+           
+          </div>
+          <button onClick={handleFilter}>Filter</button>
         </div>
-        <div className='news-content d-flex flex-wrap'>
+        <div className='news-content d-flex flex-wrap col-md-7 col-lg-8'>
           {status === "loading" && (
             <div className="spinner-border text-warning" role="status">
               <span className="visually-hidden">Loading...</span>
@@ -62,9 +91,9 @@ const News = () => {
           )}
           {status === 'success' && (newsArr.map((newsItem) => (
             <NewsComponent
-            key={newsItem.id}
-            newsItem={newsItem}
-          /> )
+              key={newsItem.id}
+              newsItem={newsItem}
+            />)
           ))}
           {status === "error" && (
             <>Error!</>

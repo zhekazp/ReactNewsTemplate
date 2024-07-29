@@ -1,8 +1,10 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { AppDispatch, RootState } from '../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { fetchComments, fetchNewsById, formatDate } from '../features/news/newsSlice';
+import { fetchComments, fetchNewsById, fetchPutReaction, formatDate } from '../features/news/newsSlice';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 
 const NewsDetail: FC = () => {
@@ -13,7 +15,13 @@ const NewsDetail: FC = () => {
     const newsItem = useSelector((state: RootState) => state.news.selectedNews);
     const status = useSelector((state: RootState) => state.news.status);
 
+    const [liked, setLiked] = useState(false);
+    const [disliked, setDisliked] = useState(false);
+
     const comments = useSelector((state: RootState) => state.news.comments);
+
+    const [comment, setComment] = useState('');
+    const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
         if (id) {
@@ -22,26 +30,17 @@ const NewsDetail: FC = () => {
         }
     }, [dispatch, id]);
 
-    useEffect(() => {
-        console.log("NewsDetail status:", status);
-        console.log("Selected news item:", newsItem);
-    }, [status, newsItem]);
+    // useEffect(() => {
+    //     console.log("NewsDetail status:", status);
+    //     console.log("Selected news item:", newsItem);
+    // }, [status, newsItem]);
 
-    const handleLike = () => {
-        // if (newsItem.isUserLikes) {
-        //     dispatch(unlikeNews(newsItem.newsId));
-        // } else {
-        //     dispatch(likeNews(newsItem.newsId));
-        // }
+    const handleReaction = (liked: boolean, disliked: boolean) => {
+        if (id) {
+            dispatch(fetchPutReaction({ newsId: Number(id), liked, disliked }));
+        }
     };
 
-    const handleDislike = () => {
-        // if (newsItem.isUserDislikes) {
-        //     dispatch(undislikeNews(newsItem.newsId));
-        // } else {
-        //     dispatch(dislikeNews(newsItem.newsId));
-        // }
-    };
 
     return (
         <section>
@@ -58,29 +57,31 @@ const NewsDetail: FC = () => {
                             <h1>{newsItem.title}</h1>
                             <div className='news-meta'>
                                 <p>{formatDate(newsItem.date)}</p>
-                                {/* <button onClick={handleLike}>
-                                {newsItem.isUserLikes ? 'Unlike' : 'Like'} ({newsItem.likes})
+                                <button onClick={() => handleReaction(true, false)}>
+                                <span className='activity_sm_block'><FontAwesomeIcon icon={faThumbsUp} /><span className='activity_counter'>{newsItem.likeCount}</span></span>
                             </button>
-                            <button onClick={handleDislike}>
-                                {newsItem.isUserDislikes ? 'Remove Dislike' : 'Dislike'} ({newsItem.dislikes})
-                            </button> */}
+                            <button onClick={() => handleReaction(false, true)}>
+                            <span  className='activity_sm_block'><FontAwesomeIcon icon={faThumbsDown} /><span className='activity_counter'>{newsItem.dislikeCount}</span></span>
+                            </button>
                             </div>
 
                             <div dangerouslySetInnerHTML={{ __html: newsItem.content }}></div>
 
                         </div>
                         <div className='news_comments'>
-                        <h2>Comments:</h2>
-                            {newsItem.commentsCount === 0 && <p>There are no comments yet</p>}
-                            {comments.map(comment => (
-                                <div key={comment.id} className="comment">
-                                    <p><strong>{comment.authorName}</strong> {formatDate(comment.commentDate)} </p>
-                                    <p>{comment.comment}</p>
-                                </div>
-                            ))}
+                            <h2>Comments:</h2>
+                            <div className='comment-form'>
+                                <h3>Leave a Comment:</h3>
+                                {newsItem.commentsCount === 0 && <p>There are no comments yet</p>}
+                                {comments.map(comment => (
+                                    <div key={comment.id} className="comment">
+                                        <p><strong>{comment.authorName}</strong> {formatDate(comment.commentDate)} </p>
+                                        <p>{comment.comment}</p>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
-
                 )}
                 {status === "error" && (
                     <>Error load newsItem!</>
