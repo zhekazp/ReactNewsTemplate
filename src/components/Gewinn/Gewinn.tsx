@@ -22,7 +22,9 @@ function Gewinn() {
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    axios.get<AdPreview[]>('http://localhost:3000/ads')
+   
+    
+	axios.get<AdPreview[]>(`/api/ads`)
       .then(response => {
         setAdsPreview(response.data);
       })
@@ -33,7 +35,7 @@ function Gewinn() {
   }, []);
 
   const handleMoreClick = (id: string) => {
-    axios.get<AdDetails>(`http://localhost:3000/ads/${id}`)
+   axios.get<AdDetails>(`/api/ads/${id}`)
       .then(response => {
         setSelectedAdDetails(response.data);
         setShowModal(true);
