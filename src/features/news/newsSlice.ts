@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../store';
 import { format, parseISO } from 'date-fns';
+// import authorizedFetch from './authorizedFetch';
 
 
 export interface INewsItem {
@@ -30,6 +31,7 @@ export interface IComment {
     authorName: string;
     commentDate: string;
     comment: string;
+    isPublishedByCurrentUser?: boolean;
 }
 export interface ReactionPayload {
     newsId: number;
@@ -39,12 +41,17 @@ export interface ReactionPayload {
 export interface CommentsResponse {
     comments: IComment[];
 }
-
+export interface INewsCommentRequest {
+    newsId: number;
+    comment: string;
+  }
 export interface initialNewsState {
     newsArr: INewsItem[];
     status: null | "loading" | "success" | "error";
     selectedNews: INewsItem | null;
     pageCount: number;
+    error: string | null;
+    message: string | null;
     currentPage: number;
     comments: IComment[];
     sections: string[];
@@ -55,10 +62,12 @@ const initialState: initialNewsState = {
     status: null,
     selectedNews: null,
     pageCount: 0,
+    error: null,
     currentPage: 0,
     comments: [],
     sections: [],
     regions: [],
+    message: null,
 
 };
 
@@ -102,6 +111,29 @@ export const fetchComments = createAsyncThunk<CommentsResponse, number, { state:
         }
     }
 );
+// export const addComment = createAsyncThunk<
+//   { message: string; comment?: IComment },
+//   INewsCommentRequest,
+//   { rejectValue: { message: string } }
+// >(
+//   'news/addComment',
+//   async (commentData, { rejectWithValue }) => {
+//     try {
+//       const response = await authorizedFetch(`/api/news/comment`, {
+//         method: 'PUT',
+//         body: JSON.stringify(commentData),
+//         headers: { 'Content-Type': 'application/json' },
+//       });
+//       const data = await response.json();
+//       if (!response.ok) {
+//         return rejectWithValue({ message: data.message || 'Failed to add comment' });
+//       }
+//       return data;
+//     } catch (error: any) {
+//       return rejectWithValue({ message: error.message });
+//     }
+//   }
+// );
 
 export const fetchFilteredNews = createAsyncThunk<NewsResponse, { page: number; section?: string; region?: string }, { state: RootState }>(
     'news/fetchFilteredNews',
@@ -206,7 +238,21 @@ const newsSlice = createSlice({
             .addCase(fetchFilteredNews.rejected, (state, action) => {
                 state.status = 'error';
                 console.error("Failed to fetch filtered news:", action.error.message);
-            });
+            })
+            // .addCase(addComment.pending, (state) => {
+            //     state.status = 'loading';
+            //   })
+            //   .addCase(addComment.fulfilled, (state, action) => {
+            //     state.status = 'success';
+            //     state.message = action.payload.message;
+            //     if (action.payload.comment && state.newsArr) {
+            //       state.newsArr.comments.unshift(action.payload.comment);
+            //     }
+            //   })
+            //   .addCase(addComment.rejected, (state, action) => {
+            //     state.status = 'error';
+            //     state.error = action.payload?.message || 'An error occurred';
+            //   })
 
     }
 })

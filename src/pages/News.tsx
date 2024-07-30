@@ -9,7 +9,7 @@ import '../style/news.css'
 const News = () => {
   const dispatch: AppDispatch = useDispatch();
 
-  const { newsArr, status, sections = [], regions = [] } = useSelector((state: RootState) => state.news);
+  const { newsArr, status, sections = [], regions = [], pageCount, currentPage } = useSelector((state: RootState) => state.news);
 
   const [selectedSection, setSelectedSection] = useState<string | undefined>(undefined);
   const [selectedRegion, setSelectedRegion] = useState<string | undefined>(undefined);
@@ -39,7 +39,13 @@ const News = () => {
       region: selectedRegion || ''
     }));
   };
-
+  const handlePageChange = (newPage: number) => {
+    dispatch(fetchFilteredNews({
+      page: newPage,
+      section: selectedSection || '',
+      region: selectedRegion || ''
+    }));
+  };
   // const handleSelect = (eventKey: string | null) => {
   //   if (eventKey) {
   //     setSelectedSection(eventKey);
@@ -49,7 +55,7 @@ const News = () => {
   return (
     <section className="">
       <div className='container d-flex news_content'>
-        <div className='news-aside col-md-5 col-lg-4'>
+        <div className='news-aside col-md-4 col-lg-3'>
           <div className='filter_block d-flex flex-column'>
             <h3>Filter by Section</h3>
             {sections.map((section) => (
@@ -79,22 +85,38 @@ const News = () => {
               </label>
             ))}
 
-           
+
           </div>
           <button onClick={handleFilter}>Filter</button>
         </div>
-        <div className='news-content d-flex flex-wrap col-md-7 col-lg-8'>
+        <div className='news-content col-md-8 col-lg-9'>
           {status === "loading" && (
             <div className="spinner-border text-warning" role="status">
               <span className="visually-hidden">Loading...</span>
             </div>
           )}
-          {status === 'success' && (newsArr.map((newsItem) => (
-            <NewsComponent
-              key={newsItem.id}
-              newsItem={newsItem}
-            />)
-          ))}
+          {status === 'success' && (
+            <div className='d-flex flex-wrap'>
+
+              {newsArr.map((newsItem) => (
+                <NewsComponent
+                  key={newsItem.id}
+                  newsItem={newsItem}
+                />)
+              )}
+              <div className='pagination'>
+                {Array.from({ length: pageCount }).map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handlePageChange(index)}
+                    disabled={index === currentPage}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           {status === "error" && (
             <>Error!</>
           )}
