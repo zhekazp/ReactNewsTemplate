@@ -14,6 +14,12 @@ import { fetchBlogsTest } from "./features/blog/blogsTest/blogSliceTest";
 import Page_404 from "./pages/Page_404";
 import CookieConsentModal from "./features/cookie/CookieConsentModal";
 // import { fetchBlogs } from "./features/blog/blogSlice";
+import LogIn from './pages/LogIn';
+import SignUp from './pages/SignUp';
+import './style/logInSignUp.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
@@ -35,6 +41,9 @@ function App() {
           <Route path="contact" element={<ContactUs />} />
           <Route path="*" element={<Page_404 />} /> {/* Обрабатываем все несуществующие пути */}
           <Route path='/cookie' element={<CookieConsentModal />} />
+          <Route path="/login" element={<LogIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/" element={<LogIn />} />
         </Route>
       </Routes>
     </>
