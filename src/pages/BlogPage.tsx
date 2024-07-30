@@ -1,27 +1,22 @@
-import React, { useEffect } from "react";
-// import BlogList from "../features/blog/BlogList";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../store";
-import { fetchBlogsTest } from "../features/blog/blogsTest/blogSliceTest";
-import BlogListTest from "../features/blog/blogsTest/BlogListTest";
-// import NewBlogForm from "../features/blog/NewBlogForm";
-// import { fetchBlogs, fetchComments } from "../features/blog/blogSlice";
+import React from "react";
+import BlogList from "../features/blog/blogs/BlogList";
+import { useNavigate } from "react-router-dom";
+import Breadcrumb from "../features/blog/blogs/Breadcrumb";
 
 const BlogPage = () => {
-  // const currentUser = useSelector((state: RootState) => state.user.currentUser);
+  const navigate = useNavigate();
 
-  const dispatch: AppDispatch = useDispatch();
-
-  useEffect(() => {
-    // dispatch(fetchBlogs())
-    dispatch(fetchBlogsTest());
-  }, [dispatch]);
+  const handleAddBlogClick = () => {
+    navigate("/add-blog");
+  };
 
   return (
     <div>
-      <BlogListTest />
-      {/* <NewBlogForm currentUser={currentUser}/>
-      <BlogList currentUser={currentUser} /> */}
+      <div>
+        <Breadcrumb />
+        <button onClick={handleAddBlogClick}>New Blog</button>
+      </div>
+      <BlogList />
     </div>
   );
 };
