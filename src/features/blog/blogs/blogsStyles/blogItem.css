@@ -1,0 +1,14 @@
+.blogItem-date {
+  display: flex;
+  align-items: center; /* Вертикальное выравнивание */
+  color: #b3b3b3; /* Светло-серый цвет текста */
+  padding: 6px 12px;
+  font-size: 14px; /* Размер шрифта */
+  font-family: "Verdana", sans-serif; /* Шрифт */
+  margin-bottom: 10px;
+}
+
+.blogItem-date::before {
+  content: "🗓️";
+  margin-right: 8px; /* Расстояние между иконкой и текстом */
+}
