@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import blogReducerTest from "./features/blog/blogsTest/blogSliceTest";
-// import blogReducer from "./features/blog/blogSlice";
+// import blogReducerTest from "./features/blog/blogsTest/blogSliceTest";
+import blogReducer from "./features/blog/blogs/blogSlice";
+
 
 // Заглушка редьюсера
 const dummyReducer = (state = {}, action: any) => state;
@@ -8,8 +9,8 @@ const dummyReducer = (state = {}, action: any) => state;
 const store = configureStore({
   reducer: {
     dummy: dummyReducer,
-    blogSliceTest: blogReducerTest
-    // blogs: blogReducer,
+    // blogSliceTest: blogReducerTest,
+    blogs: blogReducer
   },
 });
 

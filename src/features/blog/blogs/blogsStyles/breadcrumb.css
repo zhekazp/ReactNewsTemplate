@@ -1,0 +1,36 @@
+/* Основные стили для хлебных крошек */
+.breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px 0;
+    background-color: #1e1e1e; /* Темный фон */
+    color: #e0e0e0; /* Светлый цвет текста */
+    list-style: none;
+    margin: 0;
+    border-radius: 4px;
+  }
+  
+  .breadcrumb-item {
+    display: inline;
+    font-size: 14px;
+  }
+  
+  .breadcrumb-item + .breadcrumb-item::before {
+    content: ' / ';
+    padding: 0 5px;
+    color: #969696; /* Светло-серый для разделителей */
+  }
+  
+  .breadcrumb-item a {
+    color: #e0e0e0; /* Цвет ссылок */
+    text-decoration: none;
+  }
+  
+  .breadcrumb-item a:hover {
+    color: #b71c1c; /* Цвет ссылок при наведении */
+  }
+  
+  .breadcrumb-item.active {
+    color: #f5f5f5; /* Цвет активного элемента */
+    /* font-weight: bold; */
+  }
