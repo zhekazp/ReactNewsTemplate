@@ -8,6 +8,8 @@ import Advertisement from "./pages/Advertisement";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import News from "./pages/News";
+import './style/main.css'
+import NewsDetail from "./pages/NewsDetail";
 import BlogPage from "./pages/BlogPage";
 // import './features/blog/blogs/breadcrumb.css';
 import Page_404 from "./pages/Page_404";
