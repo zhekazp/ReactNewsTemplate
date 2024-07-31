@@ -39,6 +39,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="news" element={<News />} />
+          <Route path="news/:id" element={<NewsDetail />} />
           <Route path="blogs" element={<BlogPage />} />
           <Route path="/blogs/:id" element={<BlogDetails />} />
           <Route path="/add-blog" element={<AddBlog />} />
