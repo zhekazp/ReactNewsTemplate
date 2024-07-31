@@ -1,91 +1,115 @@
 /* Основной фон и цвет текста */
 .add-blog-container {
-    background-color: #1e1e1e; /* Темный почти черный фон */
-    color: #e0e0e0; /* Светлый цвет текста для контраста */
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 1240px;
-    margin: 0 auto;
-  }
-  
-  /* Заголовок формы */
-  .add-blog-container h1 {
-    color: #f5f5f5;
-    margin-bottom: 20px;
-    font-size: 24px;
-    line-height: 1.4; /* Высота строки заголовка для улучшения читаемости */
-  }
-  
-  /* Форматирование формы */
-  .add-blog-form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .add-blog-form div {
-    margin-bottom: 15px;
-  }
+  background-color: #1e1e1e; /* Темный почти черный фон */
+  color: #e0e0e0; /* Светлый цвет текста для контраста */
+  padding: 20px;
+  /* border-radius: 8px; */
+  max-width: 1024px;
+  margin: 0 auto;
+}
 
+/* Заголовок формы */
+.add-blog-container h1 {
+  color: #f5f5f5;
+  margin-bottom: 20px;
+  font-size: 24px;
+  line-height: 1.4; /* Высота строки заголовка для улучшения читаемости */
+}
 
-  
-  /* Поля ввода и текстовые области */
-  .add-blog-form input[type="text"],
-  .add-blog-form textarea,
-  .add-blog-form select {
-    background-color: #2e2e2e; /* Чуть светлее фон для полей ввода */
-    color: #e0e0e0; /* Цвет текста в полях ввода */
-    border: 1px solid #444; /* Цвет границы полей ввода */
-    border-radius: 4px;
-    padding: 10px;
-    width: 100%;
-  }
+/* Форматирование формы */
+.add-blog-form {
+  display: flex;
+  flex-direction: column;
+}
 
-  /* Увеличиваем высоту поля для контента */
+.add-blog-form div {
+  margin-bottom: 40px;
+}
+
+/* Поля ввода и текстовые области */
+.add-blog-form input[type="text"],
+.add-blog-form textarea,
+.add-blog-form select {
+  background-color: #2e2e2e; /* Чуть светлее фон для полей ввода */
+  color: #e0e0e0; /* Цвет текста в полях ввода */
+  border: 1px solid #444; /* Цвет границы полей ввода */
+  border-radius: 4px;
+  padding: 10px;
+  width: 100%;
+}
+
+/* Увеличиваем высоту поля для контента */
 .add-blog-form textarea {
-    min-height: 150px; /* Минимальная высота для текстовой области */
-    resize: vertical; /* Позволяет пользователю изменять высоту поля */
-  }
-  
-  /* Ошибки валидации */
-  .add-blog-form p {
-    margin: 5px 0;
-    font-size: 14px;
-  }
-  
-  .add-blog-form p.error {
-    color: #ff6f6f; /* Цвет ошибок */
-  }
-  
-  /* Кнопка отправки */
-  .add-blog-form button {
-    background-color: #1c79b7; /* Бордовая кнопка */
-    color: #f5f5f5; /* Цвет текста на кнопке */
-    border: none;
-    border-radius: 4px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-  }
-  
-  .add-blog-form button:hover {
-    background-color: #18689e; /* Цвет кнопки при наведении */
-  }
-  
-  /* Статусы загрузки и сообщения */
-  .status-message {
-    font-size: 16px;
-    margin-top: 20px;
-  }
-  
-  .status-message.loading {
-    color: #e0e0e0;
-  }
-  
-  .status-message.error {
-    color: #ff6f6f;
-  }
-  
-  .status-message.success {
-    color: #4caf50;
-  }
+  min-height: 150px; /* Минимальная высота для текстовой области */
+  resize: vertical; /* Позволяет пользователю изменять высоту поля */
+}
+
+/* Ошибки валидации */
+.add-blog-form p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.add-blog-form p.error {
+  color: #ff6f6f; /* Цвет ошибок */
+}
+
+.add-blog_buttons {
+  display: flex;
+  gap: 15px;
+}
+
+/* Кнопка отправки */
+.add-blog_button {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  background-color: #1c79b7; /* Бордовая кнопка */
+  color: #f5f5f5; /* Цвет текста на кнопке */
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.cancel-blog_button{
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  background-color: #1e1e1e; /* Бордовая кнопка */
+  color: #f5f5f5; /* Цвет текста на кнопке */
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.add-blog_button:hover {
+  background-color: #18689e; /* Цвет кнопки при наведении */
+}
+
+.cancel-blog_button:hover {
+  background-color: #9e1818; /* Цвет кнопки при наведении */
+}
+
+/* Статусы загрузки и сообщения */
+.status-message {
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.status-message.loading {
+  color: #e0e0e0;
+}
+
+.status-message.error {
+  color: #ff6f6f;
+}
+
+.status-message.success {
+  color: #4caf50;
+}

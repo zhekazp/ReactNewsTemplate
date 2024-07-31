@@ -5,6 +5,7 @@ import { addBlog, fetchRegions } from './blogSlice';
 import Breadcrumb from './Breadcrumb';
 import { IAddBlogRequest } from './types';
 import './blogsStyles/addBlog.css';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -17,6 +18,13 @@ const AddBlog: React.FC = () => {
   const [titleError, setTitleError] = useState<string | null>(null);
   const [regionError, setRegionError] = useState<string | null>(null);
   const [contentError, setContentError] = useState<string | null>(null);
+
+  const navigate = useNavigate();
+
+  const handleCancelBlogClick = () => {
+    navigate("/blogs");
+  };
+
 
   useEffect(() => {
     dispatch(fetchRegions());
@@ -117,7 +125,7 @@ return (
       <h1>Neuen Blog hinzufügen</h1>
       <form onSubmit={handleSubmit} className="add-blog-form">
         <div>
-          <label>Title:</label>
+          <label>Titel:</label>
           <input
             type="text"
             value={title}
@@ -126,7 +134,7 @@ return (
           {titleError && <p className="error">{titleError}</p>}
         </div>
         <div>
-          <label>Content:</label>
+          <label>Inhalt:</label>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
@@ -148,7 +156,10 @@ return (
           </select>
           {regionError && <p className="error">{regionError}</p>}
         </div>
-        <button type="submit">Blog hinzufügen</button>
+        <div className='add-blog_buttons'>
+        <button className='add-blog_button' type="submit">Blog hinzufügen</button>
+        <button className='cancel-blog_button' onClick={handleCancelBlogClick}>Abbrechen</button>
+        </div>
       </form>
       {status === 'loading' && <p className="status-message loading">Laden...</p>}
       {status === 'error' && <p className="status-message error">{error}</p>}
