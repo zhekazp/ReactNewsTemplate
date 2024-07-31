@@ -32,13 +32,21 @@ const News = () => {
     dispatch(fetchNews());
   }, [dispatch]);
 
-  const handleFilter = () => {
+  useEffect(() => {
     dispatch(fetchFilteredNews({
       page: 0,
       section: selectedSection || '',
       region: selectedRegion || ''
     }));
-  };
+  }, [selectedSection, selectedRegion, dispatch]);
+  
+  // const handleFilter = () => {
+  //   dispatch(fetchFilteredNews({
+  //     page: 0,
+  //     section: selectedSection || '',
+  //     region: selectedRegion || ''
+  //   }));
+  // };
   const handlePageChange = (newPage: number) => {
     dispatch(fetchFilteredNews({
       page: newPage,
@@ -57,20 +65,6 @@ const News = () => {
       <div className='container d-flex news_content'>
         <div className='news-aside col-md-4 col-lg-3'>
           <div className='filter_block d-flex flex-column'>
-            <h3>Filter by Section</h3>
-            {sections.map((section) => (
-              <label key={section}>
-                <input
-                  type="radio"
-                  name="section"
-                  value={section}
-                  checked={selectedSection === section}
-                  onChange={(e) => setSelectedSection(e.target.value)}
-                /> {section}
-              </label>
-            ))}
-          </div>
-          <div className='filter_block d-flex flex-column'>
             <h3>Filter by Region</h3>
             {regions.map((region) => (
               <label key={region}>
@@ -87,9 +81,21 @@ const News = () => {
 
 
           </div>
-          <button onClick={handleFilter}>Filter</button>
         </div>
         <div className='news-content col-md-8 col-lg-9'>
+        <div className='filter_block d-flex'>
+          {sections.map((section) => (
+              <label key={section}>
+                <input
+                  type="radio"
+                  name="section"
+                  value={section}
+                  checked={selectedSection === section}
+                  onChange={(e) => setSelectedSection(e.target.value)}
+                /> {section}
+              </label>
+            ))}
+          </div>
           {status === "loading" && (
             <div className="spinner-border text-warning" role="status">
               <span className="visually-hidden">Loading...</span>

@@ -16,6 +16,7 @@ const NewsComponent: FC<IProps> = ({newsItem}) => {
       
   return (
     <NavLink to={`/news/${newsItem.id}`}>
+      <span className='pick-block'>{newsItem.regionName}</span>
             <img src={newsItem.titleImageSquare} alt={newsItem.title} className='news_img'/>
             <h5>{newsItem.title}</h5>
             <div><span>{formatDate(newsItem.date)}</span>
