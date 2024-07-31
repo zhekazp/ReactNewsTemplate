@@ -5,6 +5,7 @@ import NewsComponent from '../features/news/NewsComponent';
 import { fetchFilteredNews, fetchNews, INewsItem } from '../features/news/newsSlice';
 import Dropdown from 'react-bootstrap/DropDown';
 import '../style/news.css'
+import Spinner from '../features/mainPage/components/spinner/Spinner';
 
 const News = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -33,13 +34,16 @@ const News = () => {
   }, [dispatch]);
 
   useEffect(() => {
+    if (selectedSection !== 'inland') {
+      setSelectedRegion(undefined);
+    }
     dispatch(fetchFilteredNews({
       page: 0,
       section: selectedSection || '',
       region: selectedRegion || ''
     }));
   }, [selectedSection, selectedRegion, dispatch]);
-  
+
   // const handleFilter = () => {
   //   dispatch(fetchFilteredNews({
   //     page: 0,
@@ -59,49 +63,75 @@ const News = () => {
   //     setSelectedSection(eventKey);
   // }
   // };
+  // const handleRegionSelect: (eventKey: string | null) => void = (eventKey) => {
+  //   if (eventKey !== null) {
+  //     setSelectedRegion(eventKey);
+  //   }
+  // };
 
+  const handleSectionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newSection = event.target.value;
+    setSelectedSection(newSection);
+    // Сбрасываем регион при изменении секции
+    setSelectedRegion(undefined);
+  };
+
+
+  const handleSectionSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedSection(event.target.value);
+  };
+
+  const handleRegionSelect = (eventKey: string | null) => {
+    if (eventKey !== null) {
+      setSelectedRegion(eventKey);
+    }
+  };
   return (
     <section className="">
       <div className='container d-flex news_content'>
         <div className='news-aside col-md-4 col-lg-3'>
           <div className='filter_block d-flex flex-column'>
             <h3>Filter by Region</h3>
-            {regions.map((region) => (
-              <label key={region}>
-                <input
-                  type="radio"
-                  name="region"
-                  value={region}
-                  checked={selectedRegion === region}
-                  onChange={(e) => setSelectedRegion(e.target.value)}
-                  disabled={selectedSection !== 'inland'}
-                /> {region}
-              </label>
-            ))}
+            <Dropdown onSelect={handleRegionSelect}>
+              <Dropdown.Toggle variant="success" id="dropdown-basic" disabled={selectedSection !== 'inland'}>
+                {selectedRegion || "Select Region"}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item eventKey="">All Regions</Dropdown.Item>
+                {regions
+                  .filter(region => region !== 'non-region')
+                  .map((region) => (
+                    <Dropdown.Item key={region} eventKey={region}>
+                      {region}
+                    </Dropdown.Item>
+                  ))}
+              </Dropdown.Menu>
+            </Dropdown>
 
 
           </div>
         </div>
         <div className='news-content col-md-8 col-lg-9'>
-        <div className='filter_block d-flex'>
-          {sections.map((section) => (
-              <label key={section}>
+          <div className='filter_block d-flex justify-content-between mx-2'>
+            {sections.map((section) => (
+              <label className={`news-filter-btn ${selectedSection === section ? 'active' : ''}`} key={section}>
                 <input
                   type="radio"
                   name="section"
                   value={section}
                   checked={selectedSection === section}
-                  onChange={(e) => setSelectedSection(e.target.value)}
+                  onChange={handleSectionChange}
                 /> {section}
               </label>
             ))}
           </div>
-          {status === "loading" && (
+          {status === 'idle' || status === "loading" ? (
             <div className="spinner-border text-warning" role="status">
               <span className="visually-hidden">Loading...</span>
+              {/* <Spinner show={loading} color="red" /> */}
             </div>
-          )}
-          {status === 'success' && (
+
+          ) : status === 'success' ? (
             <div className='d-flex flex-wrap'>
 
               {newsArr.map((newsItem) => (
@@ -112,7 +142,7 @@ const News = () => {
               )}
               <div className='pagination'>
                 {Array.from({ length: pageCount }).map((_, index) => (
-                  <button
+                  <button className={`page-number ${index === currentPage ? 'current' : ''}`}
                     key={index}
                     onClick={() => handlePageChange(index)}
                     disabled={index === currentPage}
@@ -122,8 +152,7 @@ const News = () => {
                 ))}
               </div>
             </div>
-          )}
-          {status === "error" && (
+          ) : (
             <>Error!</>
           )}
         </div>

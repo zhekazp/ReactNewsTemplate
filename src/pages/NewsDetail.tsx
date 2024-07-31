@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchComments, fetchNewsById, fetchPutReaction, formatDate } from '../features/news/newsSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faComment, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 
 const NewsDetail: FC = () => {
@@ -53,26 +53,27 @@ const NewsDetail: FC = () => {
                 {status === 'success' && newsItem && (
                     <div>
                         <div className='newsItem_content'>
-                            <img src={newsItem.titleImageWide} alt={newsItem.title} />
-                            <h1>{newsItem.title}</h1>
-                            <div className='news-meta d-flex align-items-center my-4'>
-                                <p className='m-0'>{formatDate(newsItem.date)}</p>
-                                <button onClick={() => handleReaction(true, false)}>
-                                <span className='activity_sm_block'><FontAwesomeIcon icon={faThumbsUp} /><span className='activity_counter'>{newsItem.likeCount}</span></span>
-                            </button>
-                            <button onClick={() => handleReaction(false, true)}>
-                            <span  className='activity_sm_block'><FontAwesomeIcon icon={faThumbsDown} /><span className='activity_counter'>{newsItem.dislikeCount}</span></span>
-                            </button>
+                            <img width='100%' src={newsItem.titleImageWide} alt={newsItem.title} />
+                            <div className='newsItem-content p-4'>
+                                <h1 className='newsItem-title'>{newsItem.title}</h1>
+                                <div className='news-meta d-flex align-items-center my-4'>
+                                    <p className='m-0'><FontAwesomeIcon icon={faClock} /> {formatDate(newsItem.date)}</p>
+                                    <button className='activity_sm_block' onClick={() => handleReaction(true, false)}>
+                                        <FontAwesomeIcon icon={faThumbsUp} /><span className='activity_counter'> {newsItem.likeCount}</span>
+                                    </button>
+                                    <button className='activity_sm_block' onClick={() => handleReaction(false, true)}>
+                                        <FontAwesomeIcon icon={faThumbsDown} /><span className='activity_counter'> {newsItem.dislikeCount}</span>
+                                    </button>
+                                    <span><FontAwesomeIcon icon={faComment} /> {newsItem.commentsCount}</span>
+                                </div>
+                                <div dangerouslySetInnerHTML={{ __html: newsItem.content }}></div>
                             </div>
-
-                            <div dangerouslySetInnerHTML={{ __html: newsItem.content }}></div>
 
                         </div>
                         <div className='news_comments'>
-                            <h2>Comments:</h2>
-                            <div className='comment-form'>
-                                <h3>Leave a Comment:</h3>
-                                <form>
+                            
+                                <h3 className='newsTopTitle'>Leave a Comment:</h3>
+                                <form className='comment-form p-4'>
                                     {/* <div className='form-group'>
                                         <label htmlFor='authorName'>Name:</label>
                                         <input
@@ -98,15 +99,17 @@ const NewsDetail: FC = () => {
                                         {submitting ? 'Submitting...' : 'Submit'}
                                     </button>
                                 </form>
-
-                                {newsItem.commentsCount === 0 && <p>There are no comments yet</p>}
-                                {comments.map(comment => (
-                                    <div key={comment.id} className="comment">
-                                        <p><strong>{comment.authorName}</strong> {formatDate(comment.commentDate)} </p>
-                                        <p>{comment.comment}</p>
-                                    </div>
-                                ))}
-                            </div>
+                                <div className='comment-content p-4'>
+                                    <h2 className='newsTopTitle'>Comments:</h2>
+                                    {newsItem.commentsCount === 0 && <p className='empty-comments p-5 text-center'>There are no comments yet</p>}
+                                    {comments.map(comment => (
+                                        <div key={comment.id} className="comment">
+                                            <p><strong>{comment.authorName}</strong> {formatDate(comment.commentDate)} </p>
+                                            <p>{comment.comment}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                           
                         </div>
                     </div>
                 )}
