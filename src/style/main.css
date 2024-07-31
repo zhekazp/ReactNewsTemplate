@@ -4,6 +4,9 @@ body {
 a {
   cursor: pointer;
 }
+main{
+  min-height: calc(100vh - 440px);
+}
 .topBlock {
   background-color: #ff0000;
   width: 100%;
@@ -162,10 +165,13 @@ a {
 /* weather */
 .wMainblock {
   width: 100%;
-  padding: 15px 0;
-  border-radius: 4px;
-  background-image: linear-gradient(#53585b, #2b3035d9);
-  color: white;
+    padding: 10px;
+    border-radius: 4px;
+    background-image: linear-gradient(#53585b, #2b3035d9);
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .wBlock {
   display: flex;
@@ -194,6 +200,9 @@ a {
 }
 .nInfo {
   font-size: 0.7rem;
+}
+.infoH2 {
+  margin: 0;
 }
 .nIco {
   margin-right: 7px;
