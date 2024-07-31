@@ -47,7 +47,7 @@ export interface INewsCommentRequest {
   }
 export interface initialNewsState {
     newsArr: INewsItem[];
-    status: null | "loading" | "success" | "error";
+    status: 'idle' | "loading" | "success" | "error";
     selectedNews: INewsItem | null;
     pageCount: number;
     error: string | null;
@@ -59,7 +59,7 @@ export interface initialNewsState {
 }
 const initialState: initialNewsState = {
     newsArr: [],
-    status: null,
+    status: 'idle',
     selectedNews: null,
     pageCount: 0,
     error: null,

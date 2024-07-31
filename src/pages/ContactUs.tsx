@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { AppDispatch, RootState } from "../store";
 import { sendForm, updateForm } from "../features/contactUs/contactUsSlice";
-// import '../styles/ContactUs.css'
+import '../style/contactUs.css'
 
 interface Errors {
     name?: string;
@@ -77,50 +77,66 @@ const ContactUs = () => {
     };
 
     return (
-        <div>
-            <section className="contactUs">
-                <div className="contact-title">
-                    <div className="container">
-                        <h1>Contact Us</h1>
-                        <p>You can contact us any way that is convenient for you. We are available 24/7 via email. You can also use a quick contact form below or visit our office personally. We would be happy to answer your questions. </p>
+
+        <section className="contactUs">
+            <div className="container">
+                <h1 className='newsTopTitle'>Contact Us</h1>
+                <p>You can contact us any way that is convenient for you. We are available 24/7 via email. You can also use a quick contact form below or visit our office personally. We would be happy to answer your questions. </p>
+
+                <div className="contact-info row">
+                    <div className="col-4">
+                        <div className="contact-info-item d-flex flex-column">
+                            <div className="contact-icon d-flex justify-content-center"><FontAwesomeIcon icon={faPhone} /></div>
+                            <div className="contact-text">
+                                <span> Phone</span>
+                                <a href="tel:+491239876543">+49(123)9876543</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div className="col-4">
+                        <div className="contact-info-item d-flex flex-column">
+                            <div className="contact-icon d-flex justify-content-center"><FontAwesomeIcon icon={faEnvelope} /></div>
+                            <div className="contact-text">
+                                <span> E-mail</span>
+                                <a href="mailto:example@gmail.com">example@gmail.com</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="container d-flex">
-                    <div className="contact-info w-50 p-5 list-group">
-                        <div className="list-group-item"><FontAwesomeIcon icon={faPhone} /><span> Phone:</span><a href="tel:+491239876543">+49(123)9876543</a></div>
-                        <div className="list-group-item"><FontAwesomeIcon icon={faEnvelope} /><span> E-mail:</span><a href="mailto:example@gmail.com">example@gmail.com</a></div>
-                    </div>
-                    <div className="w-50 p-5">
-                        <p>If you have any ideas or suggestions for improving our Web-site, please contact us by filling the form.</p>
-                        <form onSubmit={handleSendForm} className="input-group d-flex flex-column">
-                            <label htmlFor="name">name
-                                <input type="text" className="form-control" required value={form.name} name='name' onChange={handleInputChange} placeholder='Enter your name' />
+                <div className="contact-form p-4">
+                    <p className='newsTopTitle'>If you have any ideas or suggestions for improving our Web-site, please contact us by filling the form.</p>
+                    <form onSubmit={handleSendForm} className="contact-input-group">
+                        <div className="row">
+                            <label className="col-lg-6" htmlFor="name">
+                                <input type="text" className="form-input" required value={form.name} name='name' onChange={handleInputChange} placeholder='Enter your name' />
                                 {errors.name && <div className="error">{errors.name}</div>}
                             </label>
-                            <label htmlFor="email">e-mail
-                                <input type="text" className="form-control" required value={form.email} name='email' onChange={handleInputChange} placeholder='Enter your e-mail' />
+                            <label className="col-lg-6" htmlFor="email">
+                                <input type="text" className="form-input" required value={form.email} name='email' onChange={handleInputChange} placeholder='Enter your e-mail' />
                                 {errors.email && <div className="error">{errors.email}</div>}
                             </label>
-                            <label htmlFor="message">Message
-                                <textarea value={form.message} name='message' required className="form-control" onChange={handleInputChange} placeholder='enter your message'></textarea>
-                                {errors.message && <div className="error">{errors.message}</div>}
-                            </label>
-                            {/* <ReCAPTCHA
+                        </div>
+                        <label className="col-lg-12" htmlFor="message">
+                            <textarea value={form.message} name='message' required className="form-input" onChange={handleInputChange} placeholder='Enter your message'></textarea>
+                            {errors.message && <div className="error">{errors.message}</div>}
+                        </label>
+                        {/* <ReCAPTCHA
                                 ref={recaptchaRef}
                                 size="invisible"
                                 sitekey="Your client site key"
                             /> */}
-                            <button type="submit" className="btn btn-info">
-                                {status === 'loading' ? 'Sending...' : 'Send'}
-                            </button>
-                            {status === 'success' && <div>Form submitted successfully!</div>}
-                            {status === 'error' && <div>Failed to submit the form.</div>}
-                        </form>
-                    </div>
+                        <button type="submit" className="submit-btn">
+                            {status === 'loading' ? 'Sending...' : 'Send'}
+                        </button>
+                        {status === 'success' && <div>Form submitted successfully!</div>}
+                        {status === 'error' && <div>Failed to submit the form.</div>}
+                    </form>
                 </div>
-            </section>
-            
-        </div>
+            </div>
+        </section>
+
+
     )
 }
 
