@@ -13,7 +13,12 @@ import { IAddBlogRequestDTO, IBlogDetails, IUpdateBlogRequest } from "./types";
 import Breadcrumb from "./Breadcrumb";
 import "./blogsStyles/blogDetails.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faGlobe, faComments } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUser,
+  faGlobe,
+  faComments,
+  faCalendar,
+} from "@fortawesome/free-solid-svg-icons";
 
 const BlogDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -222,7 +227,7 @@ const BlogDetails: React.FC = () => {
           {isEditing ? (
             <form onSubmit={handleEdit} className="edit-blog-form">
               <div>
-                <label>Title:</label>
+                <label>Titel:</label>
                 <input
                   className="edit-blog-form_input"
                   value={editedTitle}
@@ -231,7 +236,7 @@ const BlogDetails: React.FC = () => {
                 {titleError && <p className="error">{titleError}</p>}
               </div>
               <div>
-                <label>Content:</label>
+                <label>Inhalt:</label>
                 <textarea
                   className="edit-blog-form_textarea"
                   value={editedContent}
@@ -239,15 +244,29 @@ const BlogDetails: React.FC = () => {
                 />
                 {contentError && <p className="error">{contentError}</p>}
               </div>
-              <button type="submit">Save</button>
-              <button type="button" onClick={() => setIsEditing(false)}>
-                Cancel
-              </button>
+              <div className="button-container_edit_del">
+                <button className="edit-blog-form_button" type="submit">
+                Speichern
+                </button>
+                <button
+                  className="delete-blog-form_button"
+                  type="button"
+                  onClick={() => setIsEditing(false)}
+                >
+                  Abbrechen
+                </button>
+              </div>
             </form>
           ) : (
             <div className="blog-container_inner">
               <h2 className="blog-title_inner">{blog.title}</h2>
-              <p className="blog-publishedDate_inner">{blog.publishedDate}</p>
+              <p className="blogItem-date">
+                <FontAwesomeIcon
+                  icon={faCalendar}
+                  style={{ marginRight: "8px" }}
+                />
+                {blog.publishedDate}
+              </p>
               {/* <p className="">{blog.views} views</p> */}
               <p className="blog-content_inner">{blog.content}</p>
               <p className="blog-author-region_inner">
@@ -270,10 +289,10 @@ const BlogDetails: React.FC = () => {
                   className="edit-blog_button"
                   onClick={() => setIsEditing(true)}
                 >
-                  Edit
+                  Bearbeiten
                 </button>
                 <button className="delete-blog_button" onClick={handleDelete}>
-                  Delete
+                Löschen
                 </button>
               </div>
               {showModalDeleteBlog && deleteSuccess && (
@@ -297,31 +316,36 @@ const BlogDetails: React.FC = () => {
             {blog.comments.length > 0 ? (
               blog.comments.map((comment) => (
                 <div key={comment.id} className="blog_comment">
-                  <p>{comment.comment}</p>
-                  <p>
-                    By: {comment.authorName} on {comment.commentDate}
+                  <p className="blog_comment_text">{comment.comment}</p>
+                  <p className="blog_comment_author">
+                  Von: {comment.authorName} am {comment.commentDate}
                   </p>
                   {comment.isPublishedByCurrentUser && (
                     <button
-                      className="blog_comment_button"
+                      className="blog_delcomment_button"
                       onClick={() => handleDeleteComment(comment.id)}
                     >
-                      Delete Comment
+                      Kommentar löschen
                     </button>
                   )}
                 </div>
               ))
             ) : (
-              <p>No comments yet</p>
+              <p>Noch keine Kommentare</p>
             )}
             <div className="add-comment-section">
-              <h3>Add a Comment</h3>
+              <h3>Einen Kommentar hinzufügen</h3>
               <textarea
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
               />
               {commentError && <p className="error">{commentError}</p>}
-              <button onClick={handleAddComment}>Add Comment</button>
+              <button
+                className="blog_addComment_button"
+                onClick={handleAddComment}
+              >
+                Kommentar hinzufügen
+              </button>
             </div>
             {status === "loading" && (
               <div className="status-message loading">Loading...</div>
@@ -335,8 +359,9 @@ const BlogDetails: React.FC = () => {
           </div>
         </>
       ) : (
-        <div>No blog found</div>
+        <div>Kein Blog gefunden</div>
       )}
+      <Breadcrumb />
     </div>
   );
 };

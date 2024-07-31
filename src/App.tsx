@@ -14,7 +14,7 @@ import BlogPage from "./pages/BlogPage";
 // import './features/blog/blogs/breadcrumb.css';
 import Page_404 from "./pages/Page_404";
 import CookieConsentModal from "./features/cookie/CookieConsentModal";
-logInSignUp
+// logInSignUp
 // import { fetchBlogs } from "./features/blog/blogSlice";
 import LogIn from './pages/LogIn';
 import SignUp from './pages/SignUp';
@@ -22,7 +22,7 @@ import './style/logInSignUp.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-=======
+
 import AddBlog from "./features/blog/blogs/AddBlog";
 import BlogDetails from "./features/blog/blogs/BlogDetails";
 import { fetchBlogs } from "./features/blog/blogs/blogSlice";
