@@ -1,0 +1,48 @@
+
+body {
+  background-size: 100%;  
+  background: linear-gradient(
+    to right,
+    black 0%,
+    black 100%
+  );
+}
+
+.form {
+  z-index: 15;
+  position: relative;  
+  background-color: rgb(57, 56, 56);
+  width: 600px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  margin: 100px auto 10px;
+  
+}
+
+.form-header h1 {
+  margin: 20px 0;
+  text-align: center;
+  color: white;
+}
+
+.form-content {
+  padding: 20px;
+  color: white;
+}
+
+.form-group {
+  margin-top: 15px;
+}
+
+.form-group button {
+  display: block;
+  width: 200px;
+  margin: 10px auto;
+}
+
+.center-input {
+  background-color: black;
+  border: black;
+  color: white;
+}
+
