@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
 import NewsComponent from '../features/news/NewsComponent';
-import { fetchFilteredNews, fetchNews, INewsItem } from '../features/news/newsSlice';
+import { fetchFilteredNews, fetchNews, fetchRegions, fetchSections } from '../features/news/newsSlice';
 import Dropdown from 'react-bootstrap/DropDown';
 import '../style/news.css'
 import Spinner from '../features/mainPage/components/spinner/Spinner';
@@ -14,6 +14,7 @@ const News = () => {
 
   const [selectedSection, setSelectedSection] = useState<string | undefined>(undefined);
   const [selectedRegion, setSelectedRegion] = useState<string | undefined>(undefined);
+  const [page, setPage] = useState<number>(0);
   // const [currentPage, setCurrentPage] = useState(0);
   // const [page, setPage] = useState(0);
 
@@ -27,22 +28,37 @@ const News = () => {
   // // }
 
 
+
   // }, [dispatch, selectedSection]);
 
-  useEffect(() => {
-    dispatch(fetchNews());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchNews({page: 0}));
+  // }, [dispatch]);
 
+  // useEffect(() => {
+  //   if (selectedSection !== 'inland') {
+  //     setSelectedRegion(undefined);
+  //   }
+  //   dispatch(fetchFilteredNews({
+  //     page: 0,
+  //     section: selectedSection || '',
+  //     region: selectedRegion || ''
+  //   }));
+  // }, [selectedSection, selectedRegion, dispatch]);
   useEffect(() => {
-    if (selectedSection !== 'inland') {
-      setSelectedRegion(undefined);
+    dispatch(fetchRegions());
+    dispatch(fetchSections());
+    // Выполняем запрос, только если есть выбранная секция или регион
+    if (selectedSection || selectedRegion) {
+      dispatch(fetchFilteredNews({
+        page,
+        section: selectedSection || '',
+        region: selectedRegion || ''
+      }));
+    } else {
+      dispatch(fetchNews({ page }));
     }
-    dispatch(fetchFilteredNews({
-      page: 0,
-      section: selectedSection || '',
-      region: selectedRegion || ''
-    }));
-  }, [selectedSection, selectedRegion, dispatch]);
+  }, [dispatch, selectedSection, selectedRegion, page]);
 
   // const handleFilter = () => {
   //   dispatch(fetchFilteredNews({
@@ -52,11 +68,21 @@ const News = () => {
   //   }));
   // };
   const handlePageChange = (newPage: number) => {
-    dispatch(fetchFilteredNews({
-      page: newPage,
-      section: selectedSection || '',
-      region: selectedRegion || ''
-    }));
+    // dispatch(fetchFilteredNews({
+    //   page: newPage,
+    //   section: selectedSection || '',
+    //   region: selectedRegion || ''
+    // }));
+  //   if (selectedSection || selectedRegion) {
+  //     dispatch(fetchFilteredNews({
+  //         page: newPage,
+  //         section: selectedSection || '',
+  //         region: selectedRegion || ''
+  //     }));
+  // } else {
+  //     dispatch(fetchNews({ page: newPage }));
+  // }
+  setPage(newPage);
   };
   // const handleSelect = (eventKey: string | null) => {
   //   if (eventKey) {
@@ -74,44 +100,30 @@ const News = () => {
     setSelectedSection(newSection);
     // Сбрасываем регион при изменении секции
     setSelectedRegion(undefined);
+    setPage(0);
   };
 
 
-  const handleSectionSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedSection(event.target.value);
-  };
+  // const handleSectionSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setSelectedSection(event.target.value);
+  // };
 
-  const handleRegionSelect = (eventKey: string | null) => {
-    if (eventKey !== null) {
-      setSelectedRegion(eventKey);
-    }
+  // const handleRegionSelect = (eventKey: string | null) => {
+  //   if (eventKey !== null) {
+  //     setSelectedRegion(eventKey);
+  //     setPage(0);
+  //   }
+  // };
+
+  const handleRegionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newRegion = event.target.value;
+    setSelectedRegion(newRegion);
+    setPage(0);
   };
   return (
     <section className="">
       <div className='container d-flex news_content'>
-        <div className='news-aside col-md-4 col-lg-3'>
-          <div className='filter_block d-flex flex-column'>
-            <h3>Filter by Region</h3>
-            <Dropdown onSelect={handleRegionSelect}>
-              <Dropdown.Toggle variant="success" id="dropdown-basic" disabled={selectedSection !== 'inland'}>
-                {selectedRegion || "Select Region"}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item eventKey="">All Regions</Dropdown.Item>
-                {regions
-                  .filter(region => region !== 'non-region')
-                  .map((region) => (
-                    <Dropdown.Item key={region} eventKey={region}>
-                      {region}
-                    </Dropdown.Item>
-                  ))}
-              </Dropdown.Menu>
-            </Dropdown>
-
-
-          </div>
-        </div>
-        <div className='news-content col-md-8 col-lg-9'>
+        <div className='news-content col-md-12'>
           <div className='filter_block d-flex justify-content-between mx-2'>
             {sections.map((section) => (
               <label className={`news-filter-btn ${selectedSection === section ? 'active' : ''}`} key={section}>
@@ -124,6 +136,22 @@ const News = () => {
                 /> {section}
               </label>
             ))}
+          </div>
+          <div className={`filter_block filter-region d-flex flex-wrap ${selectedSection !== 'inland' ? 'hidden' : ''}`}>
+            <h4 className='newsTopTitle' style={{"width":"100%"}}>Filter by Region</h4>
+            {regions
+              .filter(region => region !== 'non-region')
+              .map((region) => (
+                <label key={region} className={`region-filter-btn news-filter-btn  ${selectedRegion === region ? 'active' : ''}`}>
+                  <input
+                    type="radio"
+                    name="region"
+                    value={region}
+                    checked={selectedRegion === region}
+                    onChange={handleRegionChange}
+                  /> {region}
+                </label>
+              ))}
           </div>
           {status === 'idle' || status === "loading" ? (
             <div className="spinner-border text-warning" role="status">

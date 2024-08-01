@@ -2,9 +2,9 @@ import React, { FC, useEffect, useState } from 'react'
 import { AppDispatch, RootState } from '../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { fetchComments, fetchNewsById, fetchPutReaction, formatDate } from '../features/news/newsSlice';
+import { deleteComment, editComment, fetchComments, fetchNewsById, fetchPutReaction, formatDate } from '../features/news/newsSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faComment, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faComment, faPenToSquare, faThumbsDown, faThumbsUp, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 
 const NewsDetail: FC = () => {
@@ -15,13 +15,12 @@ const NewsDetail: FC = () => {
     const newsItem = useSelector((state: RootState) => state.news.selectedNews);
     const status = useSelector((state: RootState) => state.news.status);
 
-    const [liked, setLiked] = useState(false);
-    const [disliked, setDisliked] = useState(false);
-
     const comments = useSelector((state: RootState) => state.news.comments);
 
     const [comment, setComment] = useState('');
     const [submitting, setSubmitting] = useState(false);
+    const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+    const [editedComment, setEditedComment] = useState('');
 
     useEffect(() => {
         if (id) {
@@ -41,6 +40,23 @@ const NewsDetail: FC = () => {
         }
     };
 
+    const handleEditComment = (commentId: number, comment: string) => {
+        setEditingCommentId(commentId);
+        setEditedComment(comment);
+    };
+
+    const handleDeleteComment = (commentId: number) => {
+        dispatch(deleteComment({ commentId }));
+    };
+
+    const handleEditSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        if (editingCommentId !== null) {
+            dispatch(editComment({ commentId: editingCommentId, comment: editedComment }));
+            setEditingCommentId(null);
+            setEditedComment('');
+        }
+    };
 
     return (
         <section>
@@ -104,8 +120,29 @@ const NewsDetail: FC = () => {
                                     {newsItem.commentsCount === 0 && <p className='empty-comments p-5 text-center'>There are no comments yet</p>}
                                     {comments.map(comment => (
                                         <div key={comment.id} className="comment">
-                                            <p><strong>{comment.authorName}</strong> {formatDate(comment.commentDate)} </p>
+                                            <div className='comment-header d-flex justify-content-between'><strong>{comment.authorName}</strong> {formatDate(comment.commentDate)} </div>
                                             <p>{comment.comment}</p>
+                                            <div className="comments-action">
+                                                <button className="comment-edit" onClick={() => handleEditComment(comment.id, comment.comment)}><FontAwesomeIcon icon={faPenToSquare} /></button>
+                                                <button className="comment-delete" onClick={() => handleDeleteComment(comment.id)}><FontAwesomeIcon icon={faTrash} /></button>
+                                            </div>
+                                            {editingCommentId === comment.id && (
+                                            <form className="edit-comment-form" onSubmit={handleEditSubmit}>
+                                                <div className='form-group'>
+                                                    <label htmlFor='editComment'>Edit your comment:</label>
+                                                    <textarea
+                                                        id='editComment'
+                                                        value={editedComment}
+                                                        onChange={(e) => setEditedComment(e.target.value)}
+                                                        required
+                                                        className='form-control'
+                                                    />
+                                                </div>
+                                                <button type='submit' className='btn'>
+                                                    Save
+                                                </button>
+                                            </form>
+                                        )}
                                         </div>
                                     ))}
                                 </div>
