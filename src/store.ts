@@ -4,7 +4,8 @@ import contactUsReducer from "./features/contactUs/contactUsSlice";
 
 // import blogReducerTest from "./features/blog/blogsTest/blogSliceTest";
 import blogReducer from "./features/blog/blogs/blogSlice";
-
+import userReducer from "./features/admin/users/userSlice";
+import adminNewsReducer from "./features/admin/adminNews/adminNewsSlice";
 
 // Заглушка редьюсера
 const dummyReducer = (state = {}, action: any) => state;
@@ -13,9 +14,11 @@ const store = configureStore({
   reducer: {
     dummy: dummyReducer,
     news: newsReducer,
-       contactForm: contactUsReducer,
+    contactForm: contactUsReducer,
     // blogSliceTest: blogReducerTest,
-    blogs: blogReducer
+    blogs: blogReducer,
+    users: userReducer,
+    adminNews: adminNewsReducer,
   },
 });
 
