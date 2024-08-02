@@ -1,5 +1,8 @@
 const authorizedFetch = async (url: string, options: RequestInit = {}) => {
-  const token = localStorage.getItem("access");
+  const token = localStorage.token;
+  
+  
+  
   const response = await fetch(url, {
     ...options,
     headers: {

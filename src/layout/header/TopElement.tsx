@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import RunLine from './Runline';
+import LogIn from '../../pages/LogIn';
 
 // Define the props type
 export interface TopElementProps {
@@ -24,10 +25,8 @@ const TopElement: FC<TopElementProps> = (props) => {
               <span className="login">
                 <FontAwesomeIcon icon={faUserCircle} />
               </span>
-              <a href="">Login</a>
-              <span> / </span>
-              <a href="">Registration</a>
-            </span>
+              <a href="/login">LogIn/Registration</a>
+              </span>
           </div>
         </div>
       </div>
