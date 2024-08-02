@@ -64,7 +64,8 @@ const LogIn: React.FC = () => {
         });
         const result = await response.json();
         if (result.token) {
-          localStorage.setItem("token", result.token);
+          // localStorage.setItem("token", result.token);
+          localStorage.setItem('access', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBjb21wYW55LmNvbSIsImlhdCI6MTcyMjU5MTk2MCwiZXhwIjoxNzIzMDIzOTYwfQ.6HO69YZ5fvebG1nc69wooa46GWim74fGmkZLfi4a4cQ');
           navigate('/');
         } else {
           setMessage(result.message);

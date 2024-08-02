@@ -13,10 +13,9 @@ const initialState: initialNewsState = {
     error: null,
     currentPage: 0,
     comments: [],
+    message: null,
     sections: [],
     regions: [],
-    message: null,
-
 };
 
 export const formatDate = (dateString: string): string => {
@@ -158,8 +157,7 @@ const newsSlice = createSlice({
                     regionsSet.add(news.regionName);
                 });
 
-                state.sections = Array.from(sectionsSet);
-                state.regions = Array.from(regionsSet);
+            
                 state.pageCount = action.payload.pageCount;
                 state.currentPage = action.payload.currentPage;
             })
