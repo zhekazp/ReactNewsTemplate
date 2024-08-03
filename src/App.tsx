@@ -48,6 +48,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
+		  {/* <Route path="gewinner" element={<Gewinnen/>} /> */}
           <Route path="news" element={<News />} />
           <Route path="news/:id" element={<NewsDetail />} />
           <Route path="blogs" element={<BlogPage />} />

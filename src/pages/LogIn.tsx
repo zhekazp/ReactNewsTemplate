@@ -47,6 +47,8 @@ const LogIn: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    
+    
     const validationErrors = validation(values);
     setErrors(validationErrors);
 
@@ -64,9 +66,10 @@ const LogIn: React.FC = () => {
         });
         const result = await response.json();
         if (result.token) {
-          // localStorage.setItem("token", result.token);
-          localStorage.setItem('access', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBjb21wYW55LmNvbSIsImlhdCI6MTcyMjU5MTk2MCwiZXhwIjoxNzIzMDIzOTYwfQ.6HO69YZ5fvebG1nc69wooa46GWim74fGmkZLfi4a4cQ');
-          navigate('/');
+          localStorage.setItem("token", result.token);
+          
+          
+          // navigate('/');
         } else {
           setMessage(result.message);
         }
@@ -74,6 +77,7 @@ const LogIn: React.FC = () => {
         console.error(error);
         setMessage("Ein Fehler ist aufgetreten. Bitte versuche es erneut.");
       }
+
     }
   };
 
@@ -210,7 +214,7 @@ const LogIn: React.FC = () => {
                 }}
               >
                 Konto erstellen
-              </Link>
+              </Link>             
             </div>
             {message && <div className="text-danger mt-3">{message}</div>}
           </div>
