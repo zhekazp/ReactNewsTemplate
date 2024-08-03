@@ -21,41 +21,24 @@ export const fetchBlogs = createAsyncThunk(
 );
 
 
-// export const addComment = createAsyncThunk(
-//   'blogs/addComment',
-//   async (commentData: IBlogCommentRequest, { rejectWithValue }) => {
-//     try {
-//       const response = await authorizedFetch(`${API_BASE_URL}/blog/comment`, {
-//         method: 'PUT',
-//         body: JSON.stringify(commentData),
-//       });
-//       return response;
-//     } catch (error) {
-//       return rejectWithValue(error.message);
-//     }
-//   }
-// );
-
-export const addComment = createAsyncThunk<
-  { message: string; comment?: IBlogComment },
-  IBlogCommentRequest,
-  { rejectValue: { message: string } }
->(
+export const addComment = createAsyncThunk(
   'blogs/addComment',
-  async (commentData, { rejectWithValue }) => {
+  async (commentData: IBlogCommentRequest, { rejectWithValue }) => {
     try {
       const response = await authorizedFetch(`${API_BASE_URL}/blog/comment`, {
-        method: 'PUT',
+        method: 'POST',
         body: JSON.stringify(commentData),
         headers: { 'Content-Type': 'application/json' },
       });
-      const data = await response.json();
+
       if (!response.ok) {
-        return rejectWithValue({ message: data.message || 'Failed to add comment' });
+        const data = await response.json();
+        return rejectWithValue(data.message || 'Failed to add comment');
       }
-      return data;
+
+      return response;
     } catch (error: any) {
-      return rejectWithValue({ message: error.message });
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -87,6 +70,7 @@ export const fetchBlogById = createAsyncThunk(
 );
 
 
+
 export const fetchRegions = createAsyncThunk(
   'regions/fetchRegions',
   async () => {
@@ -99,14 +83,13 @@ export const fetchRegions = createAsyncThunk(
   }
 );
 
-// Без валидации:
 
 // export const addBlog = createAsyncThunk(
 //   'blogs/addBlog',
 //   async (blogData: IAddBlogRequest, { rejectWithValue }) => {
 //     try {
 //       const response = await authorizedFetch(`${API_BASE_URL}/blog`, {
-//         method: 'PUT',
+//         method: 'POST',
 //         body: JSON.stringify(blogData),
 //       });
 //       return response;
@@ -116,28 +99,17 @@ export const fetchRegions = createAsyncThunk(
 //   }
 // );
 
-export const addBlog = createAsyncThunk<
-  AddBlogResponse,
-  IAddBlogRequest,
-  { rejectValue: AddBlogError }
->(
+export const addBlog = createAsyncThunk(
   'blogs/addBlog',
-  async (blogData, { rejectWithValue }) => {
+  async (blogData: IAddBlogRequest, { rejectWithValue }) => {
     try {
       const response = await authorizedFetch(`${API_BASE_URL}/blog`, {
-        method: 'PUT',
+        method: 'POST',
         body: JSON.stringify(blogData),
-        headers: {
-          'Content-Type': 'application/json',
-        },
       });
-      const data = await response.json();
-      if (!response.ok) {
-        return rejectWithValue({ message: data.message || 'Failed to add blog' });
-      }
-      return data;
+      return response.json();
     } catch (error: any) {
-      return rejectWithValue({ message: error.message });
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -147,7 +119,7 @@ export const addBlog = createAsyncThunk<
 //   async ({ id, blogAddRequestDTO }: IUpdateBlogRequest, { rejectWithValue }) => {
 //     try {
 //       const response = await authorizedFetch(`${API_BASE_URL}/blog`, {
-//         method: 'POST',
+//         method: 'PUT',
 //         body: JSON.stringify({
 //           id,
 //           blogAddRequestDTO
@@ -160,39 +132,59 @@ export const addBlog = createAsyncThunk<
 //   }
 // );
 
-export const updateBlog = createAsyncThunk<
-  { message: string },
-  IUpdateBlogRequest,
-  { rejectValue: { message: string } }
->(
+export const updateBlog = createAsyncThunk(
   'blogs/updateBlog',
-  async ({ id, blogAddRequestDTO }, { rejectWithValue }) => {
+  async (updatedBlogRequest: IUpdateBlogRequest, { rejectWithValue }) => {
     try {
       const response = await authorizedFetch(`${API_BASE_URL}/blog`, {
-        method: 'POST',
-        body: JSON.stringify({ id, blogAddRequestDTO }),
-        headers: { 'Content-Type': 'application/json' },
+        method: 'PUT',
+        body: JSON.stringify(updatedBlogRequest),
       });
-      const data = await response.json();
+      
       if (!response.ok) {
-        return rejectWithValue({ message: data.message || 'Failed to update blog' });
+        const errorData = await response.json();
+        return rejectWithValue(errorData.message);
       }
-      return data;
+
+      const updatedBlog = await response.json();
+      return updatedBlog; // Возвращаем обновленный блог
     } catch (error: any) {
-      return rejectWithValue({ message: error.message });
+      return rejectWithValue(error.message);
     }
   }
 );
+
+
+// export const deleteBlog = createAsyncThunk(
+//   'blogs/deleteBlog',
+//   async (id: number, { rejectWithValue }) => {
+//     try {
+//       const response = await authorizedFetch(`${API_BASE_URL}/blog`, {
+//         method: 'DELETE',
+//         body: JSON.stringify({ id }),
+//       });
+//       return response;
+//     } catch (error: any) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
 
 export const deleteBlog = createAsyncThunk(
   'blogs/deleteBlog',
   async (id: number, { rejectWithValue }) => {
     try {
-      const response = await authorizedFetch(`${API_BASE_URL}/blog/${id}`, {
+      const response = await authorizedFetch(`${API_BASE_URL}/blog`, {
         method: 'DELETE',
+        body: JSON.stringify({ id }),
       });
-      return response;
-    } catch (error) {
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete blog');
+      }
+      
+      return id; // Возвращаем только ID удаленного блога
+    } catch (error: any) {
       return rejectWithValue(error.message);
     }
   }
@@ -250,32 +242,20 @@ const blogSlice = createSlice({
         state.status = 'error';
         state.error = action.error.message || null;
       })
-      // .addCase(addComment.pending, (state) => {
-      //   state.status = 'loading';
-      // })
-      // .addCase(addComment.fulfilled, (state, action: PayloadAction<IBlogComment>) => {
-      //   state.status = 'success';
-      //   if (state.blog) {
-      //     state.blog.comments.unshift(action.payload);
-      //   }
-      // })
-      // .addCase(addComment.rejected, (state, action) => {
-      //   state.status = 'error';
-      //   state.error = action.error.message || null;
-      // })
       .addCase(addComment.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(addComment.fulfilled, (state, action) => {
         state.status = 'success';
-        state.message = action.payload.message;
-        if (action.payload.comment && state.blog) {
-          state.blog.comments.unshift(action.payload.comment);
+        state.message = 'Comment added successfully';
+        // Обновление состояния блога с новым комментарием
+        if (state.blog) {
+          state.blog.comments.unshift(action.payload as unknown as IBlogComment);
         }
       })
       .addCase(addComment.rejected, (state, action) => {
         state.status = 'error';
-        state.error = action.payload?.message || 'An error occurred';
+        state.error = action.payload as string || 'An error occurred';
       })
       .addCase(deleteComment.fulfilled, (state, action: PayloadAction<number>) => {
         state.status = 'success';
@@ -295,70 +275,58 @@ const blogSlice = createSlice({
         state.status = 'error';
         state.error = action.error.message || null;
       })
-      // .addCase(addBlog.pending, (state) => {
-      //   state.status = 'loading';
-      // })
-      // .addCase(addBlog.fulfilled, (state, action: PayloadAction<IBlog>) => {
-      //   state.status = 'success';
-      //   state.blogs.unshift(action.payload);
-      // })
-      // .addCase(addBlog.rejected, (state, action) => {
-      //   state.status = 'error';
-      //   state.error = action.error.message || null;
-      // })
       .addCase(addBlog.pending, (state) => {
         state.status = 'loading';
-        state.error = null;
-        state.message = null;
       })
-      .addCase(addBlog.fulfilled, (state, action: PayloadAction<AddBlogResponse>) => {
+      .addCase(addBlog.fulfilled, (state, action: PayloadAction<IBlog>) => {
         state.status = 'success';
-        if (action.payload.blog) {
-          state.blogs.unshift(action.payload.blog);
-        }
-        state.message = action.payload.message;
+        state.blogs.unshift(action.payload);
       })
-      .addCase(addBlog.rejected, (state, action: PayloadAction<AddBlogError | undefined>) => {
+      .addCase(addBlog.rejected, (state, action) => {
         state.status = 'error';
-        state.error = action.payload?.message || 'An error occurred';
+        state.error = action.error.message || null;
       })
-      // .addCase(updateBlog.pending, (state) => {
-      //   state.status = 'loading';
-      // })
-      // .addCase(updateBlog.fulfilled, (state, action) => {
-      //   state.status = 'success';
-      //   if (action.payload.message === "Blog update successfully") {
-      //     // Найдите и обновите блог в состоянии
-      //     if (state.blog) {
-      //       state.blog.editedDate = new Date().toISOString();
-      //     }
-      //   }
-      // })
-      // .addCase(updateBlog.rejected, (state, action) => {
-      //   state.status = 'error';
-      //   state.error = action.error.message || null;
-      // })
       .addCase(updateBlog.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(updateBlog.fulfilled, (state, action) => {
         state.status = 'success';
-        state.message = action.payload.message;
-        if (action.payload.message === "Blog update successfully" && state.blog) {
-          state.blog.editedDate = new Date().toISOString();
-          state.blog.title = action.meta.arg.blogAddRequestDTO.title;
-          state.blog.content = action.meta.arg.blogAddRequestDTO.content;
+        if (action.payload) {
+          // Обновляем блог в состоянии
+          state.blog = {
+            ...state.blog,
+            ...action.payload,
+            editedDate: new Date().toISOString()
+          };
+          // Если блог существует в списке блогов, обновляем его там тоже
+          const index = state.blogs.findIndex(blog => blog.id === action.payload.id);
+          if (index !== -1) {
+            state.blogs[index] = {
+              ...state.blogs[index],
+              ...action.payload,
+              editedDate: new Date().toISOString()
+            };
+          }
         }
       })
       .addCase(updateBlog.rejected, (state, action) => {
         state.status = 'error';
-        state.error = action.payload?.message || 'An error occurred';
+        state.error = action.error.message || null;
       })
       .addCase(deleteBlog.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(deleteBlog.fulfilled, (state) => {
+      // .addCase(deleteBlog.fulfilled, (state) => {
+      //   state.status = 'success';
+      // })
+      .addCase(deleteBlog.fulfilled, (state, action: PayloadAction<number>) => {
         state.status = 'success';
+        // Удаляем блог из списка blogs, если он там есть
+        state.blogs = state.blogs.filter(blog => blog.id !== action.payload);
+        // Если удаленный блог был текущим отображаемым блогом, очищаем его
+        if (state.blog && state.blog.id === action.payload) {
+          state.blog = null;
+        }
       })
       .addCase(deleteBlog.rejected, (state, action) => {
         state.status = 'error';

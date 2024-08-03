@@ -69,7 +69,7 @@ const LogIn: React.FC = () => {
           localStorage.setItem("token", result.token);
           
           
-          // navigate('/');
+          navigate('/');
         } else {
           setMessage(result.message);
         }

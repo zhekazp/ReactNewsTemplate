@@ -8,103 +8,6 @@ import { IBlog } from "./types";
 import "./blogsStyles/blogList.css";
 import Breadcrumb from "./Breadcrumb";
 
-// const BlogList: React.FC = () => {
-//   const dispatch: AppDispatch = useDispatch();
-//   const { blogs, status, error, pageCount, currentPage } = useSelector((state: RootState) => state.blogs);
-
-//   useEffect(() => {
-//     // Загружаем данные только при первом рендере
-//     dispatch(fetchBlogs({ page: currentPage, region: 0 }));
-//   }, [dispatch, currentPage]);
-
-//   const handlePageChange = (page: number) => {
-//     console.log('Changing page to:', page); // Debug log
-//     dispatch(fetchBlogs({ page: page-1, region: 0 })); // Учитываем нумерацию страниц с 0
-//   };
-
-//   return (
-//     <div>
-//       {status === 'loading' && (
-//         <div className="spinner-border text-secondary" role="status">
-//           <span className="visually-hidden">Loading...</span>
-//         </div>
-//       )}
-//       {status === 'success' && (
-//         <div>
-//           <h1>Blogs</h1>
-//           <ul>
-//             {blogs.map((blog) => (
-//               <BlogItem key={blog.id} blog={blog} />
-//             ))}
-//           </ul>
-//           <div>
-//             {Array.from({ length: pageCount }).map((_, index) => (
-//               <button
-//                 key={index}
-//                 onClick={() => handlePageChange(index+1)}
-//                 disabled={index === currentPage}
-//               >
-//                 {index + 1}
-//               </button>
-//             ))}
-//           </div>
-//         </div>
-//       )}
-//       {status === 'error' && <div>Error: {error}</div>}
-//     </div>
-//   );
-// };
-
-// export default BlogList;
-
-// const BlogList: React.FC = () => {
-//   const dispatch: AppDispatch = useDispatch();
-//   const { blogs, status, error, pageCount, currentPage } = useSelector((state: RootState) => state.blogs);
-//   const [searchParams, setSearchParams] = useSearchParams();
-
-//   useEffect(() => {
-//     const page = parseInt(searchParams.get('page') || '1', 10) - 1;
-//     dispatch(fetchBlogs({ page, region: 0 }));
-//   }, [dispatch, searchParams]);
-
-//   const handlePageChange = (page: number) => {
-//     setSearchParams({ page: page.toString() });
-//   };
-
-//   return (
-//     <div>
-//       {status === 'loading' && (
-//         <div className="spinner-border text-secondary" role="status">
-//           <span className="visually-hidden">Loading...</span>
-//         </div>
-//       )}
-//       {status === 'success' && (
-//         <div>
-//           <h1>Blogs</h1>
-//           <ul>
-//             {blogs.map((blog) => (
-//               <BlogItem key={blog.id} blogItem={blog} />
-//             ))}
-//           </ul>
-//           <div>
-//             {Array.from({ length: pageCount }).map((_, index) => (
-//               <button
-//                 key={index}
-//                 onClick={() => handlePageChange(index + 1)}
-//                 disabled={index === currentPage}
-//               >
-//                 {index + 1}
-//               </button>
-//             ))}
-//           </div>
-//         </div>
-//       )}
-//       {status === 'error' && <div>Error: {error}</div>}
-//     </div>
-//   );
-// };
-
-// export default BlogList;
 
 const BlogList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -121,8 +24,19 @@ const BlogList: React.FC = () => {
 
   const navigate = useNavigate();
 
+  // const handleAddBlogClick = () => {
+  //   navigate("/add-blog");
+  // };
+
+  const [authError, setAuthError] = useState<string | null>(null);
+
   const handleAddBlogClick = () => {
-    navigate("/add-blog");
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate("/add-blog");
+    } else {
+      setAuthError('Sie müssen sich anmelden, um einen neuen Blog hinzuzufügen.');
+    }
   };
 
   useEffect(() => {
@@ -149,6 +63,7 @@ const BlogList: React.FC = () => {
       <button className="newBlog_button" onClick={handleAddBlogClick}>
         Neuer Blog
       </button>
+      {authError && <p className="error">{authError}</p>}
       <div>
         <select
           className="blogList_select"
