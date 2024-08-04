@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { IAddBlogRequest, IBlog, IBlogsResponse, IUpdateBlogRequest, IRegionDTO, IBlogComment, IBlogCommentRequest, IBlogDetails, AddBlogResponse, AddBlogError} from './types';
+import { IAddBlogRequest, IBlog, IBlogsResponse, IUpdateBlogRequest, IRegionDTO, IBlogComment, IBlogCommentRequest, IBlogDetails} from './types';
 import authorizedFetch from './authorizedFetch';
 
 export const API_BASE_URL = '/api';
@@ -47,7 +47,7 @@ export const deleteComment = createAsyncThunk(
   'comments/deleteComment',
   async (commentId: number, { rejectWithValue }) => {
     try {
-      const response = await authorizedFetch(`${API_BASE_URL}/blog/comment/${commentId}`, {
+      const response = await authorizedFetch(`${API_BASE_URL}/blog/comment`, {
         method: 'DELETE',
       });
       return commentId;
@@ -147,7 +147,7 @@ export const updateBlog = createAsyncThunk(
       }
 
       const updatedBlog = await response.json();
-      return updatedBlog; // Возвращаем обновленный блог
+      return updatedBlog;
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
@@ -183,9 +183,37 @@ export const deleteBlog = createAsyncThunk(
         throw new Error('Failed to delete blog');
       }
       
-      return id; // Возвращаем только ID удаленного блога
+      return id;
     } catch (error: any) {
       return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchUserBlogs = createAsyncThunk(
+  'blogs/fetchUserBlogs',
+  async ({ page }: { page: number }, { rejectWithValue }) => {
+    try {
+      const url = `${API_BASE_URL}/blogs/user?page=${page}`;
+
+      const response = await authorizedFetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return rejectWithValue(errorData.message || 'Не удалось получить блоги пользователя');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error: any) {
+      console.error('Ошибка при выполнении fetchUserBlogs:', error.message);
+      return rejectWithValue(error.message || 'Произошла неизвестная ошибка');
     }
   }
 );
@@ -215,7 +243,8 @@ const initialState: BlogsState = {
 const blogSlice = createSlice({
   name: 'blogs',
   initialState,
-  reducers: {},
+  reducers: {
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchBlogs.pending, (state) => {
@@ -235,6 +264,7 @@ const blogSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(fetchBlogById.fulfilled, (state, action: PayloadAction<IBlogDetails>) => {
+        console.log('Received blog data:', action.payload);
         state.status = 'success';
         state.blog = action.payload;
       })
@@ -332,7 +362,21 @@ const blogSlice = createSlice({
         state.status = 'error';
         state.error = action.error.message || null;
       })
+      .addCase(fetchUserBlogs.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchUserBlogs.fulfilled, (state, action: PayloadAction<IBlogsResponse>) => {
+        state.status = 'success';
+        state.blogs = action.payload.blogs;
+        state.pageCount = action.payload.pageCount;
+        state.currentPage = action.payload.currentPage;
+      })
+      .addCase(fetchUserBlogs.rejected, (state, action) => {
+        state.status = 'error';
+        state.error = action.error.message || null;
+      })
   },
 });
+
 
 export default blogSlice.reducer;

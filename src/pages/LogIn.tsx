@@ -67,7 +67,20 @@ const LogIn: React.FC = () => {
         const result = await response.json();
         if (result.token) {
           localStorage.setItem("token", result.token);
+
+
+          localStorage.removeItem("user");
+        
+          // Сохранение новых данных
+          const userData = { 
+            email: values.email, 
+            name: result.name || values.email, 
+            token: result.token 
+          };
+          localStorage.setItem("user", JSON.stringify(userData));
           
+          console.log('Token saved:', result.token);
+
           
           navigate('/');
         } else {
