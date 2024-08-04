@@ -69,6 +69,7 @@ const LogIn: React.FC = () => {
           localStorage.setItem("token", result.token);
 
 
+
           localStorage.removeItem("user");
         
           // Сохранение новых данных
@@ -80,6 +81,7 @@ const LogIn: React.FC = () => {
           localStorage.setItem("user", JSON.stringify(userData));
           
           console.log('Token saved:', result.token);
+
 
           
           navigate('/');

@@ -4,12 +4,9 @@ import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import RunLine from './Runline';
 import LogIn from '../../pages/LogIn';
 
-// Define the props type
-export interface TopElementProps {
-  news: string[];
-}
 
-const TopElement: FC<TopElementProps> = (props) => {
+
+const TopElement: FC = () => {
   return (
     <div className="topBlock">
       <div className="container">
@@ -17,7 +14,7 @@ const TopElement: FC<TopElementProps> = (props) => {
           <div className="left-content">
             <div className="topText">
               <span className="topTitle">actuelle</span>
-              <RunLine news={props.news} />
+              <RunLine />
             </div>
           </div>
           <div className="right-content d-flex align-self-center">

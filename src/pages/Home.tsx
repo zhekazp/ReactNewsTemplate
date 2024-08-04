@@ -11,14 +11,16 @@ import Blog from "../features/mainPage/components/blog/Blog";
 import InfoComponent from "../features/mainPage/components/info/InfoComponent";
 import { MainPageData, NewsMP, WeatherMP } from "../features/mainPage/mainPage";
 import ErrorModal from "../features/mainPage/components/modal/ErrorModal";
-
+import { useDispatch } from "react-redux";
+import { topSlice } from "../layout/header/topElSlice";
+import type { INewsTop } from "../layout/header/topElSlice";
 const Home = () => {
   const [data, setData] = useState<MainPageData | null>(null);
   const [errorResponse, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [weather, setWeather] = useState<WeatherMP | null>(null);
   const [weatherLoading, setStatus] = useState<boolean>(true);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     fetch("/api/mainpage")
       .then((response) => {
@@ -30,6 +32,11 @@ const Home = () => {
       .then((response) => response.json())
       .then((data) => {
         setData(data);
+        const newsDT: INewsTop[] = 
+        data.innerNews.slice(12, 15).map((item) => {return {news:item.title, url:item.id}});        
+        dispatch(topSlice.actions
+          .setNews(newsDT));
+        
       })
       .catch(() => {
         setLoading(false);
