@@ -32,11 +32,10 @@ const Home = () => {
       .then((response) => response.json())
       .then((data) => {
         setData(data);
-        const newsDT: INewsTop[] = 
-        data.innerNews.slice(12, 15).map((item) => {return {news:item.title, url:item.id}});        
-        dispatch(topSlice.actions
-          .setNews(newsDT));
-        
+        const newsDT: INewsTop[] = data.innerNews.slice(12, 15).map((item) => {
+          return { news: item.title, url: item.id };
+        });
+        dispatch(topSlice.actions.setNews(newsDT));
       })
       .catch(() => {
         setLoading(false);
@@ -77,17 +76,20 @@ const Home = () => {
                 <Carousel fade={true}>
                   {data.innerNews.slice(0, 4).map((newsItem: NewsMP) => (
                     <Carousel.Item key={uid()}>
-                      <div className="picBlock">
-                        <img
-                          width="100%"
-                          src={newsItem.titleImageSquare}
-                          alt={newsItem.title}
-                        />
-                      </div>
-                      <Carousel.Caption>
-                        <h4>{newsItem.title}</h4>
-                        <NewsInfo info={newsItem} />
-                      </Carousel.Caption>
+                      <a href={"/news/" + newsItem.id}>
+                        <div className="picBlock">
+                          <img
+                            width="100%"
+                            src={newsItem.titleImageSquare}
+                            alt={newsItem.title}
+                          />
+                        </div>
+
+                        <Carousel.Caption>
+                          <h4>{newsItem.title}</h4>
+                          <NewsInfo info={newsItem} />
+                        </Carousel.Caption>
+                      </a>
                     </Carousel.Item>
                   ))}
                 </Carousel>
@@ -96,7 +98,9 @@ const Home = () => {
                 <div className="row ">
                   {data.innerNews.slice(5, 7).map((newsItem) => (
                     <div key={uid()} className="col-6">
-                      <News city={false} info={newsItem} />
+                      <a href={"/news/" + newsItem.id}>
+                        <News city={false} info={newsItem} />
+                      </a>
                     </div>
                   ))}
                 </div>
@@ -114,7 +118,9 @@ const Home = () => {
                 <div className="row">
                   {data.innerNews.slice(7, 11).map((item) => (
                     <div key={uid()} className="col-3">
-                      <News city={true} info={item} />
+                      <a href={"/news/" + item.id}>
+                        <News city={true} info={item} />
+                      </a>
                     </div>
                   ))}
                 </div>
@@ -133,7 +139,9 @@ const Home = () => {
                     <div className="row">
                       {data.world.map((item) => (
                         <div key={uid()} className="col-6 worldNews">
-                          <News city={false} info={item} />
+                          <a href={"/news/" + item.id}>
+                            <News city={false} info={item} />
+                          </a>
                         </div>
                       ))}
                     </div>
@@ -152,10 +160,14 @@ const Home = () => {
                       <div className="row">
                         {[0, 1].map((childItem) => (
                           <div key={uid()} className="col-6">
-                            <News
-                              city={false}
-                              info={data.sport[item + childItem]}
-                            />
+                            <a
+                              href={"/news/" + data.sport[item + childItem].id}
+                            >
+                              <News
+                                city={false}
+                                info={data.sport[item + childItem]}
+                              />
+                            </a>
                           </div>
                         ))}
                       </div>
@@ -166,7 +178,9 @@ const Home = () => {
               <div className="col-6 newSlider">
                 <Title title="Blogs" />
                 {data.blogs.map((item) => (
-                  <Blog key={uid()} info={item} />
+                  <a href={"/blogs/"+item.id}>
+                    <Blog key={uid()} info={item} />
+                  </a>
                 ))}
               </div>
             </div>

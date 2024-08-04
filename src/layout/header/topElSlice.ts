@@ -11,7 +11,8 @@ export interface INewsTop{
 }
 
 export interface ITopData {
-    news: INewsTop[];
+  currentPage: number;  
+  news: INewsTop[];
     user:IUserAuth;
 }
 
@@ -19,6 +20,7 @@ export interface ITopData {
 
 const initialState: ITopData = {
   news: [],
+  currentPage:0,
   user:{
   authorized: false,
   useRole: false}
@@ -34,7 +36,10 @@ export const topSlice = createSlice({
     setUserData(state, action: PayloadAction<IUserAuth>){
         state.user.authorized = action.payload.authorized;
         state.user.useRole = action.payload.useRole;
-    }
+    },
+    setCurrentPage(state, action: PayloadAction<number>){
+      state.currentPage = action.payload;
+   }
   },
   
 });
