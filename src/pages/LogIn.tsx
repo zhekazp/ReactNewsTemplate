@@ -67,7 +67,10 @@ const LogIn: React.FC = () => {
         const result = await response.json();
         if (result.token) {
           localStorage.setItem("token", result.token);
-          
+          // localStorage.setItem("login", {
+          //   role: result.role,
+          //   log: true;
+          // });
           
           navigate('/');
         } else {
