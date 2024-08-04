@@ -3,6 +3,7 @@ body {
 }
 a {
   cursor: pointer;
+  text-decoration: none !important;
 }
 main{
   min-height: calc(100vh - 440px);
@@ -281,6 +282,7 @@ main{
 .blog{
   text-align: center;
   margin-top: 10px;
+  cursor: pointer;
 }
 @media (max-width: 1000px) {
   .col-3 {
