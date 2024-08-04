@@ -11,6 +11,12 @@
     margin: 20px auto;
 }
 
+.meine-blog_buttons{
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
 .newBlog_button {
   display: flex;
   justify-content: center;
@@ -22,7 +28,7 @@
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.3s;
-  margin: 20px 0;
+  margin-top: 20px;
 }
 
 .newBlog_button:hover {

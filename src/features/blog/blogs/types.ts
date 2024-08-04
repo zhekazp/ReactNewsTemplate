@@ -17,6 +17,7 @@ export interface IBlog extends IBlogBase {
 
 
 export interface IBlogDetails extends IBlogBase {
+  isPublishedByCurrentUser: boolean;
   content: string;
   comments: IBlogComment[];
 }
