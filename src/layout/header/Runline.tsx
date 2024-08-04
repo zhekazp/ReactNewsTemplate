@@ -6,7 +6,6 @@ import { uid } from "uid";
  
   const RunLine: FC = () => {
   const {news} = useSelector((state:RootState) => state.top);
-  
   return (
     <div>
        <div className="run">
