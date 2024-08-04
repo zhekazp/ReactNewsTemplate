@@ -43,13 +43,26 @@ export const addComment = createAsyncThunk(
   }
 );
 
+
 export const deleteComment = createAsyncThunk(
   'comments/deleteComment',
   async (commentId: number, { rejectWithValue }) => {
     try {
-      const response = await authorizedFetch(`${API_BASE_URL}/blog/comment`, {
+      const token = localStorage.getItem('token'); // Получаем токен из localStorage
+
+      const response = await fetch(`${API_BASE_URL}/blog/comment`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Добавляем токен в заголовок
+        },
+        body: JSON.stringify({ id: commentId }), // Отправляем ID в теле запроса
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
       return commentId;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -57,13 +70,37 @@ export const deleteComment = createAsyncThunk(
   }
 );
 
+// export const fetchBlogById = createAsyncThunk(
+//   'blogs/fetchBlogById',
+//   async (id: number, { rejectWithValue }) => {
+//     try {
+//       const response = await axios.get<IBlogDetails>(`${API_BASE_URL}/blogs/${id}`);
+//       return response.data;
+//     } catch (error) {
+//       return rejectWithValue(error.response?.data || error.message);
+//     }
+//   }
+// );
+
 export const fetchBlogById = createAsyncThunk(
   'blogs/fetchBlogById',
   async (id: number, { rejectWithValue }) => {
     try {
-      const response = await axios.get<IBlogDetails>(`${API_BASE_URL}/blogs/${id}`);
+      const token = localStorage.getItem('token');
+      console.log('Token being sent:', token);
+      
+      const response = await axios.get<IBlogDetails>(`${API_BASE_URL}/blogs/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      console.log('Full API response:', response);
+      console.log('Blog data:', response.data);
+      console.log('isPublishedByCurrentUser:', response.data.isPublishedByCurrentUser);
       return response.data;
     } catch (error) {
+      console.error('Error in fetchBlogById:', error);
       return rejectWithValue(error.response?.data || error.message);
     }
   }
@@ -84,21 +121,6 @@ export const fetchRegions = createAsyncThunk(
 );
 
 
-// export const addBlog = createAsyncThunk(
-//   'blogs/addBlog',
-//   async (blogData: IAddBlogRequest, { rejectWithValue }) => {
-//     try {
-//       const response = await authorizedFetch(`${API_BASE_URL}/blog`, {
-//         method: 'POST',
-//         body: JSON.stringify(blogData),
-//       });
-//       return response;
-//     } catch (error) {
-//       return rejectWithValue(error.message);
-//     }
-//   }
-// );
-
 export const addBlog = createAsyncThunk(
   'blogs/addBlog',
   async (blogData: IAddBlogRequest, { rejectWithValue }) => {
@@ -114,23 +136,6 @@ export const addBlog = createAsyncThunk(
   }
 );
 
-// export const updateBlog = createAsyncThunk(
-//   'blogs/updateBlog',
-//   async ({ id, blogAddRequestDTO }: IUpdateBlogRequest, { rejectWithValue }) => {
-//     try {
-//       const response = await authorizedFetch(`${API_BASE_URL}/blog`, {
-//         method: 'PUT',
-//         body: JSON.stringify({
-//           id,
-//           blogAddRequestDTO
-//         }),
-//       });
-//       return response;
-//     } catch (error) {
-//       return rejectWithValue(error.message);
-//     }
-//   }
-// );
 
 export const updateBlog = createAsyncThunk(
   'blogs/updateBlog',
@@ -154,21 +159,6 @@ export const updateBlog = createAsyncThunk(
   }
 );
 
-
-// export const deleteBlog = createAsyncThunk(
-//   'blogs/deleteBlog',
-//   async (id: number, { rejectWithValue }) => {
-//     try {
-//       const response = await authorizedFetch(`${API_BASE_URL}/blog`, {
-//         method: 'DELETE',
-//         body: JSON.stringify({ id }),
-//       });
-//       return response;
-//     } catch (error: any) {
-//       return rejectWithValue(error.message);
-//     }
-//   }
-// );
 
 export const deleteBlog = createAsyncThunk(
   'blogs/deleteBlog',
@@ -264,9 +254,11 @@ const blogSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(fetchBlogById.fulfilled, (state, action: PayloadAction<IBlogDetails>) => {
-        console.log('Received blog data:', action.payload);
+        console.log('Updating state with blog data:', action.payload);
+        console.log('isPublishedByCurrentUser in payload:', action.payload.isPublishedByCurrentUser);
         state.status = 'success';
         state.blog = action.payload;
+        console.log('Updated state:', state.blog);
       })
       .addCase(fetchBlogById.rejected, (state, action) => {
         state.status = 'error';
@@ -346,9 +338,6 @@ const blogSlice = createSlice({
       .addCase(deleteBlog.pending, (state) => {
         state.status = 'loading';
       })
-      // .addCase(deleteBlog.fulfilled, (state) => {
-      //   state.status = 'success';
-      // })
       .addCase(deleteBlog.fulfilled, (state, action: PayloadAction<number>) => {
         state.status = 'success';
         // Удаляем блог из списка blogs, если он там есть
