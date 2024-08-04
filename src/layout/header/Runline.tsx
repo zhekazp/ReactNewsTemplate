@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 import Marquee from "react-fast-marquee";
-import { TopElementProps } from "./TopElement";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { RootState } from "../../store";
+import { uid } from "uid";
  
   const RunLine: FC = () => {
   const {news} = useSelector((state:RootState) => state.top);
@@ -13,7 +13,7 @@ import { RootState } from "../redux/store";
         <Marquee pauseOnHover={true}>
           {
           news.map((item, index) => (
-            <span className="runText" key={item + index}>
+            <span className="runText" key={uid()}>
               <a href={"/news/"+item.url}>{item.news}</a>
             </span>
           ))}
