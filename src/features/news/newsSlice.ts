@@ -135,12 +135,10 @@ export const addComment = createAsyncThunk(
                 body: JSON.stringify(commentData),
                 headers: { 'Content-Type': 'application/json' },
             });
-
             if (!response.ok) {
                 const data = await response.json();
                 return rejectWithValue(data.message || 'Failed to add comment');
             }
-
             return response;
         } catch (error: any) {
             return rejectWithValue(error.message);

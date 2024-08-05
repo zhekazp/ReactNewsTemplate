@@ -80,7 +80,7 @@ const NewsDetail: FC = () => {
             await dispatch(addComment({ newsId: Number(id), comment })).unwrap();
             setComment("");
             setCommentError(null);
-            setUpdateTrigger((prev) => prev + 1);
+            // setUpdateTrigger((prev) => prev + 1);
           } catch (error) {
             console.error("Fehler beim Hinzufügen des Kommentars:", error);
             setCommentError("Failed to add comment");
