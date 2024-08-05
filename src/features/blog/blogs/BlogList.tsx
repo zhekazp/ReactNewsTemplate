@@ -29,7 +29,7 @@ const BlogList: React.FC = () => {
   useEffect(() => {
     const page = parseInt(filters.page, 10);
     const region = parseInt(filters.region, 10);
-    dispatch(topSlice.actions.setCurrentPage(1));
+    dispatch(topSlice.actions.setCurrentPage(2));
     if (showUserBlogs) {
       dispatch(fetchUserBlogs({ page }));
     } else {
