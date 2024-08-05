@@ -7,10 +7,10 @@ const Confirm = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   useEffect(() => {
+      
     fetch(
-      "/api/user/confirmation?" +
-        `data=${searchParams.get("data")}
-        &code=${searchParams.get("code")}`
+      "api/user/confirmation?" +
+        `data=${searchParams.get("data")}&code=${searchParams.get("code")}`
     ).then((response) => {
       if (response.status === 200) 
         {
