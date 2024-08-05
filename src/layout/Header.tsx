@@ -7,9 +7,7 @@ import { news } from '../config/news';
 const Header = () => {
   return (
     <>
-            <TopElement news={[news[0].title, news[1].title,
-                news[2].title, news[3].title
-            ]}/>
+            <TopElement />
             <Navigation/>
         </>
   )

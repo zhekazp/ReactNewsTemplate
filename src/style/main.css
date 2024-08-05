@@ -3,9 +3,13 @@ body {
 }
 a {
   cursor: pointer;
+  text-decoration: none !important;
 }
 main{
   min-height: calc(100vh - 440px);
+}
+.textColorMain{
+  color:white;
 }
 .topBlock {
   background-color: #ff0000;
@@ -30,6 +34,9 @@ main{
   margin-right: 30px;
 }
 
+.loginButton{
+  cursor: pointer;
+}
 .topBlock ul li:last-child {
   margin-right: 0;
 }
@@ -47,6 +54,9 @@ main{
   border-right: 1px solid #f0f3f5;
   font-weight: 500;
   padding-left: 0;
+}
+.notMain{
+  border:none;
 }
 .run {
   overflow: hidden;
@@ -281,6 +291,7 @@ main{
 .blog{
   text-align: center;
   margin-top: 10px;
+  cursor: pointer;
 }
 @media (max-width: 1000px) {
   .col-3 {
@@ -305,6 +316,17 @@ main{
     width: 100%;
     border-bottom: 1px solid;
   }
-  
+  .smallWidth .col-6 {
+    width:100%}
 }
+  @media (max-width: 500px){
+    .smallWidth .col-6 {
+      width:100%}
+      .smallWidth .col-3 {
+        width:100%!important}
+    .newsTopic .nTitle{
+      font-size:.8rem}
+    }
+  
+
 
