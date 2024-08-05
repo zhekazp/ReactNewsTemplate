@@ -4,6 +4,8 @@ import contactUsReducer from "./features/contactUs/contactUsSlice";
 
 // import blogReducerTest from "./features/blog/blogsTest/blogSliceTest";
 import blogReducer from "./features/blog/blogs/blogSlice";
+import  topSliceReducer  from "./layout/header/topElSlice";
+
 
 
 // Заглушка редьюсера
@@ -15,7 +17,8 @@ const store = configureStore({
     news: newsReducer,
        contactForm: contactUsReducer,
     // blogSliceTest: blogReducerTest,
-    blogs: blogReducer
+    blogs: blogReducer,
+    top: topSliceReducer
   },
 });
 

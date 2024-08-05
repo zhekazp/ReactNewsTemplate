@@ -7,9 +7,7 @@ export interface IBlogBase {
   authorName: string;
   regionName: string;
   content?: string;
-  authorId?: number;
   editedDate?: string;
-  regionId?: number;
 }
 
 // Интерфейс для списка блогов
@@ -19,9 +17,8 @@ export interface IBlog extends IBlogBase {
 
 
 export interface IBlogDetails extends IBlogBase {
+  isPublishedByCurrentUser: boolean;
   content: string;
-  authorId: number;
-  regionId: number;
   comments: IBlogComment[];
 }
 

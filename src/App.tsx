@@ -11,18 +11,12 @@ import News from "./pages/News";
 import './style/main.css'
 import NewsDetail from "./pages/NewsDetail";
 import BlogPage from "./pages/BlogPage";
-// import './features/blog/blogs/breadcrumb.css';
 import Page_404 from "./pages/Page_404";
 import CookieConsentModal from "./features/cookie/CookieConsentModal";
-// logInSignUp
-// import { fetchBlogs } from "./features/blog/blogSlice";
 import LogIn from './pages/LogIn';
 import SignUp from './pages/SignUp';
 import './style/logInSignUp.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-
-
 import AddBlog from "./features/blog/blogs/AddBlog";
 import BlogDetails from "./features/blog/blogs/BlogDetails";
 import { fetchBlogs } from "./features/blog/blogs/blogSlice";
@@ -30,10 +24,6 @@ import { fetchBlogs } from "./features/blog/blogs/blogSlice";
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
-
-  // useEffect(() => {
-  //   dispatch(fetchBlogs({ page: 0, region: 0 }));
-  // }, [dispatch]);
 
   const [searchParams] = useSearchParams();
 
@@ -52,7 +42,7 @@ function App() {
           <Route path="news" element={<News />} />
           <Route path="news/:id" element={<NewsDetail />} />
           <Route path="blogs" element={<BlogPage />} />
-          <Route path="/blogs/:id" element={<BlogDetails />} />
+          <Route path="blogs/:id" element={<BlogDetails />} />
           <Route path="/add-blog" element={<AddBlog />} />
           <Route path="advertisement" element={<Advertisement />} />
           <Route path="about" element={<AboutUs />} />

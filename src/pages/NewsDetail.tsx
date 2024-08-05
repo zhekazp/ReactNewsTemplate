@@ -28,6 +28,7 @@ const NewsDetail: FC = () => {
             dispatch(fetchNewsById(Number(id)));
             dispatch(fetchComments(Number(id)));
         }
+        dispatch(topSlice.actions.setCurrentPage(1));
     }, [dispatch, id]);
 
     // useEffect(() => {

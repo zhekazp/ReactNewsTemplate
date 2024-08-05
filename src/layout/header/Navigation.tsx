@@ -1,27 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { uid } from 'uid';
-import { menuItems } from '../../config/menuConfig.ts';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store.ts";
+import { topSlice } from "../../layout/header/topElSlice";
+import { menuItems } from '../../config/menuConfig.ts';
 
 
 const Navigation = () => {
-  const [activeLink, setActiveLink] = useState<number>(0);
-
-  useEffect(() => {
-    // Извлекаем индекс активной ссылки из локального хранилища при монтировании компонента
-    const storedActiveLink = localStorage.getItem('activeLink');
-    if (storedActiveLink !== null) {
-      setActiveLink(parseInt(storedActiveLink, 10));
-    }
-  }, []);
-
-  const handleNavClick = (index: number) => {
-    // Сохраняем индекс активной ссылки в локальное хранилище
-    localStorage.setItem('activeLink', index.toString());
-    setActiveLink(index);
+  const dispatch = useDispatch();
+  const {currentPage} = useSelector((state:RootState) => state.top);
+  const handleClick = (index: number) => {
+      dispatch(topSlice.actions.setCurrentPage(index));
   };
 
   return (
@@ -38,8 +31,8 @@ const Navigation = () => {
             <Nav.Link key={uid()}
             as={Link}
                 to={item.path}
-                className={activeLink === index ? 'mActive' : ''}
-                onClick={() => handleNavClick(index)}>{item.title}</Nav.Link>
+                className={currentPage === index ? 'mActive' : ''}
+                onClick={() => handleClick(index)}>{item.title}</Nav.Link>
             )}
               
             </Nav>

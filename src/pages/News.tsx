@@ -4,6 +4,7 @@ import { AppDispatch, RootState } from '../store';
 import NewsComponent from '../features/news/NewsComponent';
 import { fetchFilteredNews, fetchNews, fetchRegions, fetchSections } from '../features/news/newsSlice';
 import '../style/news.css'
+import { topSlice } from "../layout/header/topElSlice";
 import Spinner from '../features/mainPage/components/spinner/Spinner';
 
 const News = () => {
