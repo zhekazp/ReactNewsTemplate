@@ -147,6 +147,10 @@ a, .news_content a{
         background-color: transparent;
         color: rgba(255, 255, 255, 0.55);
     }
+    h2{
+        font-size: 1.5rem;
+        margin-top: 20px;
+    }
 }
 .news-meta, .empty-comments{
     color: rgba(255, 255, 255, 0.55);
@@ -160,5 +164,46 @@ a, .news_content a{
 .comment-content{
     .newsTopTitle{
         margin: 0;
+    }
+}
+.form-input {
+    color: #fff;
+    background-color: #0D0D0D;
+    border-color: #0D0D0D;
+    height: 45px;
+    border-radius: 4px;
+    padding: 6px 20px;
+    margin-bottom: 30px;
+    border: 1px solid #D8E2E9;
+    outline: none !important;
+    text-decoration: none !important;
+    box-shadow: none !important;
+    width: 100%;
+    min-height: 100px;
+    &:focus{
+        background-color: transparent;
+        border-color: #ff0000;
+        color: #fff;
+    }
+    
+}
+.submit-btn{
+    outline: none;
+    background-color: #0D0D0D;
+    border: 1px solid #ff0000;
+    color: #ff0000;
+    padding: 10px 25px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    &:hover{
+        background-color: #ff0000;
+        color: #fff;
+    }
+}
+.form-group{
+    label{
+        color: rgb(132, 134, 138);
+        font-size: 14px;
+        font-weight: normal;
     }
 }

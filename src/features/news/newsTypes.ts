@@ -13,7 +13,11 @@ export interface INewsItem {
     dislikeCount: number;
     commentsCount: number;
 }
-
+export interface INewsItemFullPage extends INewsItem{
+    isPublishedByCurrentUser: boolean;
+    content: string;
+    comments: IComment[];
+}
 export interface NewsResponse {
     pageCount: number;
     currentPage: number; 
@@ -36,11 +40,12 @@ export interface CommentsResponse {
     comments: IComment[];
 }
 export interface INewsCommentRequest {
-    newsId: number;
     comment: string;
+    newsId: number;
   }
 export interface initialNewsState {
     newsArr: INewsItem[];
+    newsStk: INewsItemFullPage | null;
     status: 'idle' | "loading" | "success" | "error";
     selectedNews: INewsItem | null;
     pageCount: number;

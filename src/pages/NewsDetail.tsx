@@ -8,6 +8,7 @@ import { faClock, faComment, faPenToSquare, faThumbsDown, faThumbsUp, faTrash } 
 import { topSlice } from '../layout/header/topElSlice';
 
 
+
 const NewsDetail: FC = () => {
     const dispatch: AppDispatch = useDispatch();
 
@@ -23,6 +24,7 @@ const NewsDetail: FC = () => {
     const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
     const [editedComment, setEditedComment] = useState('');
     const [commentError, setCommentError] = useState<string | null>(null);
+    const [updateTrigger, setUpdateTrigger] = useState(0);
 
     useEffect(() => {
         if (id) {
@@ -52,21 +54,39 @@ const NewsDetail: FC = () => {
         dispatch(deleteComment({ commentId }));
     };
 
-    const handleEditSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
-        if (id && comment.trim()) {
-            setSubmitting(true);
-            if (!comment.trim()) {
-                setCommentError("Der Kommentar darf nicht leer sein.");
-                return;
-              }
-              if (id) {
-                dispatch(addComment({ newsId: Number(id), comment }));
-                setComment("");
-                setCommentError(null);
-              }
+    // const handleEditSubmit = async (event: React.FormEvent) => {
+    //     event.preventDefault();
+    //     if (id && comment.trim()) {
+    //         setSubmitting(true);
+    //         if (!comment.trim()) {
+    //             setCommentError("Der Kommentar darf nicht leer sein.");
+    //             return;
+    //           }
+    //           if (id) {
+    //             dispatch(addComment({ newsId: Number(id), comment }));
+    //             setComment("");
+    //             setCommentError(null);
+    //           }
+    //     }
+    // };
+    const handleAddComment = async () => {
+        if (!comment.trim()) {
+          setCommentError("Der Kommentar darf nicht leer sein.");
+          return;
         }
-    };
+        if (id) {
+          try {
+            console.log("Sending comment data:", { newsId: Number(id), comment });
+            await dispatch(addComment({ newsId: Number(id), comment })).unwrap();
+            setComment("");
+            setCommentError(null);
+            setUpdateTrigger((prev) => prev + 1);
+          } catch (error) {
+            console.error("Fehler beim Hinzufügen des Kommentars:", error);
+            setCommentError("Failed to add comment");
+          }
+        }
+      };
 
     return (
         <section>
@@ -113,16 +133,16 @@ const NewsDetail: FC = () => {
                                     </div> */}
                                 <div className='form-group'>
                                     <label htmlFor='comment'>Enter your comment:</label>
-                                    <textarea
+                                    <textarea 
                                         id='comment'
                                         value={comment}
                                         onChange={(e) => setComment(e.target.value)}
                                         required
-                                        className='form-control'
+                                        className=' form-input'
                                     />
                                 </div>
                                 {commentError && <p className="error">{commentError}</p>}
-                                <button type='submit' className='btn btn-primary' disabled={submitting}>
+                                <button type='submit' className='submit-btn' disabled={submitting} onClick={handleAddComment}>
                                     {submitting ? 'Submitting...' : 'Submit'}
                                 </button>
                             </form>
@@ -140,7 +160,7 @@ const NewsDetail: FC = () => {
                                             </div>
                                         )}
                                         {editingCommentId === comment.id && (
-                                            <form className="edit-comment-form" onSubmit={handleEditSubmit}>
+                                            <form className="edit-comment-form">
                                                 <div className='form-group'>
                                                     <label htmlFor='editComment'>Edit your comment:</label>
                                                     <textarea
@@ -148,10 +168,10 @@ const NewsDetail: FC = () => {
                                                         value={editedComment}
                                                         onChange={(e) => setEditedComment(e.target.value)}
                                                         required
-                                                        className='form-control'
+                                                        className=' form-input'
                                                     />
                                                 </div>
-                                                <button type='submit' className='btn'>
+                                                <button type='submit' className='submit-btn'>
                                                     Save
                                                 </button>
                                             </form>
