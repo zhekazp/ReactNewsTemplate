@@ -41,24 +41,21 @@ const BlogDetails: React.FC = () => {
   const [showModalDeleteBlog, setShowModalDeleteBlog] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [showModalUpdateSuccess, setShowModalUpdateSuccess] = useState(false);
+  const [showModalAddComment, setShowModalAddComment] = useState(false);
+  const [showModalDeleteComment, setShowModalDeleteComment] = useState(false);
+  const [updateTrigger, setUpdateTrigger] = useState(0); // Перерендер компонента
 
   const currentUserString = localStorage.getItem("user");
   const currentUser = currentUserString ? JSON.parse(currentUserString) : null;
-  console.log(currentUser);
+  const token = currentUser ? currentUser.token : null;
+  // console.log(currentUser);
 
-  const [updateTrigger, setUpdateTrigger] = useState(0);
-
-  //   const user = {
-  //     name: "Max", // замените это на фактическое имя пользователя
-  //     // добавьте другие свойства пользователя
-  //   };
-  //   localStorage.setItem("user", JSON.stringify(user));
-
-  //   const currentUserString = localStorage.getItem("user");
-  // console.log("User from localStorage:", currentUserString);
-
-  // const currentUser = currentUserString ? JSON.parse(currentUserString) : null;
-  // console.log("Parsed Current User:", currentUser);
+  useEffect(() => {
+    if (blog) {
+      console.log("Blog details:", blog);
+      console.log("isPublishedByCurrentUser:", blog.isPublishedByCurrentUser);
+    }
+  }, [blog]);
 
   useEffect(() => {
     const scrollToTop = () => {
@@ -81,15 +78,22 @@ const BlogDetails: React.FC = () => {
     }
   }, [blog]);
 
-  const handleAddComment = () => {
+
+  const handleAddComment = async () => {
     if (!comment.trim()) {
       setCommentError("Der Kommentar darf nicht leer sein.");
       return;
     }
     if (id) {
-      dispatch(addComment({ blogId: Number(id), comment }));
-      setComment("");
-      setCommentError(null);
+      try {
+        await dispatch(addComment({ blogId: Number(id), comment })).unwrap();
+        setComment("");
+        setCommentError(null);
+        setShowModalAddComment(true);
+        setUpdateTrigger((prev) => prev + 1);
+      } catch (error) {
+        console.error("Fehler beim Hinzufügen des Kommentars:", error);
+      }
     }
   };
 
@@ -101,118 +105,12 @@ const BlogDetails: React.FC = () => {
     }
   }, [dispatch, regions]);
 
-  // const handleEdit = async (event: React.FormEvent) => {
-  //   event.preventDefault();
-  //   let isValid = true;
-
-  //   if (!id || isNaN(Number(id))) {
-  //     console.error("Некорректный ID блога");
-  //     return;
-  //   }
-  //   // Валидация заголовка и содержания
-  //   if (editedTitle.length < 2) {
-  //     setTitleError("Der Titel muss mindestens 2 Zeichen lang sein.");
-  //     isValid = false;
-  //   } else if (editedTitle.length > 200) {
-  //     setTitleError("Der Titel darf höchstens 200 Zeichen lang sein.");
-  //     isValid = false;
-  //   } else {
-  //     setTitleError(null);
-  //   }
-
-  //   if (!editedContent.trim()) {
-  //     setContentError("Der Inhalt darf nicht leer sein.");
-  //     isValid = false;
-  //   } else {
-  //     setContentError(null);
-  //   }
-
-  //   if (isValid && blog) {
-  //     const region = regions.find((r) => r.regionName === blog.regionName);
-  //     if (!region) {
-  //       console.error("Регион не найден");
-  //       return;
-  //     }
-
-  //     const updatedBlogRequest: IUpdateBlogRequest = {
-  //       id: Number(id),
-  //       blogAddRequestDTO: {
-  //         title: editedTitle,
-  //         content: editedContent,
-  //         region: region.id,
-  //       },
-  //     };
-
-  //     try {
-  //       const updatedBlog = await dispatch(
-  //         updateBlog(updatedBlogRequest)
-  //       ).unwrap();
-  //       setIsEditing(false);
-  //       navigate(`/blogs/${updatedBlog.id}`);
-  //     } catch (error) {
-  //       console.error("Не удалось обновить блог:", error);
-  //     }
-  //   }
-  // };
-
-  // const handleEdit = async (event: React.FormEvent) => {
-  //   event.preventDefault();
-  //   let isValid = true;
-
-  //   if (!id || isNaN(Number(id))) {
-  //     console.error("Некорректный ID блога");
-  //     return;
-  //   }
-  //   // Валидация заголовка и содержания
-  //   if (editedTitle.length < 2) {
-  //     setTitleError("Der Titel muss mindestens 2 Zeichen lang sein.");
-  //     isValid = false;
-  //   } else if (editedTitle.length > 200) {
-  //     setTitleError("Der Titel darf höchstens 200 Zeichen lang sein.");
-  //     isValid = false;
-  //   } else {
-  //     setTitleError(null);
-  //   }
-
-  //   if (!editedContent.trim()) {
-  //     setContentError("Der Inhalt darf nicht leer sein.");
-  //     isValid = false;
-  //   } else {
-  //     setContentError(null);
-  //   }
-
-  //   if (isValid && blog) {
-  //     const region = regions.find((r) => r.regionName === blog.regionName);
-  //     if (!region) {
-  //       console.error("Регион не найден");
-  //       return;
-  //     }
-
-  //     const updatedBlogRequest: IUpdateBlogRequest = {
-  //       id: Number(id),
-  //       blogAddRequestDTO: {
-  //         title: editedTitle,
-  //         content: editedContent,
-  //         region: region.id,
-  //       },
-  //     };
-
-  //     try {
-  //       await dispatch(updateBlog(updatedBlogRequest)).unwrap();
-  //       setIsEditing(false);
-  //       setShowModalUpdateSuccess(true); // Показываем модалку об успешном обновлении
-  //     } catch (error) {
-  //       console.error("Не удалось обновить блог:", error.message || error);
-  //     }
-  //   }
-  // };
-
   const handleEdit = (event: React.FormEvent) => {
     event.preventDefault();
     let isValid = true;
 
     if (!id || isNaN(Number(id))) {
-      console.error("Некорректный ID блога");
+      console.error("Ungültige Blog-ID");
       return;
     }
 
@@ -235,77 +133,53 @@ const BlogDetails: React.FC = () => {
     }
 
     if (isValid && blog) {
-    const region = regions.find((r) => r.regionName === blog.regionName);
-    if (!region) {
-      console.error("Регион не найден");
-      return;
+      const region = regions.find((r) => r.regionName === blog.regionName);
+      if (!region) {
+        console.error("Region nicht gefunden");
+        return;
+      }
+
+      const updatedBlogRequest: IUpdateBlogRequest = {
+        id: Number(id),
+        blogAddRequestDTO: {
+          title: editedTitle,
+          content: editedContent,
+          region: region.id,
+        },
+      };
+
+      dispatch(updateBlog(updatedBlogRequest))
+        .unwrap()
+        .then((updatedBlog) => {
+          setIsEditing(false);
+          setShowModalUpdateSuccess(true);
+          setUpdateTrigger((prev) => prev + 1); // Это вызовет перерендер компонента
+        })
+        .catch((error) => {
+          console.error("Fehler beim Aktualisieren des Blogs:", error.message || error);
+        });
     }
-
-    const updatedBlogRequest: IUpdateBlogRequest = {
-      id: Number(id),
-      blogAddRequestDTO: {
-        title: editedTitle,
-        content: editedContent,
-        region: region.id,
-      },
-    };
-
-    dispatch(updateBlog(updatedBlogRequest))
-      .unwrap()
-      .then((updatedBlog) => {
-        setIsEditing(false);
-        setShowModalUpdateSuccess(true);
-        setUpdateTrigger(prev => prev + 1); // Это вызовет перерендер компонента
-      })
-      .catch((error) => {
-        console.error("Не удалось обновить блог:", error.message || error);
-      });
-  }
-};
-
-  // const handleDelete = async () => {
-  //   if (!id) {
-  //     console.error("Невозможно удалить: ID блога равен null или undefined");
-  //     return;
-  //   }
-
-  //   try {
-  //     console.log("Попытка удалить блог с ID:", id);
-  //     const numericId = Number(id);
-  //     if (isNaN(numericId)) {
-  //       console.error("Некорректный ID блога");
-  //       return;
-  //     }
-
-  //     // Вызовите асинхронный экшен для удаления блога
-  //     await dispatch(deleteBlog(numericId)).unwrap(); // unwrap для получения ответа без ошибок
-
-  //     setDeleteSuccess(true);
-  //     setShowModalDeleteBlog(true);
-  //   } catch (error) {
-  //     console.error("Не удалось удалить блог:", error);
-  //   }
-  // };
+  };
 
   const handleDelete = async () => {
     if (!id) {
-      console.error("Невозможно удалить: ID блога равен null или undefined");
+      console.error("Löschen nicht möglich: Blog-ID ist null oder undefined");
       return;
     }
-  
+
     try {
-      console.log("Попытка удалить блог с ID:", id);
+      console.log("Versuche, Blog mit ID zu löschen:", id);
       const numericId = Number(id);
       if (isNaN(numericId)) {
-        console.error("Некорректный ID блога");
+        console.error("Ungültige Blog-ID");
         return;
       }
-  
+
       await dispatch(deleteBlog(numericId)).unwrap();
       setDeleteSuccess(true);
       setShowModalDeleteBlog(true);
     } catch (error) {
-      console.error("Не удалось удалить блог:", error);
+      console.error("Fehler beim Löschen des Blogs:", error);
     }
   };
 
@@ -314,8 +188,15 @@ const BlogDetails: React.FC = () => {
     navigate("/blogs");
   };
 
-  const handleDeleteComment = (commentId: number) => {
-    dispatch(deleteComment(commentId));
+
+  const handleDeleteComment = async (commentId: number) => {
+    try {
+      await dispatch(deleteComment(commentId)).unwrap();
+      setShowModalDeleteComment(true);
+      setUpdateTrigger((prev) => prev + 1);
+    } catch (error) {
+      console.error("Failed to delete comment:", error);
+    }
   };
 
   return (
@@ -381,50 +262,49 @@ const BlogDetails: React.FC = () => {
               </p>
             </div>
           )}
-          {console.log("Current User:", currentUser.name)}
+          {console.log("Current User:", currentUser.email)}
+          {console.log("Current User:", token)}
           {console.log("Blog Author:", blog.authorName)}
-          {currentUser &&
-            currentUser.name === blog.authorName &&
-            !isEditing && (
-              <div>
-                <div className="button-container_edit_del">
-                  <button
-                    className="edit-blog_button"
-                    onClick={() => setIsEditing(true)}
-                  >
-                    Bearbeiten
-                  </button>
-                  <button className="delete-blog_button" onClick={handleDelete}>
-                    Löschen
-                  </button>
-                </div>
-                {showModalDeleteBlog && deleteSuccess && (
-                  <div className="modal">
-                    <div className="modal-content">
-                      <h2>Blog gelöscht</h2>
-                      <p>Der Blog wurde erfolgreich gelöscht.</p>
-                      <button onClick={handleModalClose}>OK</button>
-                    </div>
-                  </div>
-                )}
-                {showModalUpdateSuccess && (
-                  <div className="modal">
-                    <div className="modal-content">
-                      <h2>Blog aktualisiert</h2>
-                      <p>Der Blog wurde erfolgreich aktualisiert.</p>
-                      <button
-                        onClick={() => {
-                          setShowModalUpdateSuccess(false);
-                          navigate(`/blogs/${id}`);
-                        }}
-                      >
-                        OK
-                      </button>
-                    </div>
-                  </div>
-                )}
+          {blog && blog.isPublishedByCurrentUser && !isEditing && (
+            <div>
+              <div className="button-container_edit_del">
+                <button
+                  className="edit-blog_button"
+                  onClick={() => setIsEditing(true)}
+                >
+                  Bearbeiten
+                </button>
+                <button className="delete-blog_button" onClick={handleDelete}>
+                  Löschen
+                </button>
               </div>
-            )}
+              {showModalDeleteBlog && deleteSuccess && (
+                <div className="modal">
+                  <div className="modal-content">
+                    <h2>Blog gelöscht</h2>
+                    <p>Der Blog wurde erfolgreich gelöscht.</p>
+                    <button onClick={handleModalClose}>OK</button>
+                  </div>
+                </div>
+              )}
+              {showModalUpdateSuccess && (
+                <div className="modal">
+                  <div className="modal-content">
+                    <h2>Blog aktualisiert</h2>
+                    <p>Der Blog wurde erfolgreich aktualisiert.</p>
+                    <button
+                      onClick={() => {
+                        setShowModalUpdateSuccess(false);
+                        navigate(`/blogs/${id}`);
+                      }}
+                    >
+                      OK
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
           <div className="comments-section">
             <div className="comments-header">
               <p className="comments-info">
@@ -439,14 +319,16 @@ const BlogDetails: React.FC = () => {
                   <p className="blog_comment_author">
                     Von: {comment.authorName} am {comment.commentDate}
                   </p>
-                  {comment.isPublishedByCurrentUser && (
-                    <button
-                      className="blog_delcomment_button"
-                      onClick={() => handleDeleteComment(comment.id)}
-                    >
-                      Kommentar löschen
-                    </button>
-                  )}
+                  <div>
+                    {comment.isPublishedByCurrentUser && (
+                      <button
+                        className="blog_delcomment_button"
+                        onClick={() => handleDeleteComment(comment.id)}
+                      >
+                        Kommentar löschen
+                      </button>
+                    )}
+                  </div>
                 </div>
               ))
             ) : (
@@ -478,6 +360,28 @@ const BlogDetails: React.FC = () => {
               <div className="status-message success">{message}</div>
             )}
           </div>
+          {showModalAddComment && (
+            <div className="modal">
+              <div className="modal-content">
+                <h2>Kommentar hinzugefügt</h2>
+                <p>Der Kommentar wurde erfolgreich hinzugefügt.</p>
+                <button onClick={() => setShowModalAddComment(false)}>
+                  OK
+                </button>
+              </div>
+            </div>
+          )}
+          {showModalDeleteComment && (
+            <div className="modal">
+              <div className="modal-content">
+                <h2>Kommentar gelöscht</h2>
+                <p>Der Kommentar wurde erfolgreich gelöscht.</p>
+                <button onClick={() => setShowModalDeleteComment(false)}>
+                  OK
+                </button>
+              </div>
+            </div>
+          )}
         </>
       ) : (
         <div>Kein Blog gefunden</div>

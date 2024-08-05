@@ -68,6 +68,7 @@ const LogIn: React.FC = () => {
         const result = await response.json();
         if (result.token) {
           localStorage.setItem("token", result.token);
+
           dispatch(
             topSlice.actions.setUserData({
               useRole: result.role === "ROLE_ADMIN",
@@ -86,6 +87,7 @@ const LogIn: React.FC = () => {
           localStorage.setItem("user", JSON.stringify(userData));
 
           navigate("/");
+
         } else {
           setMessage("Falscher Login oder Passwort");
         }

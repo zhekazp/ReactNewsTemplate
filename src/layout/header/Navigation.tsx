@@ -3,11 +3,21 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { uid } from 'uid';
-import { menuItems } from '../../config/menuConfig.ts';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store.ts";
 import { topSlice } from "../../layout/header/topElSlice";
+
+const menuItems = [
+  { title: 'Nachrichten', path: '/news' },
+  // { title: 'Chat', path: '/chat' },
+  { title: 'Blogs', path: '/blogs' },
+  { title: 'Anzeige', path: '/advertisement' },
+  { title: 'Gewinnen', path: '/gewinner' },
+  { title: 'Über uns', path: '/about' },
+  { title: 'Contact', path: '/contact' },
+];
+
 
 const Navigation = () => {
   const dispatch = useDispatch();
