@@ -45,10 +45,10 @@ const BlogDetails: React.FC = () => {
   const [showModalDeleteComment, setShowModalDeleteComment] = useState(false);
   const [updateTrigger, setUpdateTrigger] = useState(0); // Перерендер компонента
 
-  const currentUserString = localStorage.getItem("user");
-  const currentUser = currentUserString ? JSON.parse(currentUserString) : null;
-  const token = currentUser ? currentUser.token : null;
-  // console.log(currentUser);
+  // const currentUserString = localStorage.getItem("user");
+  // const currentUser = currentUserString ? JSON.parse(currentUserString) : null;
+  // const token = currentUser ? currentUser.token : null;
+  //  console.log(currentUser);
 
   useEffect(() => {
     if (blog) {
@@ -262,9 +262,9 @@ const BlogDetails: React.FC = () => {
               </p>
             </div>
           )}
-          {console.log("Current User:", currentUser.email)}
-          {console.log("Current User:", token)}
-          {console.log("Blog Author:", blog.authorName)}
+          {/* {console.log("Current User:", currentUser.email)}
+          {console.log("Current User:", token)} */}
+          {/* {console.log("Blog Author:", blog.authorName)} */}
           {blog && blog.isPublishedByCurrentUser && !isEditing && (
             <div>
               <div className="button-container_edit_del">
