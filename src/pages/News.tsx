@@ -94,7 +94,7 @@ const News = () => {
         <div className='news-aside col-md-4 col-lg-3'>
           <div className='filter_block d-flex flex-column'>
             <h3>Filter by Region</h3>
-            <Dropdown onSelect={handleRegionSelect}>
+            {/* <Dropdown onSelect={handleRegionSelect}>
               <Dropdown.Toggle variant="success" id="dropdown-basic" disabled={selectedSection !== 'inland'}>
                 {selectedRegion || "Select Region"}
               </Dropdown.Toggle>
@@ -108,7 +108,7 @@ const News = () => {
                     </Dropdown.Item>
                   ))}
               </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown> */}
 
 
           </div>
