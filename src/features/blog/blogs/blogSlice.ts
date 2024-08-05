@@ -86,8 +86,7 @@ export const fetchBlogById = createAsyncThunk(
   'blogs/fetchBlogById',
   async (id: number, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('token');
-      console.log('Token being sent:', token);
+      const token = localStorage.getItem('token') ?? undefined;
       
       const response = await axios.get<IBlogDetails>(`${API_BASE_URL}/blogs/${id}`, {
         headers: {
