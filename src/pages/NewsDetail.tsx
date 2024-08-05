@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { fetchComments, fetchNewsById, fetchPutReaction, formatDate } from '../features/news/newsSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faComment, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
-
+import { topSlice } from '../layout/header/topElSlice';
 
 const NewsDetail: FC = () => {
     const dispatch: AppDispatch = useDispatch();
@@ -28,6 +28,7 @@ const NewsDetail: FC = () => {
             dispatch(fetchNewsById(Number(id)));
             dispatch(fetchComments(Number(id)));
         }
+        dispatch(topSlice.actions.setCurrentPage(1));
     }, [dispatch, id]);
 
     // useEffect(() => {
