@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useDispatch } from "react-redux";
@@ -46,7 +46,8 @@ const LogIn: React.FC = () => {
 
     return error;
   };
-
+  useEffect(() => {
+    dispatch(topSlice.actions.setCurrentPage(-1));});
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
