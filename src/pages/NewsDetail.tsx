@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { addComment, deleteComment, editComment, fetchComments, fetchNewsById, fetchPutReaction, formatDate } from '../features/news/newsSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faComment, faPenToSquare, faThumbsDown, faThumbsUp, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { topSlice } from '../layout/header/topElSlice';
 
 
 const NewsDetail: FC = () => {
