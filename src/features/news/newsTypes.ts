@@ -60,3 +60,11 @@ export interface ISectionResponse {
     id: number,
     sectionName: string
 }
+export interface AddCommentResponse {
+    message: string;
+    comment?: IComment;
+}
+
+export interface AddCommentError {
+    message: string;
+}

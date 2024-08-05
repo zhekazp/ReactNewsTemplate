@@ -1,5 +1,6 @@
 const authorizedFetch = async (url: string, options: RequestInit = {}) => {
   const token = localStorage.token;
+  console.log(token);
   
   
   

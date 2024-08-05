@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { AppDispatch, RootState } from '../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { deleteComment, editComment, fetchComments, fetchNewsById, fetchPutReaction, formatDate } from '../features/news/newsSlice';
+import { addComment, deleteComment, editComment, fetchComments, fetchNewsById, fetchPutReaction, formatDate } from '../features/news/newsSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faComment, faPenToSquare, faThumbsDown, faThumbsUp, faTrash } from '@fortawesome/free-solid-svg-icons';
 
@@ -21,6 +21,7 @@ const NewsDetail: FC = () => {
     const [submitting, setSubmitting] = useState(false);
     const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
     const [editedComment, setEditedComment] = useState('');
+    const [commentError, setCommentError] = useState<string | null>(null);
 
     useEffect(() => {
         if (id) {
@@ -49,12 +50,19 @@ const NewsDetail: FC = () => {
         dispatch(deleteComment({ commentId }));
     };
 
-    const handleEditSubmit = (event: React.FormEvent) => {
+    const handleEditSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        if (editingCommentId !== null) {
-            dispatch(editComment({ commentId: editingCommentId, comment: editedComment }));
-            setEditingCommentId(null);
-            setEditedComment('');
+        if (id && comment.trim()) {
+            setSubmitting(true);
+            if (!comment.trim()) {
+                setCommentError("Der Kommentar darf nicht leer sein.");
+                return;
+              }
+              if (id) {
+                dispatch(addComment({ newsId: Number(id), comment }));
+                setComment("");
+                setCommentError(null);
+              }
         }
     };
 
@@ -87,10 +95,10 @@ const NewsDetail: FC = () => {
 
                         </div>
                         <div className='news_comments'>
-                            
-                                <h3 className='newsTopTitle'>Leave a Comment:</h3>
-                                <form className='comment-form p-4'>
-                                    {/* <div className='form-group'>
+
+                            <h3 className='newsTopTitle'>Leave a Comment:</h3>
+                            <form className='comment-form p-4'>
+                                {/* <div className='form-group'>
                                         <label htmlFor='authorName'>Name:</label>
                                         <input
                                             type='text'
@@ -101,32 +109,35 @@ const NewsDetail: FC = () => {
                                             className='form-control'
                                         />
                                     </div> */}
-                                    <div className='form-group'>
-                                        <label htmlFor='comment'>Enter your comment:</label>
-                                        <textarea
-                                            id='comment'
-                                            value={comment}
-                                            onChange={(e) => setComment(e.target.value)}
-                                            required
-                                            className='form-control'
-                                        />
-                                    </div>
-                                    <button type='submit' className='btn btn-primary' disabled={submitting}>
-                                        {submitting ? 'Submitting...' : 'Submit'}
-                                    </button>
-                                </form>
-                                <div className='comment-content p-4'>
-                                    <h2 className='newsTopTitle'>Comments:</h2>
-                                    {newsItem.commentsCount === 0 && <p className='empty-comments p-5 text-center'>There are no comments yet</p>}
-                                    {comments.map(comment => (
-                                        <div key={comment.id} className="comment">
-                                            <div className='comment-header d-flex justify-content-between'><strong>{comment.authorName}</strong> {formatDate(comment.commentDate)} </div>
-                                            <p>{comment.comment}</p>
+                                <div className='form-group'>
+                                    <label htmlFor='comment'>Enter your comment:</label>
+                                    <textarea
+                                        id='comment'
+                                        value={comment}
+                                        onChange={(e) => setComment(e.target.value)}
+                                        required
+                                        className='form-control'
+                                    />
+                                </div>
+                                {commentError && <p className="error">{commentError}</p>}
+                                <button type='submit' className='btn btn-primary' disabled={submitting}>
+                                    {submitting ? 'Submitting...' : 'Submit'}
+                                </button>
+                            </form>
+                            <div className='comment-content p-4'>
+                                <h2 className='newsTopTitle'>Comments:</h2>
+                                {newsItem.commentsCount === 0 && <p className='empty-comments p-5 text-center'>There are no comments yet</p>}
+                                {comments.map(comment => (
+                                    <div key={comment.id} className="comment">
+                                        <div className='comment-header d-flex justify-content-between'><strong>{comment.authorName}</strong> {formatDate(comment.commentDate)} </div>
+                                        <p>{comment.comment}</p>
+                                        {comment.isPublishedByCurrentUser && (
                                             <div className="comments-action">
                                                 <button className="comment-edit" onClick={() => handleEditComment(comment.id, comment.comment)}><FontAwesomeIcon icon={faPenToSquare} /></button>
                                                 <button className="comment-delete" onClick={() => handleDeleteComment(comment.id)}><FontAwesomeIcon icon={faTrash} /></button>
                                             </div>
-                                            {editingCommentId === comment.id && (
+                                        )}
+                                        {editingCommentId === comment.id && (
                                             <form className="edit-comment-form" onSubmit={handleEditSubmit}>
                                                 <div className='form-group'>
                                                     <label htmlFor='editComment'>Edit your comment:</label>
@@ -143,10 +154,10 @@ const NewsDetail: FC = () => {
                                                 </button>
                                             </form>
                                         )}
-                                        </div>
-                                    ))}
-                                </div>
-                           
+                                    </div>
+                                ))}
+                            </div>
+
                         </div>
                     </div>
                 )}

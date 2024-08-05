@@ -65,8 +65,9 @@ const News = () => {
               </label>
             ))}
           </div>
-          <div className={`filter_block filter-region d-flex flex-wrap ${selectedSection !== 'inland' ? 'hidden' : ''}`}>
+          <div className={`filter_block filter-region ${selectedSection !== 'inland' ? 'hidden' : ''}`}>
             <h4 className='newsTopTitle' style={{"width":"100%"}}>Filter by Region</h4>
+            <div className='row d-flex flex-wrap'>
             {regions
               .filter(region => region !== 'non-region')
               .map((region) => (
@@ -80,6 +81,7 @@ const News = () => {
                   /> {region}
                 </label>
               ))}
+            </div>
           </div>
           {status === 'idle' || status === "loading" ? (
             <div className="spinner-border text-warning" role="status">
