@@ -86,11 +86,18 @@ export const fetchBlogById = createAsyncThunk(
   'blogs/fetchBlogById',
   async (id: number, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('token') ?? undefined;
+      // const token = localStorage.getItem('token') ?? undefined;
+      let token = "";
+      if(localStorage.getItem('token') && localStorage.getItem('token')!==""){
+        token = `Bearer ${token}`;
+      }  
       
       const response = await axios.get<IBlogDetails>(`${API_BASE_URL}/blogs/${id}`, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': token
+          // Добавляем заголовок авторизации, только если токен есть
+          // Hinzufügen des Autorisierungsheaders, nur wenn ein Token vorhanden ist
+          // ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         }
       });
       
@@ -236,6 +243,7 @@ const blogSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+    // Обработка и обновление состояний действия
       .addCase(fetchBlogs.pending, (state) => {
         state.status = 'loading';
       })
