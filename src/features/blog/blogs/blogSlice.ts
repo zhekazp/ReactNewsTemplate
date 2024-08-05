@@ -91,10 +91,7 @@ export const fetchBlogById = createAsyncThunk(
       
       const response = await axios.get<IBlogDetails>(`${API_BASE_URL}/blogs/${id}`, {
         headers: {
-          // 'Authorization': `Bearer ${token}`
-          // Добавляем заголовок авторизации, только если токен есть
-          // Hinzufügen des Autorisierungsheaders, nur wenn ein Token vorhanden ist
-          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          'Authorization': `Bearer ${token}`
         }
       });
       
