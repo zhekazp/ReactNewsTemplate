@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import RunLine from "./Runline";
@@ -10,11 +10,23 @@ import { Link } from "react-router-dom";
 const TopElement: FC = () => {
   const { currentPage, user } = useSelector((state: RootState) => state.top);
   const dispatch = useDispatch();
+  useEffect(() => {
+   
+    dispatch(
+      topSlice.actions.setUserData({
+        useRole:  localStorage.getItem('role') === "ROLE_ADMIN",
+        authorized: localStorage.getItem('role') !== "" && localStorage.getItem('role') !== undefined &&
+        localStorage.getItem('role') !== null,
+      })
+    );
+  },[])
   const logout = () => {
     dispatch(topSlice.actions.setUserData({ useRole: false, 
       authorized: false}));
-      localStorage.removeItem("false");
+      localStorage.removeItem("role");
       localStorage.removeItem("token");
+      console.log("LOGOUT");
+      
     }
   return (
     <div className="topBlock">
