@@ -21,7 +21,7 @@ const Navigation = () => {
     <>
       <Navbar sticky="top" expand="lg" className="bg-body-tertiary" bg="dark" data-bs-theme="dark">
         <Container>
-          <a  className='logo' href="#">
+          <a  className='logo' href="/">
             <h3>B L B</h3>
           </a>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
