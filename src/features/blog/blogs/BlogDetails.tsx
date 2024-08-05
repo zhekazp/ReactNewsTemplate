@@ -20,7 +20,7 @@ import {
   faComments,
   faCalendar,
 } from "@fortawesome/free-solid-svg-icons";
-
+import { topSlice } from "../../../layout/header/topElSlice";
 const BlogDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch: AppDispatch = useDispatch();
@@ -64,7 +64,7 @@ const BlogDetails: React.FC = () => {
     const scrollToTop = () => {
       window.scrollTo(0, 0);
     };
-
+    dispatch(topSlice.actions.setCurrentPage(1))
     requestAnimationFrame(scrollToTop);
   }, []);
 

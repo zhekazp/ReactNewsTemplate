@@ -1,7 +1,8 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import 'bootstrap-icons/font/bootstrap-icons.css';
-
+import "bootstrap-icons/font/bootstrap-icons.css";
+import { useDispatch } from "react-redux";
+import { topSlice } from "../layout/header/topElSlice";
 interface Values {
   email: string;
   password: string;
@@ -15,10 +16,10 @@ interface Errors {
 const LogIn: React.FC = () => {
   const [values, setValues] = useState<Values>({ email: "", password: "" });
   const [errors, setErrors] = useState<Errors>({});
-  const [message, setMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
     setValues((prev) => ({ ...prev, [event.target.name]: event.target.value }));
   };
@@ -26,7 +27,8 @@ const LogIn: React.FC = () => {
   const validation = (values: Values): Errors => {
     const error: Errors = {};
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@#$%^&+=!,.|?><~/])(?=\S+$).{8,}$/;
+    const passwordPattern =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@#$%^&+=!,.|?><~/])(?=\S+$).{8,}$/;
 
     if (!values.email) {
       error.email = "Bitte gib eine gültige E-Mail-Adresse ein.";
@@ -47,8 +49,7 @@ const LogIn: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    
-    
+
     const validationErrors = validation(values);
     setErrors(validationErrors);
 
@@ -67,20 +68,31 @@ const LogIn: React.FC = () => {
         const result = await response.json();
         if (result.token) {
           localStorage.setItem("token", result.token);
-          // localStorage.setItem("login", {
-          //   role: result.role,
-          //   log: true;
-          // });
-          
-          navigate('/');
+          dispatch(
+            topSlice.actions.setUserData({
+              useRole: result.role === "ROLE_ADMIN",
+              authorized: true,
+            })
+          );
+
+          localStorage.removeItem("user");
+
+          // Сохранение новых данных
+          const userData = {
+            email: values.email,
+            name: result.name || values.email,
+            token: result.token,
+          };
+          localStorage.setItem("user", JSON.stringify(userData));
+
+          navigate("/");
         } else {
-          setMessage(result.message);
+          setMessage("Falscher Login oder Passwort");
         }
       } catch (error) {
         console.error(error);
         setMessage("Ein Fehler ist aufgetreten. Bitte versuche es erneut.");
       }
-
     }
   };
 
@@ -97,6 +109,9 @@ const LogIn: React.FC = () => {
         <div className="form-content">
           <div className="row g-3 needs-validation">
             <div className="mb-3">
+              <div className="errorLoginMessage">
+                {message === "" ? <></> : <span>{message}</span>}
+              </div>
               <label htmlFor="loginEmail" className="form-label">
                 Email
               </label>
@@ -194,7 +209,7 @@ const LogIn: React.FC = () => {
               )}
             </div>
             <div className="form-group">
-              <a className="form-recovery" style={{ color: 'red' }} href="#">
+              <a className="form-recovery" style={{ color: "red" }} href="#">
                 Passwort vergessen?
               </a>
             </div>
@@ -217,9 +232,8 @@ const LogIn: React.FC = () => {
                 }}
               >
                 Konto erstellen
-              </Link>             
+              </Link>
             </div>
-            {message && <div className="text-danger mt-3">{message}</div>}
           </div>
         </div>
       </div>

@@ -113,11 +113,11 @@ const Home = () => {
             </div>
             <Ad text="Bestes Web-Erstellungsteam – klicken Sie hier, um einen Rabatt zu erhalten" />
             <div className="row">
-              <div className="col-12">
+              <div className="col-12 smallWidth">
                 <Title title="Bundesland Nachrichten" />
                 <div className="row">
                   {data.innerNews.slice(7, 11).map((item) => (
-                    <div key={uid()} className="col-3">
+                    <div key={uid()} className="col-3 s">
                       <a href={"/news/" + item.id}>
                         <News city={true} info={item} />
                       </a>
@@ -126,7 +126,7 @@ const Home = () => {
                 </div>
               </div>
 
-              <div className="col-12 newsTopic2">
+              <div className="col-12 newsTopic2 smallWidth">
                 <div className="row">
                   <div className="col-6 halfScreen">
                     <Title title="Neueste Anzeige" />
@@ -157,7 +157,7 @@ const Home = () => {
                 <Carousel fade={true}>
                   {[0, 2, 4].map((item) => (
                     <Carousel.Item key={uid()}>
-                      <div className="row">
+                      <div className="row newsTopic">
                         {[0, 1].map((childItem) => (
                           <div key={uid()} className="col-6">
                             <a
