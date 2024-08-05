@@ -178,8 +178,8 @@ const Home = () => {
               <div className="col-6 newSlider">
                 <Title title="Blogs" />
                 {data.blogs.map((item) => (
-                  <a href={"/blogs/"+item.id}>
-                    <Blog key={uid()} info={item} />
+                  <a key={uid()} href={"/blogs/"+item.id}>
+                    <Blog info={item} />
                   </a>
                 ))}
               </div>

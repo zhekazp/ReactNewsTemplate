@@ -1,4 +1,4 @@
-import { menu } from "../util/elements,jsx"
+import { menuItems } from '../../config/menuConfig.ts';
 import { uid } from "uid"
 // import Nav from 'react-bootstrap/Nav';
 
@@ -10,7 +10,7 @@ const Footer = () => {
                 <div className="fTopBlock">
                     <div className="container">
                         <ul className="buttonMenu">
-                            {menu.map((item, index) =>
+                            {menuItems.map((item, index) =>
                                 <li key={uid()}>
                                     <a className={current === index ? 'mActive footerA' : "footerA"}
                                         href="">{item}</a>
