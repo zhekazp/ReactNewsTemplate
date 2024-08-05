@@ -20,6 +20,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import AddBlog from "./features/blog/blogs/AddBlog";
 import BlogDetails from "./features/blog/blogs/BlogDetails";
 import { fetchBlogs } from "./features/blog/blogs/blogSlice";
+import Confirm from "./pages/Confirm";
 
 
 function App() {
@@ -51,6 +52,7 @@ function App() {
           <Route path='/cookie' element={<CookieConsentModal />} />
           <Route path="/login" element={<LogIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/confirm" element={<Confirm />} />
           <Route path="/" element={<LogIn />} />
         </Route>
       </Routes>
