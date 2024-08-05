@@ -5,6 +5,7 @@ import RunLine from "./Runline";
 import { RootState } from "../../store.ts";
 import { useDispatch, useSelector } from "react-redux";
 import { topSlice } from "../../layout/header/topElSlice";
+import { Link } from "react-router-dom";
 
 const TopElement: FC = () => {
   const { currentPage, user } = useSelector((state: RootState) => state.top);
@@ -55,9 +56,9 @@ const TopElement: FC = () => {
                 </>
               ) : (
                 <>
-                  <a href="/login">
+                  <Link to="/login">
                     <span className="loginButton">Login/Registration</span>
-                  </a>
+                  </Link>
                 </>
               )}
             </span>
