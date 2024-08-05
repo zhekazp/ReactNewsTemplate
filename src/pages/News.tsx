@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
 import NewsComponent from '../features/news/NewsComponent';
 import { fetchFilteredNews, fetchNews, INewsItem } from '../features/news/newsSlice';
-import Dropdown from 'react-bootstrap/DropDown';
+// import Dropdown from 'react-bootstrap/DropDown';git 
 import '../style/news.css'
 import { topSlice } from "../layout/header/topElSlice";
 import Spinner from '../features/mainPage/components/spinner/Spinner';
