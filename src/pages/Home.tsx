@@ -10,11 +10,12 @@ import { uid } from "uid";
 import Blog from "../features/mainPage/components/blog/Blog";
 import InfoComponent from "../features/mainPage/components/info/InfoComponent";
 import { MainPageData, NewsMP, WeatherMP } from "../features/mainPage/mainPage";
-import ErrorModal from "../features/mainPage/components/modal/ErrorModal";
+// import ErrorModal from "../features/mainPage/components/modal/ErrorModal";
 import { useDispatch } from "react-redux";
 import { topSlice } from "../layout/header/topElSlice";
 import type { INewsTop } from "../layout/header/topElSlice";
 import { Link } from "react-router-dom";
+import ModalComponent from "../features/mainPage/components/modal/ModalComponent";
 const Home = () => {
   const [data, setData] = useState<MainPageData | null>(null);
   const [errorResponse, setError] = useState<boolean>(false);
@@ -62,12 +63,13 @@ const Home = () => {
       {data === null ? (
         <>
           <Spinner show={loading} color="red" />
-          <ErrorModal
-            show={errorResponse}
-            onHide={() => {
-              setError(false);
-            }}
-          />
+          <ModalComponent  show={errorResponse}
+             title="Error"
+             content="Die Antwort des Servers ist ein Fehler. Versuchen Sie es später erneut."
+             buttonContent="ok"
+             danger = {true}
+             onClose={()=>setError(false)}
+             />
         </>
       ) : (
         <>
