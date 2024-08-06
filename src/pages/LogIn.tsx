@@ -209,11 +209,7 @@ const LogIn: React.FC = () => {
                 <div className="text-danger">{errors.password}</div>
               )}
             </div>
-            <div className="form-group">
-              <a className="form-recovery" style={{ color: "red" }} href="#">
-                Passwort vergessen?
-              </a>
-            </div>
+           
             <div className="errorLoginMessage">
                 {message === "" ? <></> : <span>{message}</span>}
               </div>
