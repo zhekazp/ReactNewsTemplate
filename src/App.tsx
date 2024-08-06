@@ -22,6 +22,7 @@ import BlogDetails from "./features/blog/blogs/BlogDetails";
 import { fetchBlogs } from "./features/blog/blogs/blogSlice";
 import Confirm from "./pages/Confirm";
 import Gewinnen from "./pages/Gewinnen";
+import Restore from "./pages/Restore";
 
 
 
@@ -55,6 +56,7 @@ function App() {
           <Route path="/login" element={<LogIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/confirm" element={<Confirm />} />
+          <Route path="/restore" element={<Restore />} />
           <Route path="/" element={<LogIn />} />
         </Route>
       </Routes>

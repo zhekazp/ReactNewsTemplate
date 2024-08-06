@@ -69,7 +69,7 @@ const LogIn: React.FC = () => {
         const result = await response.json();
         if (result.token) {
           localStorage.setItem("token", result.token);
-          localStorage.setItem("role", result.role);
+
           dispatch(
             topSlice.actions.setUserData({
               useRole: result.role === "ROLE_ADMIN",
@@ -112,9 +112,7 @@ const LogIn: React.FC = () => {
         <div className="form-content">
           <div className="row g-3 needs-validation">
             <div className="mb-3">
-              <div className="errorLoginMessage">
-                {message === "" ? <></> : <span>{message}</span>}
-              </div>
+
               <label htmlFor="loginEmail" className="form-label">
                 Email
               </label>
@@ -216,6 +214,9 @@ const LogIn: React.FC = () => {
                 Passwort vergessen?
               </a>
             </div>
+            <div className="errorLoginMessage">
+                {message === "" ? <></> : <span>{message}</span>}
+              </div>
             <div className="form-group d-flex flex-column align-items-center">
               <button
                 className="btn btn-danger"
