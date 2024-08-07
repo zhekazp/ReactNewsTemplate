@@ -46,7 +46,8 @@ a, .news_content a{
 /* } */ 
 .filter-region {
     overflow: hidden;
-    transition: max-height 0.5s ease-in-out 0.5s, padding 0.5s ease-in-out 0.5s;
+    padding: 10px;
+    transition: max-height 0.5s ease-in-out 0.5s;
   }
   
   .filter-region.hidden {
@@ -83,6 +84,14 @@ a, .news_content a{
 }
 .activity_sm_block{
     margin-left: 7px;
+    transition: .3s ease;
+    &:hover{
+        .activity_counter, svg{
+        color:#ff0000;  
+        transition: .3s ease;     
+        }
+        
+    }
 }
 .pick-block{
  position: absolute;
@@ -179,7 +188,9 @@ a, .news_content a{
     text-decoration: none !important;
     box-shadow: none !important;
     width: 100%;
-    min-height: 100px;
+    &#comment{
+        min-height: 100px;
+    }
     &:focus{
         background-color: transparent;
         border-color: #ff0000;

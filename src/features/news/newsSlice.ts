@@ -56,7 +56,7 @@ export const fetchPutReaction = createAsyncThunk<INewsItem, ReactionPayload, { s
                 body: JSON.stringify({ newsId, liked, disliked }),
             });
             if (!response.ok) {
-                throw new Error('Failed to edit comment');
+                throw new Error('Failed to send reaction');
             }
             return await response.json();
         } catch (error) {

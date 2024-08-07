@@ -37,7 +37,7 @@ export const sendForm = createAsyncThunk<void, IForm, {state:RootState}>('form/s
             return response.data;
         } catch(error) {
             // throw new Error(error.response.data.message || 'Something went wrong');
-            let errorMessage = 'Something went wrong';
+            let errorMessage = 'Etwas ist schief gelaufen';
             if (axios.isAxiosError(error) && error.response) {
                 errorMessage = error.response.data.message || errorMessage;
             }

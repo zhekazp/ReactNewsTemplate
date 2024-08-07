@@ -25,6 +25,7 @@ const NewsDetail: FC = () => {
     const [editedComment, setEditedComment] = useState('');
     const [commentError, setCommentError] = useState<string | null>(null);
     const [updateTrigger, setUpdateTrigger] = useState(0);
+    const [authError, setAuthError] = useState<string | null>(null);
 
     useEffect(() => {
         if (id) {
@@ -39,12 +40,17 @@ const NewsDetail: FC = () => {
     //     console.log("Selected news item:", newsItem);
     // }, [status, newsItem]);
 
+   
     const handleReaction = (liked: boolean, disliked: boolean) => {
-        if (id) {
+        const token = localStorage.getItem("token");
+        if (token) {
             dispatch(fetchPutReaction({ newsId: Number(id), liked, disliked }));
+        } else {
+          setAuthError(
+            "Sie müssen sich anmelden, um einen neuen Blog hinzuzufügen."
+          );
         }
-    };
-
+      };
     const handleEditComment = (commentId: number, comment: string) => {
         setEditingCommentId(commentId);
         setEditedComment(comment);
@@ -98,6 +104,7 @@ const NewsDetail: FC = () => {
                 )}
                 {status === 'success' && newsItem && (
                     <div>
+                        {authError && <p className="error">{authError}</p>}
                         <div className='newsItem_content'>
                             <img width='100%' src={newsItem.titleImageWide} alt={newsItem.title} />
                             <div className='newsItem-content p-4'>
@@ -149,35 +156,40 @@ const NewsDetail: FC = () => {
                             <div className='comment-content p-4'>
                                 <h2 className='newsTopTitle'>Comments:</h2>
                                 {newsItem.commentsCount === 0 && <p className='empty-comments p-5 text-center'>There are no comments yet</p>}
-                                {comments.map(comment => (
-                                    <div key={comment.id} className="comment">
-                                        <div className='comment-header d-flex justify-content-between'><strong>{comment.authorName}</strong> {formatDate(comment.commentDate)} </div>
-                                        <p>{comment.comment}</p>
-                                        {comment.isPublishedByCurrentUser && (
-                                            <div className="comments-action">
-                                                <button className="comment-edit" onClick={() => handleEditComment(comment.id, comment.comment)}><FontAwesomeIcon icon={faPenToSquare} /></button>
-                                                <button className="comment-delete" onClick={() => handleDeleteComment(comment.id)}><FontAwesomeIcon icon={faTrash} /></button>
-                                            </div>
-                                        )}
-                                        {editingCommentId === comment.id && (
-                                            <form className="edit-comment-form">
-                                                <div className='form-group'>
-                                                    <label htmlFor='editComment'>Edit your comment:</label>
-                                                    <textarea
-                                                        id='editComment'
-                                                        value={editedComment}
-                                                        onChange={(e) => setEditedComment(e.target.value)}
-                                                        required
-                                                        className=' form-input'
-                                                    />
+                                {comments.map(comment =>{
+                                    console.log("isPublishedByCurrentUser:", comment.isPublishedByCurrentUser);
+                                    return(
+                                        <div key={comment.id} className="comment">
+                                            <div className='comment-header d-flex justify-content-between'><strong>{comment.authorName}</strong> {formatDate(comment.commentDate)} </div>
+                                            <p>{comment.comment}</p>
+                                            {comment.isPublishedByCurrentUser && (
+                                                <div className="comments-action">
+                                                    <button className="comment-edit" onClick={() => handleEditComment(comment.id, comment.comment)}><FontAwesomeIcon icon={faPenToSquare} /></button>
+                                                    <button className="comment-delete" onClick={() => handleDeleteComment(comment.id)}><FontAwesomeIcon icon={faTrash} /></button>
                                                 </div>
-                                                <button type='submit' className='submit-btn'>
-                                                    Save
-                                                </button>
-                                            </form>
-                                        )}
-                                    </div>
-                                ))}
+                                            )}
+                                            {editingCommentId === comment.id && (
+                                                <form className="edit-comment-form">
+                                                    <div className='form-group'>
+                                                        <label htmlFor='editComment'>Edit your comment:</label>
+                                                        <textarea
+                                                            id='editComment'
+                                                            value={editedComment}
+                                                            onChange={(e) => setEditedComment(e.target.value)}
+                                                            required
+                                                            className=' form-input'
+                                                        />
+                                                    </div>
+                                                    <button type='submit' className='submit-btn'>
+                                                        Save
+                                                    </button>
+                                                </form>
+                                            )}
+                                        </div>
+                                    )
+                                } 
+                                
+                                )}
                             </div>
 
                         </div>

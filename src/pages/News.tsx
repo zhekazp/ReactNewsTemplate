@@ -15,6 +15,7 @@ const News = () => {
   const [selectedSection, setSelectedSection] = useState<string | undefined>(undefined);
   const [selectedRegion, setSelectedRegion] = useState<string | undefined>(undefined);
   const [page, setPage] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
   
   useEffect(() => {
     dispatch(fetchRegions());
@@ -67,10 +68,10 @@ const News = () => {
             ))}
           </div>
           <div className={`filter_block filter-region ${selectedSection !== 'inland' ? 'hidden' : ''}`}>
-            <h4 className='newsTopTitle' style={{"width":"100%"}}>Filter by Region</h4>
+            <h4 className='newsTopTitle' style={{"width":"100%"}}>Filter nach Region</h4>
             <div className='row d-flex flex-wrap'>
             {regions
-              .filter(region => region !== 'non-region')
+              .filter(region => region !== 'non-region' && region !== 'Deutschland')
               .map((region) => (
                 <label key={region} className={`region-filter-btn news-filter-btn  ${selectedRegion === region ? 'active' : ''}`}>
                   <input
@@ -85,11 +86,7 @@ const News = () => {
             </div>
           </div>
           {status === 'idle' || status === "loading" ? (
-            <div className="spinner-border text-warning" role="status">
-              <span className="visually-hidden">Loading...</span>
-              {/* <Spinner show={loading} color="red" /> */}
-            </div>
-
+            <Spinner show={loading} color="red" />
           ) : status === 'success' ? (
             <div className='d-flex flex-wrap'>
 
