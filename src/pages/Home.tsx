@@ -11,15 +11,19 @@ import Blog from "../features/mainPage/components/blog/Blog";
 import InfoComponent from "../features/mainPage/components/info/InfoComponent";
 import { MainPageData, NewsMP, WeatherMP } from "../features/mainPage/mainPage";
 import ErrorModal from "../features/mainPage/components/modal/ErrorModal";
-
+import { useDispatch } from "react-redux";
+import { topSlice } from "../layout/header/topElSlice";
+import type { INewsTop } from "../layout/header/topElSlice";
+import { Link } from "react-router-dom";
 const Home = () => {
   const [data, setData] = useState<MainPageData | null>(null);
   const [errorResponse, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [weather, setWeather] = useState<WeatherMP | null>(null);
   const [weatherLoading, setStatus] = useState<boolean>(true);
-
+  const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(topSlice.actions.setCurrentPage(0));
     fetch("/api/mainpage")
       .then((response) => {
         if (response.status > 299) {
@@ -30,6 +34,10 @@ const Home = () => {
       .then((response) => response.json())
       .then((data) => {
         setData(data);
+        const newsDT: INewsTop[] = data.innerNews.slice(12, 15).map((item) => {
+          return { news: item.title, url: item.id };
+        });
+        dispatch(topSlice.actions.setNews(newsDT));
       })
       .catch(() => {
         setLoading(false);
@@ -70,17 +78,20 @@ const Home = () => {
                 <Carousel fade={true}>
                   {data.innerNews.slice(0, 4).map((newsItem: NewsMP) => (
                     <Carousel.Item key={uid()}>
-                      <div className="picBlock">
-                        <img
-                          width="100%"
-                          src={newsItem.titleImageSquare}
-                          alt={newsItem.title}
-                        />
-                      </div>
-                      <Carousel.Caption>
-                        <h4>{newsItem.title}</h4>
-                        <NewsInfo info={newsItem} />
-                      </Carousel.Caption>
+                      <Link to={"/news/" + newsItem.id}>
+                        <div className="picBlock">
+                          <img
+                            width="100%"
+                            src={newsItem.titleImageSquare}
+                            alt={newsItem.title}
+                          />
+                        </div>
+
+                        <Carousel.Caption>
+                          <h4>{newsItem.title}</h4>
+                          <NewsInfo info={newsItem} />
+                        </Carousel.Caption>
+                      </Link>
                     </Carousel.Item>
                   ))}
                 </Carousel>
@@ -89,7 +100,9 @@ const Home = () => {
                 <div className="row ">
                   {data.innerNews.slice(5, 7).map((newsItem) => (
                     <div key={uid()} className="col-6">
-                      <News city={false} info={newsItem} />
+                      <Link to={"/news/" + newsItem.id}>
+                        <News city={false} info={newsItem} />
+                      </Link>
                     </div>
                   ))}
                 </div>
@@ -102,18 +115,20 @@ const Home = () => {
             </div>
             <Ad text="Bestes Web-Erstellungsteam – klicken Sie hier, um einen Rabatt zu erhalten" />
             <div className="row">
-              <div className="col-12">
+              <div className="col-12 smallWidth">
                 <Title title="Bundesland Nachrichten" />
                 <div className="row">
                   {data.innerNews.slice(7, 11).map((item) => (
-                    <div key={uid()} className="col-3">
-                      <News city={true} info={item} />
+                    <div key={uid()} className="col-3 s">
+                      <Link to={"/news/" + item.id}>
+                        <News city={true} info={item} />
+                      </Link>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="col-12 newsTopic2">
+              <div className="col-12 newsTopic2 smallWidth">
                 <div className="row">
                   <div className="col-6 halfScreen">
                     <Title title="Neueste Anzeige" />
@@ -126,7 +141,9 @@ const Home = () => {
                     <div className="row">
                       {data.world.map((item) => (
                         <div key={uid()} className="col-6 worldNews">
-                          <News city={false} info={item} />
+                          <Link to={"/news/" + item.id}>
+                            <News city={false} info={item} />
+                          </Link>
                         </div>
                       ))}
                     </div>
@@ -142,13 +159,17 @@ const Home = () => {
                 <Carousel fade={true}>
                   {[0, 2, 4].map((item) => (
                     <Carousel.Item key={uid()}>
-                      <div className="row">
+                      <div className="row newsTopic">
                         {[0, 1].map((childItem) => (
                           <div key={uid()} className="col-6">
-                            <News
-                              city={false}
-                              info={data.sport[item + childItem]}
-                            />
+                            <Link
+                              to={"/news/" + data.sport[item + childItem].id}
+                            >
+                              <News
+                                city={false}
+                                info={data.sport[item + childItem]}
+                              />
+                            </Link>
                           </div>
                         ))}
                       </div>
@@ -159,7 +180,9 @@ const Home = () => {
               <div className="col-6 newSlider">
                 <Title title="Blogs" />
                 {data.blogs.map((item) => (
-                  <Blog key={uid()} info={item} />
+                  <Link key={uid()} to={"/blogs/"+item.id}>
+                    <Blog info={item} />
+                  </Link>
                 ))}
               </div>
             </div>

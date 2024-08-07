@@ -7,7 +7,7 @@ import BlogItem from "./BlogItem";
 import { IBlog } from "./types";
 import "./blogsStyles/blogList.css";
 import Breadcrumb from "./Breadcrumb";
-
+import { topSlice } from "../../../layout/header/topElSlice";
 
 const BlogList: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -28,7 +28,7 @@ const BlogList: FC = () => {
   useEffect(() => {
     const page = parseInt(filters.page, 10);
     const region = parseInt(filters.region, 10);
-
+    dispatch(topSlice.actions.setCurrentPage(2));
     if (showUserBlogs) {
       dispatch(fetchUserBlogs({ page }));
     } else {

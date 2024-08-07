@@ -20,6 +20,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import AddBlog from "./features/blog/blogs/AddBlog";
 import BlogDetails from "./features/blog/blogs/BlogDetails";
 import { fetchBlogs } from "./features/blog/blogs/blogSlice";
+import Gewinnen from "./pages/Gewinnen";
 
 
 function App() {
@@ -38,7 +39,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-		  {/* <Route path="gewinner" element={<Gewinnen/>} /> */}
+          <Route path="/api/ads" element={<Gewinnen/>} /> 
           <Route path="news" element={<News />} />
           <Route path="news/:id" element={<NewsDetail />} />
           <Route path="blogs" element={<BlogPage />} />

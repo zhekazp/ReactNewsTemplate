@@ -3,8 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
 import NewsComponent from '../features/news/NewsComponent';
 import { fetchFilteredNews, fetchNews, INewsItem } from '../features/news/newsSlice';
-import Dropdown from 'react-bootstrap/DropDown';
+// import Dropdown from 'react-bootstrap/DropDown';git 
 import '../style/news.css'
+import { topSlice } from "../layout/header/topElSlice";
 import Spinner from '../features/mainPage/components/spinner/Spinner';
 
 const News = () => {
@@ -31,6 +32,7 @@ const News = () => {
 
   useEffect(() => {
     dispatch(fetchNews());
+    dispatch(topSlice.actions.setCurrentPage(1));
   }, [dispatch]);
 
   useEffect(() => {
@@ -92,7 +94,7 @@ const News = () => {
         <div className='news-aside col-md-4 col-lg-3'>
           <div className='filter_block d-flex flex-column'>
             <h3>Filter by Region</h3>
-            <Dropdown onSelect={handleRegionSelect}>
+            {/* <Dropdown onSelect={handleRegionSelect}>
               <Dropdown.Toggle variant="success" id="dropdown-basic" disabled={selectedSection !== 'inland'}>
                 {selectedRegion || "Select Region"}
               </Dropdown.Toggle>
@@ -106,7 +108,7 @@ const News = () => {
                     </Dropdown.Item>
                   ))}
               </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown> */}
 
 
           </div>

@@ -15,8 +15,14 @@ body {
   width: 600px;
   border-radius: 10px;
   box-sizing: border-box;
-  margin: 100px auto 10px;
+  margin: 30px auto 30px;
   
+}
+
+.errorLoginMessage{
+  --bs-text-opacity: 1;
+  color: rgba(var(--bs-danger-rgb));
+  height: 25px;
 }
 
 .form-header h1 {
