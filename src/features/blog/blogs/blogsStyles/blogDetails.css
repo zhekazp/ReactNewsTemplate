@@ -1,14 +1,12 @@
-/* Основной фон и цвет текста */
+
 .blog-details-container {
-  background-color: #1e1e1e; /* Темный почти черный фон */
-  color: #e0e0e0; /* Светлый цвет текста для контраста */
+  background-color: #1e1e1e; 
+  color: #e0e0e0; 
   padding: 20px;
   /* border-radius: 8px; */
   max-width: 1024px;
   margin: 0 auto;
 }
-
-/* Титл контент дата автор регион */
 
 .blog-container_inner {
   margin: 10px 0;
@@ -26,15 +24,15 @@
 
 .blog-publishedDate_inner {
   display: flex;
-  align-items: center; /* Вертикальное выравнивание */
-  color: #b3b3b3; /* Светло-серый цвет текста */
+  align-items: center; 
+  color: #b3b3b3; 
   padding: 6px 12px;
-  font-size: 14px; /* Размер шрифта */
-  font-family: "Verdana", sans-serif; /* Шрифт */
+  font-size: 14px;
+  font-family: "Verdana", sans-serif; 
   margin-bottom: 40px;
 }
 
-/* Основной стиль для контента блога */
+
 .blog-content_inner {
   font-size: 16px;
   line-height: 1.6;
@@ -44,122 +42,122 @@
   border-radius: 8px;
   /* border: 1px solid #444; */
  margin: 24px auto;
-  word-wrap: break-word; /* Перенос длинных слов */
+  word-wrap: break-word; 
 }
 
-/* Заголовки внутри контента */
+
 .blog-content_inner h1,
 .blog-content_inner h2,
 .blog-content_inner h3 {
-  color: #f5f5f5; /* Цвет заголовков */
-  margin-top: 20px; /* Отступ сверху */
-  margin-bottom: 10px; /* Отступ снизу */
+  color: #f5f5f5;
+  margin-top: 20px; 
+  margin-bottom: 10px; 
 }
 
-/* Ссылки */
+
 .blog-content_inner a {
-  color: #1c79b7; /* Цвет ссылок */
-  text-decoration: none; /* Убираем подчеркивание */
+  color: #1c79b7; 
+  text-decoration: none; 
 }
 
 .blog-content_inner a:hover {
-  text-decoration: underline; /* Подчеркивание при наведении */
+  text-decoration: underline; 
 }
 
-/* Цитаты */
+
 .blog-content_inner blockquote {
-  background-color: #2e2e2e; /* Фон цитаты */
-  color: #b3b3b3; /* Цвет текста */
-  padding: 10px 20px; /* Внутренние отступы */
-  border-left: 5px solid #1c79b7; /* Линия слева */
-  margin: 20px 0; /* Отступы сверху и снизу */
-  font-style: italic; /* Курсив */
+  background-color: #2e2e2e; 
+  color: #b3b3b3; 
+  padding: 10px 20px; 
+  border-left: 5px solid #1c79b7; 
+  margin: 20px 0; 
+  font-style: italic;
 }
 
-/* Код */
+
 .blog-content_inner pre {
-  background-color: #2e2e2e; /* Фон кода */
-  color: #e0e0e0; /* Цвет текста */
-  padding: 10px; /* Внутренние отступы */
-  border-radius: 4px; /* Скруглённые углы */
-  overflow-x: auto; /* Горизонтальная прокрутка */
-  font-family: "Courier New", monospace; /* Шрифт для кода */
-  border: 1px solid #444; /* Граница */
+  background-color: #2e2e2e; 
+  color: #e0e0e0; 
+  padding: 10px; 
+  border-radius: 4px; 
+  overflow-x: auto; 
+  font-family: "Courier New", monospace; 
+  border: 1px solid #444; 
 }
 
 .blog-content_inner code {
-  background-color: #333; /* Фон для inline-кода */
-  color: #e0e0e0; /* Цвет текста */
-  padding: 2px 4px; /* Внутренние отступы */
-  border-radius: 4px; /* Скруглённые углы */
-  font-family: "Courier New", monospace; /* Шрифт для кода */
+  background-color: #333; 
+  color: #e0e0e0; 
+  padding: 2px 4px; 
+  border-radius: 4px; 
+  font-family: "Courier New", monospace; 
 }
 
-/* Основной стиль для имени автора и региона */
+
 .blog-author-region_inner {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* Современный шрифт */
-  font-size: 14px; /* Размер шрифта */
-  color: #e0e0e0; /* Цвет текста по умолчанию */
-  padding: 12px 12px; /* Внутренние отступы */
-  margin-bottom: 12px; /* Отступ снизу */
-  display: flex; /* Выравнивание по горизонтали */
-  align-items: center; /* Центрирование по вертикали */
-  gap: 10px; /* Промежуток между элементами */
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; 
+  font-size: 14px; 
+  color: #e0e0e0; 
+  padding: 12px 12px; 
+  margin-bottom: 12px; 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
 }
 
-/* Имя автора */
+
 .blog-author-name {
-  color: #9e9e9e; /* Цвет текста имени автора */
-  display: inline-flex; /* Выравнивание с иконкой */
-  align-items: center; /* Центрирование иконки и текста */
-  gap: 10px; /* Промежуток между иконкой и текстом */
+  color: #9e9e9e; 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 10px; 
 }
 
 /* Регион */
 .blog-region-name {
-  font-style: italic; /* Курсивный текст для региона */
-  color: #9e9e9e; /* Цвет текста региона (серый) */
-  display: inline-flex; /* Выравнивание с иконкой */
-  align-items: center; /* Центрирование иконки и текста */
-  gap: 5px; /* Промежуток между иконкой и текстом */
+  font-style: italic; 
+  color: #9e9e9e; 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 5px; 
 }
 
-/* Форматирование формы редактирования */
+
 .edit-blog-form {
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Добавляем промежуток между элементами формы */
+  gap: 15px; 
 }
 
 .edit-blog-form div {
-  margin-bottom: 15px; /* Отступы между полями ввода */
+  margin-bottom: 15px;
 }
 
-/* Поля ввода и текстовые области */
+
 .edit-blog-form_input,
 .edit-blog-form_textarea {
-  background-color: #2e2e2e; /* Чуть светлее фон для полей ввода */
-  color: #e0e0e0; /* Цвет текста в полях ввода */
-  border: 1px solid #444; /* Цвет границы полей ввода */
+  background-color: #2e2e2e;
+  color: #e0e0e0;
+  border: 1px solid #444;
   border-radius: 4px;
   padding: 10px;
   width: 100%;
 }
 
-/* Увеличиваем высоту поля для контента */
+
 .edit-blog-form_textarea {
-  min-height: 150px; /* Минимальная высота для текстовой области */
-  resize: vertical; /* Позволяет пользователю изменять высоту поля */
+  min-height: 150px; 
+  resize: vertical; 
 }
 
-/* Ошибки валидации */
+
 .edit-blog-form p {
   margin: 5px 0;
   font-size: 14px;
 }
 
 .edit-blog-form p.error {
-  color: #ff6f6f; /* Цвет ошибок */
+  color: #ff6f6f;
 }
 
 /* Кнопки */
@@ -169,8 +167,8 @@
   display: flex;
   justify-content: center;
   text-align: center;
-  background-color: #1c79b7; /* Бордовая кнопка */
-  color: #f5f5f5; /* Цвет текста на кнопке */
+  background-color: #1c79b7;
+  color: #f5f5f5;
   border: none;
   border-radius: 4px;
   padding: 5px 10px;
@@ -194,18 +192,18 @@
   transition: background-color 0.3s;
 }
 
-/* Контейнер для кнопок */
+
 .button-container_edit_del {
-  display: flex; /* Включаем flexbox для контейнера */
-  justify-content: flex-start; /* Выравниваем элементы по правому краю */
-  margin-top: 20px; /* Отступ сверху, если нужно */
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 20px;
   gap: 10px;
   padding: 0 12px;
 }
 
 .edit-blog_button:hover,
 .edit-blog-form_button:hover {
-  background-color: #18689e; /* Цвет кнопки при наведении */
+  background-color: #18689e;
 }
 
 .delete-blog_button:hover,
@@ -237,28 +235,28 @@
   margin-bottom: 64px;
 }
 
-/* Контейнер для заголовка комментариев */
+
 .comments-header {
-  margin-top: 20px; /* Отступ сверху */
-  margin-bottom: 10px; /* Отступ снизу */
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
-/* Контейнер для информации о комментариях */
+
 .comments-info {
-  display: flex; /* Используем flexbox для горизонтального выравнивания */
-  align-items: center; /* Выравнивание по центру вертикально */
-  font-size: 16px; /* Размер шрифта */
-  color: #e0e0e0; /* Цвет текста */
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: #e0e0e0;
   /* background-color: #222222; */
-  padding: 10px 20px; /* Внутренние отступы */
+  padding: 10px 20px;
   border-radius: 5px;
   height: 25px;
 }
 
-/* Стиль для количества комментариев */
+
 .comments-count {
-  margin: 0 8px; /* Отступы слева и справа от количества комментариев */
-  font-weight: bold; /* Жирное начертание текста */
+  margin: 0 8px;
+  font-weight: bold;
 }
 
 .comments-section h3 {
@@ -343,7 +341,6 @@
   font-size: 14px;
 }
 
-/* Модальные окна */
 .modal {
   position: fixed;
   top: 0;

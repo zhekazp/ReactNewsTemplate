@@ -1,22 +1,19 @@
-/* Основной фон и цвет текста */
 .add-blog-container {
-  background-color: #1e1e1e; /* Темный почти черный фон */
-  color: #e0e0e0; /* Светлый цвет текста для контраста */
+  background-color: #1e1e1e; 
+  color: #e0e0e0;
   padding: 20px;
   /* border-radius: 8px; */
   max-width: 1024px;
   margin: 0 auto;
 }
 
-/* Заголовок формы */
 .add-blog-container h1 {
   color: #f5f5f5;
   margin-bottom: 20px;
   font-size: 24px;
-  line-height: 1.4; /* Высота строки заголовка для улучшения читаемости */
+  line-height: 1.4; 
 }
 
-/* Форматирование формы */
 .add-blog-form {
   display: flex;
   flex-direction: column;
@@ -26,32 +23,29 @@
   margin-bottom: 40px;
 }
 
-/* Поля ввода и текстовые области */
 .add-blog-form input[type="text"],
 .add-blog-form textarea,
 .add-blog-form select {
-  background-color: #2e2e2e; /* Чуть светлее фон для полей ввода */
-  color: #e0e0e0; /* Цвет текста в полях ввода */
-  border: 1px solid #444; /* Цвет границы полей ввода */
+  background-color: #2e2e2e; 
+  color: #e0e0e0; 
+  border: 1px solid #444; 
   border-radius: 4px;
   padding: 10px;
   width: 100%;
 }
 
-/* Увеличиваем высоту поля для контента */
 .add-blog-form textarea {
-  min-height: 150px; /* Минимальная высота для текстовой области */
-  resize: vertical; /* Позволяет пользователю изменять высоту поля */
+  min-height: 150px; 
+  resize: vertical; 
 }
 
-/* Ошибки валидации */
 .add-blog-form p {
   margin: 5px 0;
   font-size: 14px;
 }
 
 .add-blog-form p.error {
-  color: #ff6f6f; /* Цвет ошибок */
+  color: #ff6f6f; 
 }
 
 .add-blog_buttons {
@@ -59,13 +53,12 @@
   gap: 15px;
 }
 
-/* Кнопка отправки */
 .add-blog_button {
   display: flex;
   justify-content: center;
   text-align: center;
-  background-color: #1c79b7; /* Бордовая кнопка */
-  color: #f5f5f5; /* Цвет текста на кнопке */
+  background-color: #1c79b7; 
+  color: #f5f5f5; 
   border: none;
   border-radius: 4px;
   padding: 5px 10px;
@@ -78,8 +71,8 @@
   display: flex;
   justify-content: center;
   text-align: center;
-  background-color: #1e1e1e; /* Бордовая кнопка */
-  color: #f5f5f5; /* Цвет текста на кнопке */
+  background-color: #1e1e1e; 
+  color: #f5f5f5; 
   border: none;
   border-radius: 4px;
   padding: 5px 10px;
@@ -89,14 +82,13 @@
 }
 
 .add-blog_button:hover {
-  background-color: #18689e; /* Цвет кнопки при наведении */
+  background-color: #18689e; 
 }
 
 .cancel-blog_button:hover {
-  background-color: #9e1818; /* Цвет кнопки при наведении */
+  background-color: #9e1818; 
 }
 
-/* Статусы загрузки и сообщения */
 .status-message {
   font-size: 16px;
   margin-top: 20px;
@@ -112,27 +104,4 @@
 
 .status-message.success {
   color: #4caf50;
-}
-
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-}
-
-.modal-content p {
-  margin-bottom: 20px;
 }

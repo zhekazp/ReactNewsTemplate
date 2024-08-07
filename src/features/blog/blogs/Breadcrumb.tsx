@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './blogsStyles/breadcrumb.css';
 
-const Breadcrumb: React.FC = () => {
+const Breadcrumb: FC = () => {
   const location = useLocation();
   const pathnames = location.pathname.split('/').filter(x => x);
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import { NavLink } from "react-router-dom";
 import { BlogItemProps } from "./types";
 import "./blogsStyles/blogItem.css";
@@ -10,7 +10,7 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
-const BlogItem: React.FC<BlogItemProps> = ({ blogItem }) => {
+const BlogItem: FC<BlogItemProps> = ({ blogItem }) => {
   return (
     <div className="blogItem_container">
       <li className="blogItem-item">
