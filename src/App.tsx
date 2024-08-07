@@ -56,7 +56,7 @@ function App() {
           <Route path="/login" element={<LogIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/confirm" element={<Confirm />} />
-          <Route path="/restore" element={<Restore />} />
+          <Route path="/recover" element={<Restore />} />
           <Route path="/" element={<LogIn />} />
         </Route>
       </Routes>
