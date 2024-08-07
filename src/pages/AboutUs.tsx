@@ -4,10 +4,11 @@ const AboutUs = () => {
   return (
     <>
     <div className="container mainBlock textColorMain textCenter">
-      <h2>Bundesland Blog</h2>
-      <p>Diese Website dient Bildungszwecken. Die Seite wurde von Studierenden der AIT-Schule (IT-Studiengänge in Deutschland) verfasst.</p> 
-      <p>Dies ist ein lebendiges Beispiel dafür, was Sie in einem 7-monatigen Training lernen können.</p> 
-      <p>Die Seite wurde in 2 Wochen von Grund auf neu geschrieben. Ein Team von 9 Leuten.</p>
+      <h2>Willkommen auf dem Bundesland Blog!</h2>
+      <p>Unsere Website dient als Bildungsressource und wurde von engagierten Studierenden der AIT TR Supplementary Technology School Berlin, einem renommierten IT-Bildungsinstitut in Deutschland, erstellt.</p> 
+      <p>Dieses Projekt veranschaulicht eindrucksvoll die Kompetenzen, die in einem intensiven 7-monatigen Weiterbildungsprogramm erlernt werden können. Innerhalb von nur zwei Wochen hat ein Team von neun talentierten Mitgliedern diese Seite von Grund auf neu entwickelt.</p> 
+      <p>Unser Team setzte sich aus einem Backend-Team von vier Personen und einem Frontend-Team von fünf Personen zusammen. Für die Backend-Entwicklung kamen Technologien wie Java, Spring Boot, Maven, MySQL, REST API, externe APIs, Spring Security, JUnit, Mockito und MockitoMVC zum Einsatz. Das Frontend-Team nutzte moderne Technologien wie React, TypeScript und Redux, um eine ansprechende und leistungsfähige Benutzeroberfläche zu schaffen. Die Versionierung und das Projektmanagement wurden dabei durch die Nutzung von Git unterstützt.</p>
+      <p>Wir laden Sie ein, die Ergebnisse unserer Arbeit zu erkunden und sich von den Möglichkeiten inspirieren zu lassen, die eine fundierte IT-Ausbildung bieten kann.</p>
     </div>
     </>
   );
