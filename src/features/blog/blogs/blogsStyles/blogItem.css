@@ -1,6 +1,6 @@
 .blogItem_container{
   font-size: 14px;
-  line-height: 1.6; /* Межстрочный интервал */
+  line-height: 1.6;
   color: #e0e0e0;
   background-color: #2c2c2c;
   padding: 20px;
@@ -53,11 +53,11 @@
 
 .blogItem-date {
   display: flex;
-  align-items: center; /* Вертикальное выравнивание */
-  color: #b3b3b3; /* Светло-серый цвет текста */
+  align-items: center;
+  color: #b3b3b3;
   padding: 6px 12px;
-  font-size: 14px; /* Размер шрифта */
-  font-family: "Verdana", sans-serif; /* Шрифт */
+  font-size: 14px;
+  font-family: "Verdana", sans-serif;
   /* margin-bottom: 8px;
   margin-top: 20px; */
 }
