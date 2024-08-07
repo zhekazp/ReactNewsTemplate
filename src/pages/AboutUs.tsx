@@ -9,6 +9,7 @@ const AboutUs = () => {
       <p>Dieses Projekt veranschaulicht eindrucksvoll die Kompetenzen, die in einem intensiven 7-monatigen Weiterbildungsprogramm erlernt werden können. Innerhalb von nur zwei Wochen hat ein Team von neun talentierten Mitgliedern diese Seite von Grund auf neu entwickelt.</p> 
       <p>Unser Team setzte sich aus einem Backend-Team von vier Personen und einem Frontend-Team von fünf Personen zusammen. Für die Backend-Entwicklung kamen Technologien wie Java, Spring Boot, Maven, MySQL, REST API, externe APIs, Spring Security, JUnit, Mockito und MockitoMVC zum Einsatz. Das Frontend-Team nutzte moderne Technologien wie React, TypeScript und Redux, um eine ansprechende und leistungsfähige Benutzeroberfläche zu schaffen. Die Versionierung und das Projektmanagement wurden dabei durch die Nutzung von Git unterstützt.</p>
       <p>Wir laden Sie ein, die Ergebnisse unserer Arbeit zu erkunden und sich von den Möglichkeiten inspirieren zu lassen, die eine fundierte IT-Ausbildung bieten kann.</p>
+      <p>Die verwendeten Fotos und Artikeltitel stammen von tagesschau.de. Diese Vorlage wurde für nichtkommerzielle Zwecke entwickelt, um das Programmieren mit React zu studieren und zu üben.</p>
     </div>
     </>
   );
