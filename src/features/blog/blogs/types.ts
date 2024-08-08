@@ -31,7 +31,7 @@ export interface IBlogComment {
   comment: string;
   commentDate: string;
   authorName: string;
-  isPublishedByCurrentUser?: boolean;
+  isPublishedByCurrentUser: boolean;
 }
 
 export interface IBlogCommentRequest {
@@ -72,14 +72,16 @@ export interface IRegionDTO {
   regionName: string;
 }
 
-
-
-
-export interface AddBlogResponse {
-  message: string;
-  blog?: IBlog;
+export interface IModal {
+  title: string;
+  content: string;
+  onClose: () => void;
 }
 
-export interface AddBlogError {
-  message: string;
-}
+
+
+
+
+
+
+
