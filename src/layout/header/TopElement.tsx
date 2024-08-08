@@ -35,7 +35,7 @@ const TopElement: FC = () => {
             <div className="topText">
               {currentPage === 0 ? (
                 <>
-                  <span className="topTitle">actuelle</span>
+                  <span className="topTitle">Actuelles</span>
                   <RunLine />
                 </>
               ) : (
