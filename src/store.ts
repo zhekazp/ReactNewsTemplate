@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import newsReducer from "./features/news/newsSlice";
 import contactUsReducer from "./features/contactUs/contactUsSlice";
 import blogReducer from "./features/blog/blogs/blogSlice";
+import  topSliceReducer  from "./layout/header/topElSlice";
 
 
 const store = configureStore({
@@ -9,6 +10,7 @@ const store = configureStore({
     news: newsReducer,
     contactForm: contactUsReducer,
     blogs: blogReducer,
+    top: topSliceReducer
   },
 });
 
