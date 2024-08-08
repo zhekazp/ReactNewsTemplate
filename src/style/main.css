@@ -11,6 +11,10 @@ main{
 .textColorMain{
   color:white;
 }
+
+.aboutMargin{
+  margin-bottom: 20px;
+}
 .textCenter{
   text-align: center;
 }
