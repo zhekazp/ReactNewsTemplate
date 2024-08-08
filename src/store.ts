@@ -5,6 +5,7 @@ import contactUsReducer from "./features/contactUs/contactUsSlice";
 // import blogReducerTest from "./features/blog/blogsTest/blogSliceTest";
 import blogReducer from "./features/blog/blogs/blogSlice";
 import  topSliceReducer  from "./layout/header/topElSlice";
+import rentReducer from "./features/rent/rentSlice";
 
 
 
@@ -18,7 +19,8 @@ const store = configureStore({
        contactForm: contactUsReducer,
     // blogSliceTest: blogReducerTest,
     blogs: blogReducer,
-    top: topSliceReducer
+    top: topSliceReducer,
+    rentProducts: rentReducer,
   },
 });
 

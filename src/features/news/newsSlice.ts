@@ -80,7 +80,7 @@ export const formatDate = (dateString: string): string => {
 
 export const fetchNews = createAsyncThunk<NewsResponse, void, { state: RootState }>(
     'news/fetchNews', async () => {
-        const data = (await axios.get<NewsResponse>('/api/news?page=0')).data;
+        const data = (await axios.get<NewsResponse>('/api/news')).data;
         return data;
     });
 export const fetchNewsById = createAsyncThunk<INewsItem, number, { state: RootState }>(
