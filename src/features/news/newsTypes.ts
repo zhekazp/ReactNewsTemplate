@@ -12,6 +12,8 @@ export interface INewsItem {
     likeCount: number;
     dislikeCount: number;
     commentsCount: number;
+    isPublishedByCurrentUser: boolean;
+
 }
 export interface INewsItemFullPage extends INewsItem{
     isPublishedByCurrentUser: boolean;

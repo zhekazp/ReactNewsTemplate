@@ -37,12 +37,28 @@ export const fetchNews = createAsyncThunk<NewsResponse, { page: number }, { stat
         }
     });
 export const fetchNewsById = createAsyncThunk<INewsItem, number, { state: RootState }>(
-    'news/fetchNewsById', async (id) => {
+    'news/fetchNewsById', async (id: number, { rejectWithValue }) => {
         try {
-            const data = (await axios.get<INewsItem>(`/api/news/${id}`)).data;
-            return data;
+            const storedToken = localStorage.getItem("token");
+            let token = "";
+            if (storedToken) {
+                token = `Bearer ${storedToken}`;
+            }
+            const response = await axios.get<INewsItem>(`/api/news/${id}`, {
+                headers: {
+                    Authorization: token,
+                },
+            });
+            console.log("Full API response:", response);
+            console.log("Blog data:", response.data);
+            console.log(
+                "isPublishedByCurrentUser:",
+                response.data.isPublishedByCurrentUser
+            );
+            return response.data;
         } catch (error) {
-            throw error;
+            console.error("Error in fetchBlogById:", error);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 );
@@ -55,10 +71,13 @@ export const fetchPutReaction = createAsyncThunk<INewsItem, ReactionPayload, { s
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ newsId, liked, disliked }),
             });
+            
             if (!response.ok) {
                 throw new Error('Failed to send reaction');
             }
-            return await response.json();
+            //  return response;
+            const responseData = await response.json();
+            return responseData;
         } catch (error) {
             return rejectWithValue(error.message);
         }
@@ -67,8 +86,23 @@ export const fetchPutReaction = createAsyncThunk<INewsItem, ReactionPayload, { s
 export const fetchComments = createAsyncThunk<CommentsResponse, number, { state: RootState }>(
     'news/fetchComments', async (newsId, { rejectWithValue }) => {
         try {
-            const data = (await axios.get<IComment[]>(`/api/news/${newsId}/comments`)).data;
-            return { comments: data };
+            const storedToken = localStorage.getItem("token");
+            let token = "";
+            if (storedToken) {
+                token = `Bearer ${storedToken}`;
+            }
+            const response = await axios.get<IComment[]>(`/api/news/${newsId}/comments`,
+                {
+                  headers: {
+                    Authorization: token,
+                  },
+                });
+            console.log("Full API response from Comments:", response);
+            console.log("Blog data from Comments:", response.data);
+            response.data.forEach(comment => {
+                console.log("Comment ID:", comment.id, "isPublishedByCurrentUser:", comment.isPublishedByCurrentUser);
+            });
+            return { comments: response.data };
         } catch (error) {
             if (axios.isAxiosError(error) && error.response?.status === 404) {
                 //если ненайдено, то возвращаем 404. и присваеваем пустой массив комментариев
@@ -136,10 +170,11 @@ export const addComment = createAsyncThunk(
                 headers: { 'Content-Type': 'application/json' },
             });
             if (!response.ok) {
-                const data = await response.json();
-                return rejectWithValue(data.message || 'Failed to add comment');
+                const errorData = await response.json();
+                return rejectWithValue(errorData.message || 'Failed to add comment');
             }
-            return response;
+            const responseData = await response.json();
+            return responseData;
         } catch (error: any) {
             return rejectWithValue(error.message);
         }
@@ -164,18 +199,22 @@ export const fetchFilteredNews = createAsyncThunk<NewsResponse, { page: number; 
     }
 );
 
-export const editComment = createAsyncThunk<IComment, { commentId: number, comment: string }, { state: RootState }>(
-    'news/editComment', async ({ commentId, comment }, { rejectWithValue }) => {
+export const editComment = createAsyncThunk<IComment, { id: number, comment: string }, { state: RootState }>(
+    'news/editComment', async ({ id, comment }, { rejectWithValue }) => {
         try {
-            const response = await authorizedFetch(`/api/news/comment/${commentId}`, {
+            const response = await authorizedFetch(`/api/news/comment`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ comment }),
+                body: JSON.stringify({ comment, id }),
             });
+             console.log('Edit Comment Response:', await response.json());
             if (!response.ok) {
-                throw new Error('Failed to edit comment');
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to edit comment');
             }
-            return await response.json();
+            const responseData = await response.json(); // Read response once
+            console.log('Edit Comment Response:', responseData);
+            return responseData;
         } catch (error) {
             return rejectWithValue(error.message);
         }

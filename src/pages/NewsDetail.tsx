@@ -27,72 +27,90 @@ const NewsDetail: FC = () => {
     const [updateTrigger, setUpdateTrigger] = useState(0);
     const [authError, setAuthError] = useState<string | null>(null);
 
+    const currentUserString = localStorage.getItem("user");
+    const currentUser = currentUserString ? JSON.parse(currentUserString) : null;
+    const token = currentUser ? currentUser.token : null;
+
+
+
     useEffect(() => {
         if (id) {
             dispatch(fetchNewsById(Number(id)));
             dispatch(fetchComments(Number(id)));
         }
         dispatch(topSlice.actions.setCurrentPage(1));
-    }, [dispatch, id]);
+    }, [dispatch, id, updateTrigger]);
 
     // useEffect(() => {
     //     console.log("NewsDetail status:", status);
     //     console.log("Selected news item:", newsItem);
     // }, [status, newsItem]);
 
-   
-    const handleReaction = (liked: boolean, disliked: boolean) => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            dispatch(fetchPutReaction({ newsId: Number(id), liked, disliked }));
-        } else {
-          setAuthError(
-            "Sie müssen sich anmelden, um einen neuen Blog hinzuzufügen."
-          );
+
+    const handleReaction = async (liked: boolean, disliked: boolean) => {
+        try {
+            await dispatch(fetchPutReaction({ newsId: Number(id), liked, disliked }));
+        } catch (error) {
+            setAuthError(
+                "Sie müssen sich anmelden, um einen neuen Blog hinzuzufügen."
+            );
         }
-      };
-    const handleEditComment = (commentId: number, comment: string) => {
-        setEditingCommentId(commentId);
+    };
+    const handleEditComment = (id: number, comment: string) => {
+        setEditingCommentId(id);
         setEditedComment(comment);
     };
 
-    const handleDeleteComment = (commentId: number) => {
-        dispatch(deleteComment({ commentId }));
+    const handleDeleteComment = async (commentId: number) => {
+        try {
+            await dispatch(deleteComment({ commentId })).unwrap();
+            setUpdateTrigger((prev) => prev + 1);
+        } catch (error) {
+            console.error("Failed to delete comment:", error);
+        }
     };
 
-    // const handleEditSubmit = async (event: React.FormEvent) => {
-    //     event.preventDefault();
-    //     if (id && comment.trim()) {
-    //         setSubmitting(true);
-    //         if (!comment.trim()) {
-    //             setCommentError("Der Kommentar darf nicht leer sein.");
-    //             return;
-    //           }
-    //           if (id) {
-    //             dispatch(addComment({ newsId: Number(id), comment }));
-    //             setComment("");
-    //             setCommentError(null);
-    //           }
-    //     }
-    // };
+    const handleEditCommentText = async () => {
+        if (!editedComment.trim()) {
+            setCommentError("The comment cannot be empty.");
+            return;
+        }
+        if (editingCommentId !== null) {
+            console.log("Editing Comment ID:", editingCommentId); // Логирование ID комментария
+            console.log("Edited Comment:", editedComment);
+            try {
+                await dispatch(editComment({ id: editingCommentId, comment: editedComment })).unwrap();
+                setEditingCommentId(null); // Close the edit form
+                setEditedComment(''); // Clear the edited comment text
+                setCommentError(null); // Clear any previous error
+                setUpdateTrigger((prev) => prev + 1); // Trigger a state update to refresh the comments
+                dispatch(fetchComments(Number(id)));
+            } catch (error) {
+                console.error("Failed to edit comment:", error);
+                setCommentError("Failed to edit comment");
+            }
+        } else {
+            setCommentError("ID do not exist.");
+        }
+    }
     const handleAddComment = async () => {
         if (!comment.trim()) {
-          setCommentError("Der Kommentar darf nicht leer sein.");
-          return;
+            setCommentError("Der Kommentar darf nicht leer sein.");
+            return;
         }
         if (id) {
-          try {
-            console.log("Sending comment data:", { newsId: Number(id), comment });
-            await dispatch(addComment({ newsId: Number(id), comment })).unwrap();
-            setComment("");
-            setCommentError(null);
-            // setUpdateTrigger((prev) => prev + 1);
-          } catch (error) {
-            console.error("Fehler beim Hinzufügen des Kommentars:", error);
-            setCommentError("Failed to add comment");
-          }
+            try {
+                console.log("Sending comment data:", { newsId: Number(id), comment });
+                await dispatch(addComment({ newsId: Number(id), comment })).unwrap();
+                setComment("");
+                setCommentError(null);
+                // setUpdateTrigger((prev) => prev + 1);
+            } catch (error) {
+                console.error("Fehler beim Hinzufügen des Kommentars:", error);
+                setCommentError("Failed to add comment");
+            }
         }
-      };
+    };
 
     return (
         <section>
@@ -119,6 +137,7 @@ const NewsDetail: FC = () => {
                                     </button>
                                     <span><FontAwesomeIcon icon={faComment} /> {newsItem.commentsCount}</span>
                                 </div>
+                                {authError && <p className="error">{authError}</p>}
                                 <div dangerouslySetInnerHTML={{ __html: newsItem.content }}></div>
                             </div>
 
@@ -140,7 +159,7 @@ const NewsDetail: FC = () => {
                                     </div> */}
                                 <div className='form-group'>
                                     <label htmlFor='comment'>Enter your comment:</label>
-                                    <textarea 
+                                    <textarea
                                         id='comment'
                                         value={comment}
                                         onChange={(e) => setComment(e.target.value)}
@@ -156,9 +175,9 @@ const NewsDetail: FC = () => {
                             <div className='comment-content p-4'>
                                 <h2 className='newsTopTitle'>Comments:</h2>
                                 {newsItem.commentsCount === 0 && <p className='empty-comments p-5 text-center'>There are no comments yet</p>}
-                                {comments.map(comment =>{
+                                {comments.map(comment => {
                                     console.log("isPublishedByCurrentUser:", comment.isPublishedByCurrentUser);
-                                    return(
+                                    return (
                                         <div key={comment.id} className="comment">
                                             <div className='comment-header d-flex justify-content-between'><strong>{comment.authorName}</strong> {formatDate(comment.commentDate)} </div>
                                             <p>{comment.comment}</p>
@@ -169,7 +188,7 @@ const NewsDetail: FC = () => {
                                                 </div>
                                             )}
                                             {editingCommentId === comment.id && (
-                                                <form className="edit-comment-form">
+                                                <form className="edit-comment-form" onSubmit={(e) => { e.preventDefault(); handleEditCommentText(); }}>
                                                     <div className='form-group'>
                                                         <label htmlFor='editComment'>Edit your comment:</label>
                                                         <textarea
@@ -187,8 +206,8 @@ const NewsDetail: FC = () => {
                                             )}
                                         </div>
                                     )
-                                } 
-                                
+                                }
+
                                 )}
                             </div>
 
