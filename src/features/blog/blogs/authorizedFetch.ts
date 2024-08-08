@@ -12,13 +12,20 @@ export const authorizedFetch = async (url: string, options: RequestInit = {}) =>
     'Authorization': `Bearer ${token}`,
     'Content-Type': 'application/json',
   };
-
+  console.log("Sending request to:", url);
+  console.log("Request options:", { ...options, headers });
   const response = await fetch(url, {
     ...options,
     headers,
   });
 
-  return response;
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || `HTTP error! status: ${response.status}`);
+}
+
+const responseText = await response.text();
+return responseText ? JSON.parse(responseText) : {};
 };
 
 export default authorizedFetch;

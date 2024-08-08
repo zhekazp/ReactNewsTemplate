@@ -1,18 +1,18 @@
 import React, { FC } from 'react'
-import { formatDate, INewsItem } from './newsSlice';
+import { formatDate } from './newsSlice';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons/faThumbsUp';
 import { faClock, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
+import { INewsItem } from './newsTypes';
 
 
 interface IProps {
   newsItem: INewsItem;
 }
-
 const NewsComponent: FC<IProps> = ({ newsItem }) => {
 
-  const displayRegionName = newsItem.regionName === 'non-region' ? 'All' : newsItem.regionName;
+  const displayRegionName = newsItem.regionName === 'non-region' ? 'Alle Bundesländer' : newsItem.regionName;
 
   return (
     <div className='col-4 p-2 newsBlock'>

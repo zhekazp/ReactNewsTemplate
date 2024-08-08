@@ -2,73 +2,22 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../store';
 import { format, parseISO } from 'date-fns';
+import { CommentsResponse, IComment, INewsCommentRequest, INewsItem, INewsItemFullPage, initialNewsState, IRegionsResponse, ISectionResponse, NewsResponse, ReactionPayload } from './newsTypes';
+import authorizedFetch from '../blog/blogs/authorizedFetch';
 // import authorizedFetch from './authorizedFetch';
 
-
-export interface INewsItem {
-    id: number;
-    regionId: number;
-    regionName: string;
-    sectionName: string;
-    title: string;
-    date: string;
-    titleImageSquare: string;
-    titleImageWide: string;
-    content: string;
-    likeCount: number;
-    dislikeCount: number;
-    commentsCount: number;
-}
-
-export interface NewsResponse {
-    pageCount: number;
-    currentPage: number; 
-    newsDataPage: INewsItem[];
-}
-export interface IComment {
-    id: number;
-    newsId: number;
-    authorName: string;
-    commentDate: string;
-    comment: string;
-    isPublishedByCurrentUser?: boolean;
-}
-export interface ReactionPayload {
-    newsId: number;
-    liked: boolean;
-    disliked: boolean;
-}
-export interface CommentsResponse {
-    comments: IComment[];
-}
-export interface INewsCommentRequest {
-    newsId: number;
-    comment: string;
-  }
-export interface initialNewsState {
-    newsArr: INewsItem[];
-    status: 'idle' | "loading" | "success" | "error";
-    selectedNews: INewsItem | null;
-    pageCount: number;
-    error: string | null;
-    message: string | null;
-    currentPage: number;
-    comments: IComment[];
-    sections: string[];
-    regions: string[];
-}
 const initialState: initialNewsState = {
     newsArr: [],
+    newsStk: null,
     status: 'idle',
     selectedNews: null,
     pageCount: 0,
     error: null,
     currentPage: 0,
     comments: [],
+    message: null,
     sections: [],
     regions: [],
-    message: null,
-
 };
 
 export const formatDate = (dateString: string): string => {
@@ -80,20 +29,35 @@ export const formatDate = (dateString: string): string => {
 
 export const fetchNews = createAsyncThunk<NewsResponse, void, { state: RootState }>(
     'news/fetchNews', async () => {
-        const data = (await axios.get<NewsResponse>('/api/news')).data;
+        const data = (await axios.get<NewsResponse>('/api/news?page=0')).data;
         return data;
     });
 export const fetchNewsById = createAsyncThunk<INewsItem, number, { state: RootState }>(
     'news/fetchNewsById', async (id) => {
-        const data = (await axios.get<INewsItem>(`/api/news/${id}`)).data;
-        return data;
+        try {
+            const data = (await axios.get<INewsItem>(`/api/news/${id}`)).data;
+            return data;
+        } catch (error) {
+            throw error;
+        }
     }
 );
 export const fetchPutReaction = createAsyncThunk<INewsItem, ReactionPayload, { state: RootState }>(
-    'news/fetchPutReaction', async (payload) => {
-        const { newsId, liked, disliked } = payload;
-        const data = (await axios.put<INewsItem>(`/api/news/reaction`, { newsId, liked, disliked })).data;
-        return data;
+    'news/fetchPutReaction', async (payload, { rejectWithValue }) => {
+        try {
+            const { newsId, liked, disliked } = payload;
+            const response = await authorizedFetch(`/api/news/reaction`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ newsId, liked, disliked }),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to send reaction');
+            }
+            return await response.json();
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
     }
 );
 export const fetchComments = createAsyncThunk<CommentsResponse, number, { state: RootState }>(
@@ -111,6 +75,28 @@ export const fetchComments = createAsyncThunk<CommentsResponse, number, { state:
         }
     }
 );
+export const fetchSections = createAsyncThunk<ISectionResponse[], void, { state: RootState }>(
+    'news/fetchSections',
+    async () => {
+        try {
+            const data = (await axios.get<ISectionResponse[]>('/api/sections')).data;
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+);
+export const fetchRegions = createAsyncThunk<IRegionsResponse[], void, { state: RootState }>(
+    'news/fetchRegions',
+    async () => {
+        try {
+            const data = (await axios.get<IRegionsResponse[]>('/api/regions')).data;
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+);
 // export const addComment = createAsyncThunk<
 //   { message: string; comment?: IComment },
 //   INewsCommentRequest,
@@ -120,12 +106,13 @@ export const fetchComments = createAsyncThunk<CommentsResponse, number, { state:
 //   async (commentData, { rejectWithValue }) => {
 //     try {
 //       const response = await authorizedFetch(`/api/news/comment`, {
-//         method: 'PUT',
+//         method: 'POST',
 //         body: JSON.stringify(commentData),
 //         headers: { 'Content-Type': 'application/json' },
 //       });
-//       const data = await response.json();
+
 //       if (!response.ok) {
+//         const data = await response.json();
 //         return rejectWithValue({ message: data.message || 'Failed to add comment' });
 //       }
 //       return data;
@@ -134,21 +121,81 @@ export const fetchComments = createAsyncThunk<CommentsResponse, number, { state:
 //     }
 //   }
 // );
+export const addComment = createAsyncThunk(
+    'news/addComment',
+    async (commentData: INewsCommentRequest, { rejectWithValue }) => {
+        try {
+            console.log('Sending to API:', commentData);
+            const response = await authorizedFetch(`/api/news/comment`, {
+                method: 'POST',
+                body: JSON.stringify(commentData),
+                headers: { 'Content-Type': 'application/json' },
+            });
+            if (!response.ok) {
+                const data = await response.json();
+                return rejectWithValue(data.message || 'Failed to add comment');
+            }
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
 
 export const fetchFilteredNews = createAsyncThunk<NewsResponse, { page: number; section?: string; region?: string }, { state: RootState }>(
     'news/fetchFilteredNews',
     async ({ page, section = '', region = '' }) => {
-        const params = new URLSearchParams({
-            page: page.toString(),
-            section,
-            region
-        });
+        try {
+            const params = new URLSearchParams({
+                page: page.toString(),
+                section,
+                region
+            });
 
-        const response = await axios.get<NewsResponse>(`/api/news/findBy?${params.toString()}`);
-        return response.data;
+            const response = await axios.get<NewsResponse>(`/api/news/findBy?${params.toString()}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
     }
 );
 
+export const editComment = createAsyncThunk<IComment, { commentId: number, comment: string }, { state: RootState }>(
+    'news/editComment', async ({ commentId, comment }, { rejectWithValue }) => {
+        try {
+            const response = await authorizedFetch(`/api/news/comment/${commentId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ comment }),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to edit comment');
+            }
+            return await response.json();
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+export const deleteComment = createAsyncThunk<void, { commentId: number }, { state: RootState }>(
+    'news/deleteComment', async ({ commentId }, { rejectWithValue }) => {
+        // await axios.delete(`/api/news/comment`, { data: { commentId } });
+        // return { commentId };
+        try {
+            const response = await authorizedFetch(`/api/news/comment`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ commentId }),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to delete comment');
+            }
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
 // export const fetchRegionsBySection = createAsyncThunk<
 // NewsResponse,
 //     { sectionName: string; regionName: string },
@@ -183,13 +230,13 @@ const newsSlice = createSlice({
                     regionsSet.add(news.regionName);
                 });
 
-                state.sections = Array.from(sectionsSet);
-                state.regions = Array.from(regionsSet);
+
                 state.pageCount = action.payload.pageCount;
                 state.currentPage = action.payload.currentPage;
             })
             .addCase(fetchNews.rejected, (state, action) => {
                 state.status = 'error';
+                state.error = action.error.message || null;
                 console.error("Failed to fetch news:", action.error.message);
             })
             .addCase(fetchNewsById.pending, (state) => {
@@ -201,6 +248,7 @@ const newsSlice = createSlice({
             })
             .addCase(fetchNewsById.rejected, (state, action) => {
                 state.status = 'error';
+                state.error = action.error.message || null;
                 console.error("Failed to fetch news by ID:", action.error.message);
             })
 
@@ -213,6 +261,7 @@ const newsSlice = createSlice({
             })
             .addCase(fetchComments.rejected, (state, action) => {
                 state.status = 'error';
+                state.error = action.error.message || null;
                 console.error("Failed to fetch comments by newsID::", action.error.message);
             })
             .addCase(fetchPutReaction.pending, (state) => {
@@ -237,22 +286,57 @@ const newsSlice = createSlice({
             })
             .addCase(fetchFilteredNews.rejected, (state, action) => {
                 state.status = 'error';
+                state.error = action.error.message || null;
                 console.error("Failed to fetch filtered news:", action.error.message);
             })
-            // .addCase(addComment.pending, (state) => {
-            //     state.status = 'loading';
-            //   })
-            //   .addCase(addComment.fulfilled, (state, action) => {
-            //     state.status = 'success';
-            //     state.message = action.payload.message;
-            //     if (action.payload.comment && state.newsArr) {
-            //       state.newsArr.comments.unshift(action.payload.comment);
-            //     }
-            //   })
-            //   .addCase(addComment.rejected, (state, action) => {
-            //     state.status = 'error';
-            //     state.error = action.payload?.message || 'An error occurred';
-            //   })
+            .addCase(fetchRegions.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchRegions.fulfilled, (state, action) => {
+                state.regions = action.payload.map(region => region.regionName);
+                state.status = 'success';
+            })
+            .addCase(fetchRegions.rejected, (state, action) => {
+                state.status = 'error';
+                state.error = action.error.message || null;
+                console.error("Failed to fetch regions:", action.error.message);
+            })
+            .addCase(fetchSections.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchSections.fulfilled, (state, action) => {
+                state.sections = action.payload.map(section => section.sectionName);
+                state.status = 'success';
+            })
+            .addCase(fetchSections.rejected, (state, action) => {
+                state.status = 'error';
+                state.error = action.error.message || null;
+                console.error("Failed to fetch sections:", action.error.message);
+            })
+            .addCase(editComment.fulfilled, (state, action) => {
+                const index = state.comments.findIndex(comment => comment.id === action.payload.id);
+                if (index !== -1) {
+                    state.comments[index] = action.payload;
+                }
+            })
+            .addCase(deleteComment.fulfilled, (state, action) => {
+                state.comments = state.comments.filter(comment => comment.id !== action.meta.arg.commentId);
+            })
+            .addCase(addComment.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(addComment.fulfilled, (state, action) => {
+                state.status = 'success';
+                state.message = 'Comment added successfully';
+
+                if (state.newsStk) {
+                    state.newsStk.comments.unshift(action.payload as unknown as IComment);
+                }
+            })
+            .addCase(addComment.rejected, (state, action) => {
+                state.status = 'error';
+                state.error = action.payload as string || 'An error occurred';
+            })
 
     }
 })
