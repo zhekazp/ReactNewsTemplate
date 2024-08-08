@@ -15,8 +15,8 @@ const TopElement: FC = () => {
     dispatch(
       topSlice.actions.setUserData({
         useRole:  localStorage.getItem('role') === "ROLE_ADMIN",
-        authorized: localStorage.getItem('role') !== "" && localStorage.getItem('role') !== undefined &&
-        localStorage.getItem('role') !== null,
+        authorized: localStorage.getItem('token') !== "" && localStorage.getItem('token') !== undefined &&
+        localStorage.getItem('token') !== null,
       })
     );
   },[])
@@ -25,7 +25,6 @@ const TopElement: FC = () => {
       authorized: false}));
       localStorage.removeItem("role");
       localStorage.removeItem("token");
-      console.log("LOGOUT");
     }
   return (
     <div className="topBlock">
@@ -35,7 +34,7 @@ const TopElement: FC = () => {
             <div className="topText">
               {currentPage === 0 ? (
                 <>
-                  <span className="topTitle">Actuelles</span>
+                  <span className="topTitle">Aktuelles</span>
                   <RunLine />
                 </>
               ) : (
