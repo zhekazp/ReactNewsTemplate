@@ -4,7 +4,7 @@ import Gewinn from '../components/Gewinn/Gewinn.tsx'; // Убедитесь, ч�
 function Gewinnen() {
   return (
     <div>
-      <h1>Добро пожаловать в наше приложение</h1>
+      <h1>Willkommen in unserer App!</h1>
       <Gewinn />
     </div>
   );
