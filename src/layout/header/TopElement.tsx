@@ -26,7 +26,6 @@ const TopElement: FC = () => {
       localStorage.removeItem("role");
       localStorage.removeItem("token");
       console.log("LOGOUT");
-      
     }
   return (
     <div className="topBlock">
