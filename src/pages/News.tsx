@@ -3,9 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
 import NewsComponent from '../features/news/NewsComponent';
 import { fetchFilteredNews, fetchNews, fetchRegions, fetchSections } from '../features/news/newsSlice';
-import '../style/news.css'
 import { topSlice } from "../layout/header/topElSlice";
 import Spinner from '../features/mainPage/components/spinner/Spinner';
+import ResponsivePagination from 'react-responsive-pagination';
+import '../style/news.css'
+
 
 const News = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -96,8 +98,7 @@ const News = () => {
                   newsItem={newsItem}
                 />)
               )}
-              <div className='pagination'>
-                {Array.from({ length: pageCount }).map((_, index) => (
+                {/* {Array.from({ length: pageCount }).map((_, index) => (
                   <button className={`page-number ${index === currentPage ? 'current' : ''}`}
                     key={index}
                     onClick={() => handlePageChange(index)}
@@ -105,8 +106,15 @@ const News = () => {
                   >
                     {index + 1}
                   </button>
-                ))}
-              </div>
+                ))} */}
+                <ResponsivePagination
+                current={currentPage + 1}  // Текущая страница (нумерация начинается с 1)
+                total={pageCount}          // Общее количество страниц
+                onPageChange={(newPage) => handlePageChange(newPage - 1)} 
+                maxWidth={10}
+                 // Переключение страниц (нумерация начинается с 0)
+              />
+             
             </div>
           ) : (
             <>Error!</>
