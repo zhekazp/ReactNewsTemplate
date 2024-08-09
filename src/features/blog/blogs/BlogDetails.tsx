@@ -183,7 +183,6 @@ const BlogDetails: FC = () => {
     }
   };
 
-
   const handleDeleteComment = async (commentId: number) => {
     try {
       await dispatch(deleteComment(commentId)).unwrap();
@@ -262,7 +261,7 @@ const BlogDetails: FC = () => {
               </p>
             </div>
           )}
-         {/* {console.log("Current User:", currentUser.email)} 
+          {/* {console.log("Current User:", currentUser.email)} 
           {console.log("Current User:", token)} 
           {console.log("Blog Author:", blog.authorName)} */}
           {blog && blog.isPublishedByCurrentUser && !isEditing && (
@@ -285,7 +284,7 @@ const BlogDetails: FC = () => {
                   onClose={handleModalClose}
                 />
               )}
-             {showModalUpdateSuccess && (
+              {showModalUpdateSuccess && (
                 <Modal
                   title="Blog aktualisiert"
                   content="Der Blog wurde erfolgreich aktualisiert."
@@ -348,7 +347,7 @@ const BlogDetails: FC = () => {
                 <div className="status-message error">{error}</div>
               </div>
             )}
-            {status === "success" && message && (
+            {status === "success" && message && !showModalAddComment && (
               <div className="status-message success">{message}</div>
             )}
           </div>
@@ -374,7 +373,5 @@ const BlogDetails: FC = () => {
     </div>
   );
 };
-
-
 
 export default BlogDetails;
