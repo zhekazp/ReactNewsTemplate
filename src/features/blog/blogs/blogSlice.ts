@@ -281,7 +281,7 @@ const blogSlice = createSlice({
       })
       .addCase(addComment.fulfilled, (state, action) => {
         state.status = "success";
-        state.message = "Comment added successfully";
+        // state.message = "Comment added successfully";
         if (state.blog) {
           state.blog.comments.unshift(
             action.payload as unknown as IBlogComment
