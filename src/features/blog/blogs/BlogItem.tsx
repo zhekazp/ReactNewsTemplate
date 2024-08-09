@@ -8,9 +8,21 @@ import {
   faComments,
   faGlobe,
   faUser,
+  faEye
 } from "@fortawesome/free-solid-svg-icons";
 
 const BlogItem: FC<BlogItemProps> = ({ blogItem }) => {
+  const addViews = () => {
+    fetch("api/blogs", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: blogItem.id,
+      }),
+    });
+  };
   return (
     <div className="blogItem_container">
       <li className="blogItem-item">
@@ -21,6 +33,10 @@ const BlogItem: FC<BlogItemProps> = ({ blogItem }) => {
             {blogItem.publishedDate}
           </p>
           {/* <p className="blogItem-views">{blogItem.views} views</p> */}
+          <p className="blogItem-comments-info">
+            <FontAwesomeIcon icon={faEye} />
+            <span className="blogItem-comments-count">{blogItem.views}</span>
+          </p>
           <p className="blogItem-comments-info">
             <FontAwesomeIcon icon={faComments} />
             <span className="blogItem-comments-count">{blogItem.comments}</span>
@@ -38,8 +54,14 @@ const BlogItem: FC<BlogItemProps> = ({ blogItem }) => {
           </p>
         </div>
         <div className="blogItem-link_container">
-          <NavLink to={`/blogs/${blogItem.id}`} className="blogItem-link">
-          Mehr erfahren
+          <NavLink
+            onClick={() => {
+              addViews();
+            }}
+            to={`/blogs/${blogItem.id}`}
+            className="blogItem-link"
+          >
+            Mehr erfahren
           </NavLink>
         </div>
       </li>
