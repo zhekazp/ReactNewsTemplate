@@ -84,8 +84,6 @@ function Gewinn() {
     <p><strong>Advertiser Phone:</strong> {selectedAdDetails?.advertiserPhone}</p>
     <p><strong>Discount:</strong> {selectedAdDetails?.discount}</p>
     <p><strong>Description of the Coupon:</strong> {selectedAdDetails?.descriptionOfTheCoupon}</p>
-    <p><strong>Creation Date:</strong> {selectedAdDetails?.createData}</p>
-    <p><strong>End Date:</strong> {selectedAdDetails?.endData}</p>
     <p><strong>Description:</strong> {selectedAdDetails?.description}</p>
   </div>
 		  
