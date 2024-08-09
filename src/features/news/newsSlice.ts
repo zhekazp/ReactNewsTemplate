@@ -105,8 +105,8 @@ export const fetchComments = createAsyncThunk<CommentsResponse, number, { state:
             });
 
             if (response.status === 204 || !response.data || response.data.length === 0) {
-                
-                return { comments: [] }; 
+
+                return { comments: [] };
             }
             return { comments: response.data };
         } catch (error) {
@@ -217,7 +217,7 @@ export const editComment = createAsyncThunk<IComment, { id: number, comment: str
                 const errorData = await response.json();
                 return rejectWithValue(errorData.message || 'Failed to edit comment');
             }
-            const responseData = await response.json(); 
+            const responseData = await response.json();
             return responseData;
         } catch (error: any) {
             return rejectWithValue(error.message);
@@ -226,29 +226,29 @@ export const editComment = createAsyncThunk<IComment, { id: number, comment: str
 );
 export const deleteComment = createAsyncThunk(
     "comments/deleteComment",
-    async (commentId: number, { rejectWithValue, dispatch  }) => {
-      try {
-        const token = localStorage.getItem("token");
-  
-        const response = await fetch(`/api/news/comment`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ id: commentId }),
-        });
-  
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+    async (commentId: number, { rejectWithValue, dispatch }) => {
+        try {
+            const token = localStorage.getItem("token");
+
+            const response = await fetch(`/api/news/comment`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ id: commentId }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            return commentId;
+        } catch (error) {
+            return rejectWithValue(error.message);
         }
-  
-        return commentId;
-      } catch (error) {
-        return rejectWithValue(error.message);
-      }
     }
-  );
+);
 // export const deleteComment = createAsyncThunk<void, { commentId: number }, { state: RootState }>(
 //     'news/deleteComment', async ({ commentId }, { rejectWithValue }) => {
 //         // await axios.delete(`/api/news/comment`, { data: { commentId } });
@@ -401,9 +401,16 @@ const newsSlice = createSlice({
                 state.status = 'success';
                 state.message = 'Comment added successfully';
 
-                if (state.newsStk) {
-                    state.newsStk.comments.unshift(action.payload as unknown as IComment);
+                // if (state.newsStk) {
+                //     state.newsStk.comments.unshift(action.payload as unknown as IComment);
+                // }
+
+                // state.comments.unshift(action.payload.comment as IComment);
+                const newComment = action.payload.comment;
+                if (newComment) {
+                    state.comments.unshift(newComment); // Убедитесь, что newComment не undefined
                 }
+
             })
             .addCase(addComment.rejected, (state, action) => {
                 state.status = 'error';

@@ -15,7 +15,7 @@ const NewsComponent: FC<IProps> = ({ newsItem }) => {
   const displayRegionName = newsItem.regionName === 'non-region' ? 'Alle Bundesländer' : newsItem.regionName;
 
   return (
-    <div className='col-4 p-2 newsBlock'>
+    <div className='col-md-4 col-sm-6 p-2 newsBlock'>
       <NavLink to={`/news/${newsItem.id}`} className='picBlock'>
         <span className='pick-block'>{displayRegionName}</span>
         <img width='100%' src={newsItem.titleImageSquare} alt={newsItem.title} className='news-img' />

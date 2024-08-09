@@ -84,7 +84,7 @@ const ContactUs = () => {
                 <p>Sie können uns auf jede für Sie bequeme Art und Weise kontaktieren. Wir sind rund um die Uhr per E-Mail erreichbar. Sie können auch das unten stehende Schnellkontaktformular verwenden oder uns persönlich im Büro besuchen. Wir beantworten gerne Ihre Fragen.</p>
 
                 <div className="contact-info row">
-                    <div className="col-4">
+                    <div className="col-md-4 col-sm-12">
                         <div className="contact-info-item d-flex flex-column">
                             <div className="contact-icon d-flex justify-content-center"><FontAwesomeIcon icon={faPhone} /></div>
                             <div className="contact-text">
@@ -94,7 +94,7 @@ const ContactUs = () => {
                         </div>
 
                     </div>
-                    <div className="col-4">
+                    <div className="col-md-4 col-sm-12">
                         <div className="contact-info-item d-flex flex-column">
                             <div className="contact-icon d-flex justify-content-center"><FontAwesomeIcon icon={faEnvelope} /></div>
                             <div className="contact-text">
@@ -103,7 +103,7 @@ const ContactUs = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-4">
+                    <div className="col-md-4 col-sm-12">
                         <div className="contact-info-item d-flex flex-column">
                             <div className="contact-icon d-flex justify-content-center"><FontAwesomeIcon icon={faLocationDot} /></div>
                             <div className="contact-text">
@@ -126,7 +126,7 @@ const ContactUs = () => {
                                 {errors.email && <div className="error">{errors.email}</div>}
                             </label>
                         </div>
-                        <label className="col-lg-12" htmlFor="message">
+                        <label className="col-12" htmlFor="message">
                             <textarea value={form.message} name='message' required className="form-input" onChange={handleInputChange} placeholder='Geben Sie Ihre Nachricht ein'></textarea>
                             {errors.message && <div className="error">{errors.message}</div>}
                         </label>
