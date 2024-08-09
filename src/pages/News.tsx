@@ -56,7 +56,7 @@ const News = () => {
     <section className="">
       <div className='container d-flex news_content'>
         <div className='news-content col-md-12'>
-          <div className='filter_block d-flex justify-content-between mx-2'>
+          <div className='filter_block d-flex'>
             {sections.map((section) => (
               <label className={`news-filter-btn ${selectedSection === section ? 'active' : ''}`} key={section}>
                 <input
@@ -107,13 +107,13 @@ const News = () => {
                     {index + 1}
                   </button>
                 ))} */}
-                <ResponsivePagination
-                current={currentPage + 1}  // Текущая страница (нумерация начинается с 1)
-                total={pageCount}          // Общее количество страниц
+                { pageCount > 1 &&(<ResponsivePagination
+                current={currentPage + 1}  
+                total={pageCount}        
                 onPageChange={(newPage) => handlePageChange(newPage - 1)} 
                 maxWidth={10}
                  // Переключение страниц (нумерация начинается с 0)
-              />
+              />)}
              
             </div>
           ) : (
