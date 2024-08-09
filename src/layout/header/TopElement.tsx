@@ -1,18 +1,29 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import RunLine from "./Runline";
 import { RootState } from "../../store.ts";
 import { useDispatch, useSelector } from "react-redux";
 import { topSlice } from "../../layout/header/topElSlice";
+import { Link } from "react-router-dom";
 
 const TopElement: FC = () => {
   const { currentPage, user } = useSelector((state: RootState) => state.top);
   const dispatch = useDispatch();
+  useEffect(() => {
+   
+    dispatch(
+      topSlice.actions.setUserData({
+        useRole:  localStorage.getItem('role') === "ROLE_ADMIN",
+        authorized: localStorage.getItem('token') !== "" && localStorage.getItem('token') !== undefined &&
+        localStorage.getItem('token') !== null,
+      })
+    );
+  },[])
   const logout = () => {
     dispatch(topSlice.actions.setUserData({ useRole: false, 
       authorized: false}));
-      localStorage.removeItem("false");
+      localStorage.removeItem("role");
       localStorage.removeItem("token");
     }
   return (
@@ -23,7 +34,7 @@ const TopElement: FC = () => {
             <div className="topText">
               {currentPage === 0 ? (
                 <>
-                  <span className="topTitle">actuelle</span>
+                  <span className="topTitle">Aktuelles</span>
                   <RunLine />
                 </>
               ) : (
@@ -55,9 +66,9 @@ const TopElement: FC = () => {
                 </>
               ) : (
                 <>
-                  <a href="/login">
+                  <Link to="/login">
                     <span className="loginButton">Login/Registration</span>
-                  </a>
+                  </Link>
                 </>
               )}
             </span>

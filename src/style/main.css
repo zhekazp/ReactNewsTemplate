@@ -8,6 +8,16 @@ a {
 main{
   min-height: calc(100vh - 440px);
 }
+.textColorMain{
+  color:white;
+}
+
+.aboutMargin{
+  margin-bottom: 20px;
+}
+.textCenter{
+  text-align: center;
+}
 .topBlock {
   background-color: #ff0000;
   width: 100%;
@@ -247,6 +257,7 @@ main{
   background-color: #292b2d;
   width: 100%;
 }
+
 .fTopBlock {
   text-align: center;
   border-bottom: 1px solid #e3e6e8;

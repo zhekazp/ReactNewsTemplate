@@ -1,6 +1,5 @@
 import { menuItems } from '../../config/menuConfig.ts';
 import { uid } from "uid"
-// import Nav from 'react-bootstrap/Nav';
 
 const Footer = () => {
     const current = 0;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBlogs, fetchUserBlogs } from "./blogSlice";
 import { AppDispatch, RootState } from "../../../store";
@@ -9,22 +9,21 @@ import "./blogsStyles/blogList.css";
 import Breadcrumb from "./Breadcrumb";
 import { topSlice } from "../../../layout/header/topElSlice";
 
-const BlogList: React.FC = () => {
+const BlogList: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { status, error, pageCount, currentPage, blogs } = useSelector(
     (state: RootState) => state.blogs
   );
+  const [showUserBlogs, setShowUserBlogs] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const [filters, setFilters] = useState({
     region: searchParams.get("region") || "0",
     page: searchParams.get("page") || "0",
   });
 
-  const [showUserBlogs, setShowUserBlogs] = useState(false); // Состояние для показа блогов пользователя
-
-  const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
     const page = parseInt(filters.page, 10);
@@ -124,7 +123,6 @@ const BlogList: React.FC = () => {
           <option value="16">Schleswig-Holstein</option>
           <option value="17">Thüringen</option>
           <option value="18">Deutschland</option>
-          {/* Другие опции регионов */}
         </select>
         {showUserBlogs && (
           <p className="info-message">

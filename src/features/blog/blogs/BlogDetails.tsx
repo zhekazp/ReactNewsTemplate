@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -20,8 +20,9 @@ import {
   faComments,
   faCalendar,
 } from "@fortawesome/free-solid-svg-icons";
-import { topSlice } from "../../../layout/header/topElSlice";
-const BlogDetails: React.FC = () => {
+import Modal from "./Modal";
+
+const BlogDetails: FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ const BlogDetails: React.FC = () => {
   const blog: IBlogDetails | null = useSelector(
     (state: RootState) => state.blogs.blog
   );
+  const regions = useSelector((state: RootState) => state.blogs.regions);
   const [comment, setComment] = useState<string>("");
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editedTitle, setEditedTitle] = useState<string>("");
@@ -45,23 +47,22 @@ const BlogDetails: React.FC = () => {
   const [showModalDeleteComment, setShowModalDeleteComment] = useState(false);
   const [updateTrigger, setUpdateTrigger] = useState(0); // Перерендер компонента
 
-  const currentUserString = localStorage.getItem("user");
-  const currentUser = currentUserString ? JSON.parse(currentUserString) : null;
-  const token = currentUser ? currentUser.token : null;
-  // console.log(currentUser);
+  // const currentUserString = localStorage.getItem("user");
+  // const currentUser = currentUserString ? JSON.parse(currentUserString) : null;
+  // const token = currentUser ? currentUser.token : null;
+  //  console.log(currentUser);
 
-  useEffect(() => {
-    if (blog) {
-      console.log("Blog details:", blog);
-      console.log("isPublishedByCurrentUser:", blog.isPublishedByCurrentUser);
-    }
-  }, [blog]);
+  // useEffect(() => {
+  //   if (blog) {
+  //     console.log("Blog details:", blog);
+  //     console.log("isPublishedByCurrentUser:", blog.isPublishedByCurrentUser);
+  //   }
+  // }, [blog]);
 
   useEffect(() => {
     const scrollToTop = () => {
       window.scrollTo(0, 0);
     };
-    dispatch(topSlice.actions.setCurrentPage(1))
     requestAnimationFrame(scrollToTop);
   }, []);
 
@@ -77,7 +78,6 @@ const BlogDetails: React.FC = () => {
       setEditedContent(blog.content);
     }
   }, [blog]);
-
 
   const handleAddComment = async () => {
     if (!comment.trim()) {
@@ -97,8 +97,6 @@ const BlogDetails: React.FC = () => {
     }
   };
 
-  const regions = useSelector((state: RootState) => state.blogs.regions);
-
   useEffect(() => {
     if (regions.length === 0) {
       dispatch(fetchRegions());
@@ -114,7 +112,6 @@ const BlogDetails: React.FC = () => {
       return;
     }
 
-    // Валидация заголовка и содержания
     if (editedTitle.length < 2) {
       setTitleError("Der Titel muss mindestens 2 Zeichen lang sein.");
       isValid = false;
@@ -150,13 +147,16 @@ const BlogDetails: React.FC = () => {
 
       dispatch(updateBlog(updatedBlogRequest))
         .unwrap()
-        .then((updatedBlog) => {
+        .then(() => {
           setIsEditing(false);
           setShowModalUpdateSuccess(true);
-          setUpdateTrigger((prev) => prev + 1); // Это вызовет перерендер компонента
+          setUpdateTrigger((prev) => prev + 1);
         })
         .catch((error) => {
-          console.error("Fehler beim Aktualisieren des Blogs:", error.message || error);
+          console.error(
+            "Fehler beim Aktualisieren des Blogs:",
+            error.message || error
+          );
         });
     }
   };
@@ -183,12 +183,6 @@ const BlogDetails: React.FC = () => {
     }
   };
 
-  const handleModalClose = () => {
-    setShowModalDeleteBlog(false);
-    navigate("/blogs");
-  };
-
-
   const handleDeleteComment = async (commentId: number) => {
     try {
       await dispatch(deleteComment(commentId)).unwrap();
@@ -197,6 +191,11 @@ const BlogDetails: React.FC = () => {
     } catch (error) {
       console.error("Failed to delete comment:", error);
     }
+  };
+
+  const handleModalClose = () => {
+    setShowModalDeleteBlog(false);
+    navigate("/blogs");
   };
 
   return (
@@ -262,9 +261,9 @@ const BlogDetails: React.FC = () => {
               </p>
             </div>
           )}
-          {console.log("Current User:", currentUser.email)}
-          {console.log("Current User:", token)}
-          {console.log("Blog Author:", blog.authorName)}
+          {/* {console.log("Current User:", currentUser.email)} 
+          {console.log("Current User:", token)} 
+          {console.log("Blog Author:", blog.authorName)} */}
           {blog && blog.isPublishedByCurrentUser && !isEditing && (
             <div>
               <div className="button-container_edit_del">
@@ -279,29 +278,21 @@ const BlogDetails: React.FC = () => {
                 </button>
               </div>
               {showModalDeleteBlog && deleteSuccess && (
-                <div className="modal">
-                  <div className="modal-content">
-                    <h2>Blog gelöscht</h2>
-                    <p>Der Blog wurde erfolgreich gelöscht.</p>
-                    <button onClick={handleModalClose}>OK</button>
-                  </div>
-                </div>
+                <Modal
+                  title="Blog gelöscht"
+                  content="Der Blog wurde erfolgreich gelöscht."
+                  onClose={handleModalClose}
+                />
               )}
               {showModalUpdateSuccess && (
-                <div className="modal">
-                  <div className="modal-content">
-                    <h2>Blog aktualisiert</h2>
-                    <p>Der Blog wurde erfolgreich aktualisiert.</p>
-                    <button
-                      onClick={() => {
-                        setShowModalUpdateSuccess(false);
-                        navigate(`/blogs/${id}`);
-                      }}
-                    >
-                      OK
-                    </button>
-                  </div>
-                </div>
+                <Modal
+                  title="Blog aktualisiert"
+                  content="Der Blog wurde erfolgreich aktualisiert."
+                  onClose={() => {
+                    setShowModalUpdateSuccess(false);
+                    navigate(`/blogs/${id}`);
+                  }}
+                />
               )}
             </div>
           )}
@@ -356,31 +347,23 @@ const BlogDetails: React.FC = () => {
                 <div className="status-message error">{error}</div>
               </div>
             )}
-            {status === "success" && message && (
+            {status === "success" && message && !showModalAddComment && (
               <div className="status-message success">{message}</div>
             )}
           </div>
           {showModalAddComment && (
-            <div className="modal">
-              <div className="modal-content">
-                <h2>Kommentar hinzugefügt</h2>
-                <p>Der Kommentar wurde erfolgreich hinzugefügt.</p>
-                <button onClick={() => setShowModalAddComment(false)}>
-                  OK
-                </button>
-              </div>
-            </div>
+            <Modal
+              title="Kommentar hinzugefügt"
+              content="Der Kommentar wurde erfolgreich hinzugefügt."
+              onClose={() => setShowModalAddComment(false)}
+            />
           )}
           {showModalDeleteComment && (
-            <div className="modal">
-              <div className="modal-content">
-                <h2>Kommentar gelöscht</h2>
-                <p>Der Kommentar wurde erfolgreich gelöscht.</p>
-                <button onClick={() => setShowModalDeleteComment(false)}>
-                  OK
-                </button>
-              </div>
-            </div>
+            <Modal
+              title="Kommentar gelöscht"
+              content="Der Kommentar wurde erfolgreich gelöscht."
+              onClose={() => setShowModalDeleteComment(false)}
+            />
           )}
         </>
       ) : (

@@ -10,10 +10,12 @@ import { uid } from "uid";
 import Blog from "../features/mainPage/components/blog/Blog";
 import InfoComponent from "../features/mainPage/components/info/InfoComponent";
 import { MainPageData, NewsMP, WeatherMP } from "../features/mainPage/mainPage";
-import ErrorModal from "../features/mainPage/components/modal/ErrorModal";
+// import ErrorModal from "../features/mainPage/components/modal/ErrorModal";
 import { useDispatch } from "react-redux";
 import { topSlice } from "../layout/header/topElSlice";
 import type { INewsTop } from "../layout/header/topElSlice";
+import { Link } from "react-router-dom";
+import ModalComponent from "../features/mainPage/components/modal/ModalComponent";
 const Home = () => {
   const [data, setData] = useState<MainPageData | null>(null);
   const [errorResponse, setError] = useState<boolean>(false);
@@ -22,6 +24,7 @@ const Home = () => {
   const [weatherLoading, setStatus] = useState<boolean>(true);
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(topSlice.actions.setCurrentPage(0));
     fetch("/api/mainpage")
       .then((response) => {
         if (response.status > 299) {
@@ -60,12 +63,13 @@ const Home = () => {
       {data === null ? (
         <>
           <Spinner show={loading} color="red" />
-          <ErrorModal
-            show={errorResponse}
-            onHide={() => {
-              setError(false);
-            }}
-          />
+          <ModalComponent  show={errorResponse}
+             title="Error"
+             content="Die Antwort des Servers ist ein Fehler. Versuchen Sie es später erneut."
+             buttonContent="ok"
+             danger = {true}
+             onClose={()=>setError(false)}
+             />
         </>
       ) : (
         <>
@@ -76,7 +80,7 @@ const Home = () => {
                 <Carousel fade={true}>
                   {data.innerNews.slice(0, 4).map((newsItem: NewsMP) => (
                     <Carousel.Item key={uid()}>
-                      <a href={"/news/" + newsItem.id}>
+                      <Link to={"/news/" + newsItem.id}>
                         <div className="picBlock">
                           <img
                             width="100%"
@@ -89,7 +93,7 @@ const Home = () => {
                           <h4>{newsItem.title}</h4>
                           <NewsInfo info={newsItem} />
                         </Carousel.Caption>
-                      </a>
+                      </Link>
                     </Carousel.Item>
                   ))}
                 </Carousel>
@@ -98,9 +102,9 @@ const Home = () => {
                 <div className="row ">
                   {data.innerNews.slice(5, 7).map((newsItem) => (
                     <div key={uid()} className="col-6">
-                      <a href={"/news/" + newsItem.id}>
+                      <Link to={"/news/" + newsItem.id}>
                         <News city={false} info={newsItem} />
-                      </a>
+                      </Link>
                     </div>
                   ))}
                 </div>
@@ -118,9 +122,9 @@ const Home = () => {
                 <div className="row">
                   {data.innerNews.slice(7, 11).map((item) => (
                     <div key={uid()} className="col-3 s">
-                      <a href={"/news/" + item.id}>
+                      <Link to={"/news/" + item.id}>
                         <News city={true} info={item} />
-                      </a>
+                      </Link>
                     </div>
                   ))}
                 </div>
@@ -139,9 +143,9 @@ const Home = () => {
                     <div className="row">
                       {data.world.map((item) => (
                         <div key={uid()} className="col-6 worldNews">
-                          <a href={"/news/" + item.id}>
+                          <Link to={"/news/" + item.id}>
                             <News city={false} info={item} />
-                          </a>
+                          </Link>
                         </div>
                       ))}
                     </div>
@@ -160,14 +164,14 @@ const Home = () => {
                       <div className="row newsTopic">
                         {[0, 1].map((childItem) => (
                           <div key={uid()} className="col-6">
-                            <a
-                              href={"/news/" + data.sport[item + childItem].id}
+                            <Link
+                              to={"/news/" + data.sport[item + childItem].id}
                             >
                               <News
                                 city={false}
                                 info={data.sport[item + childItem]}
                               />
-                            </a>
+                            </Link>
                           </div>
                         ))}
                       </div>
@@ -178,9 +182,9 @@ const Home = () => {
               <div className="col-6 newSlider">
                 <Title title="Blogs" />
                 {data.blogs.map((item) => (
-                  <a key={uid()} href={"/blogs/"+item.id}>
+                  <Link key={uid()} to={"/blogs/"+item.id}>
                     <Blog info={item} />
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>

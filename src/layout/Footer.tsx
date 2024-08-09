@@ -47,7 +47,9 @@ const Footer = () => {
         </div>
       </div>
       <div className="button">
-        <h3>Bundesland Blog</h3>
+        <Link to="/">
+          <h3 className="textColorMain">Bundesland Blog</h3>
+        </Link>
         <span>© {new Date().getFullYear()}</span>
       </div>
     </div>

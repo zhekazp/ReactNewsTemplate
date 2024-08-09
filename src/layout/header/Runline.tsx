@@ -3,6 +3,7 @@ import Marquee from "react-fast-marquee";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { uid } from "uid";
+import { Link } from "react-router-dom";
  
   const RunLine: FC = () => {
   const {news} = useSelector((state:RootState) => state.top);
@@ -13,7 +14,7 @@ import { uid } from "uid";
           {
           news.map((item, index) => (
             <span className="runText" key={uid()}>
-              <a href={"/news/"+item.url}>{item.news}</a>
+              <Link to={"/news/"+item.url}>{item.news}</Link>
             </span>
           ))}
         </Marquee>

@@ -20,6 +20,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import AddBlog from "./features/blog/blogs/AddBlog";
 import BlogDetails from "./features/blog/blogs/BlogDetails";
 import { fetchBlogs } from "./features/blog/blogs/blogSlice";
+import Confirm from "./pages/Confirm";
+import Gewinnen from "./pages/Gewinnen";
+import Restore from "./pages/Restore";
+
 
 
 function App() {
@@ -38,7 +42,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-		  {/* <Route path="gewinner" element={<Gewinnen/>} /> */}
+          <Route path="/api/ads" element={<Gewinnen/>} /> 
           <Route path="news" element={<News />} />
           <Route path="news/:id" element={<NewsDetail />} />
           <Route path="blogs" element={<BlogPage />} />
@@ -51,6 +55,8 @@ function App() {
           <Route path='/cookie' element={<CookieConsentModal />} />
           <Route path="/login" element={<LogIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/confirm" element={<Confirm />} />
+          <Route path="/recover" element={<Restore />} />
           <Route path="/" element={<LogIn />} />
         </Route>
       </Routes>

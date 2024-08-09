@@ -48,7 +48,7 @@ const Weather = (props: { weather: WeatherMP | null; loading: boolean }) => {
           <div className="wInfo">
             <span>{props.weather.description}</span>
             <br />
-            <span>{"Wind: " + props.weather.wind}</span>
+            <span>{"Wind: " + props.weather.wind+" м/s"}</span>
             <br />
             <span>{"Feuchtigkeit: " + props.weather.humidity + "%"}</span>
           </div>
