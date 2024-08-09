@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../store';
 import { format, parseISO } from 'date-fns';
-import { CommentsResponse, IComment, INewsCommentRequest, INewsItem, INewsItemFullPage, initialNewsState, IRegionsResponse, ISectionResponse, NewsResponse, ReactionPayload } from './newsTypes';
+import { AddCommentResponse, CommentsResponse, IComment, INewsCommentRequest, INewsItem, INewsItemFullPage, initialNewsState, IRegionsResponse, ISectionResponse, NewsResponse, ReactionPayload, ReactionResponse } from './newsTypes';
 import authorizedFetch from '../blog/blogs/authorizedFetch';
 // import authorizedFetch from './authorizedFetch';
 
@@ -14,7 +14,7 @@ const initialState: initialNewsState = {
     pageCount: 0,
     error: null,
     currentPage: 0,
-    comments: [],
+    comments: [] as IComment[],
     message: null,
     sections: [],
     regions: [],
@@ -62,8 +62,8 @@ export const fetchNewsById = createAsyncThunk<INewsItem, number, { state: RootSt
         }
     }
 );
-export const fetchPutReaction = createAsyncThunk<INewsItem, ReactionPayload, { state: RootState }>(
-    'news/fetchPutReaction', async (payload, { rejectWithValue }) => {
+export const fetchPutReaction = createAsyncThunk<ReactionResponse, ReactionPayload, { state: RootState }>(
+    'news/fetchPutReaction', async (payload, { rejectWithValue, dispatch }) => {
         try {
             const { newsId, liked, disliked } = payload;
             const response = await authorizedFetch(`/api/news/reaction`, {
@@ -71,12 +71,13 @@ export const fetchPutReaction = createAsyncThunk<INewsItem, ReactionPayload, { s
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ newsId, liked, disliked }),
             });
-            
+
             if (!response.ok) {
                 throw new Error('Failed to send reaction');
             }
             //  return response;
             const responseData = await response.json();
+            await dispatch(fetchNewsById(newsId));
             return responseData;
         } catch (error) {
             return rejectWithValue(error.message);
@@ -93,15 +94,20 @@ export const fetchComments = createAsyncThunk<CommentsResponse, number, { state:
             }
             const response = await axios.get<IComment[]>(`/api/news/${newsId}/comments`,
                 {
-                  headers: {
-                    Authorization: token,
-                  },
+                    headers: {
+                        Authorization: token,
+                    },
                 });
             console.log("Full API response from Comments:", response);
             console.log("Blog data from Comments:", response.data);
             response.data.forEach(comment => {
                 console.log("Comment ID:", comment.id, "isPublishedByCurrentUser:", comment.isPublishedByCurrentUser);
             });
+
+            if (response.status === 204 || !response.data || response.data.length === 0) {
+                
+                return { comments: [] }; 
+            }
             return { comments: response.data };
         } catch (error) {
             if (axios.isAxiosError(error) && error.response?.status === 404) {
@@ -159,9 +165,9 @@ export const fetchRegions = createAsyncThunk<IRegionsResponse[], void, { state: 
 //     }
 //   }
 // );
-export const addComment = createAsyncThunk(
+export const addComment = createAsyncThunk<AddCommentResponse, INewsCommentRequest, { state: RootState }>(
     'news/addComment',
-    async (commentData: INewsCommentRequest, { rejectWithValue }) => {
+    async (commentData: INewsCommentRequest, { rejectWithValue, dispatch }) => {
         try {
             console.log('Sending to API:', commentData);
             const response = await authorizedFetch(`/api/news/comment`, {
@@ -174,6 +180,7 @@ export const addComment = createAsyncThunk(
                 return rejectWithValue(errorData.message || 'Failed to add comment');
             }
             const responseData = await response.json();
+            await dispatch(fetchComments(commentData.newsId));
             return responseData;
         } catch (error: any) {
             return rejectWithValue(error.message);
@@ -198,47 +205,69 @@ export const fetchFilteredNews = createAsyncThunk<NewsResponse, { page: number; 
         }
     }
 );
-
-export const editComment = createAsyncThunk<IComment, { id: number, comment: string }, { state: RootState }>(
-    'news/editComment', async ({ id, comment }, { rejectWithValue }) => {
+export const editComment = createAsyncThunk<IComment, { id: number, comment: string, newsId: number }, { state: RootState }>(
+    'news/editComment', async ({ id, comment, newsId }, { rejectWithValue }) => {
         try {
             const response = await authorizedFetch(`/api/news/comment`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ comment, id }),
+                body: JSON.stringify({ comment, id, newsId }),
             });
-             console.log('Edit Comment Response:', await response.json());
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to edit comment');
+                return rejectWithValue(errorData.message || 'Failed to edit comment');
             }
-            const responseData = await response.json(); // Read response once
-            console.log('Edit Comment Response:', responseData);
+            const responseData = await response.json(); 
             return responseData;
-        } catch (error) {
+        } catch (error: any) {
             return rejectWithValue(error.message);
         }
     }
 );
-
-export const deleteComment = createAsyncThunk<void, { commentId: number }, { state: RootState }>(
-    'news/deleteComment', async ({ commentId }, { rejectWithValue }) => {
-        // await axios.delete(`/api/news/comment`, { data: { commentId } });
-        // return { commentId };
-        try {
-            const response = await authorizedFetch(`/api/news/comment`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ commentId }),
-            });
-            if (!response.ok) {
-                throw new Error('Failed to delete comment');
-            }
-        } catch (error) {
-            return rejectWithValue(error.message);
+export const deleteComment = createAsyncThunk(
+    "comments/deleteComment",
+    async (commentId: number, { rejectWithValue, dispatch  }) => {
+      try {
+        const token = localStorage.getItem("token");
+  
+        const response = await fetch(`/api/news/comment`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ id: commentId }),
+        });
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
+  
+        return commentId;
+      } catch (error) {
+        return rejectWithValue(error.message);
+      }
     }
-);
+  );
+// export const deleteComment = createAsyncThunk<void, { commentId: number }, { state: RootState }>(
+//     'news/deleteComment', async ({ commentId }, { rejectWithValue }) => {
+//         // await axios.delete(`/api/news/comment`, { data: { commentId } });
+//         // return { commentId };
+//         try {
+//             const response = await authorizedFetch(`/api/news/comment`, {
+//                 method: 'DELETE',
+//                 headers: { 'Content-Type': 'application/json' },
+//                 body: JSON.stringify({ commentId }),
+//             });
+//             if (!response.ok) {
+//                 throw new Error('Failed to delete comment');
+//             }
+//             return {commentId};
+//         } catch (error) {
+//             return rejectWithValue(error.message);
+//         }
+//     }
+// );
 // export const fetchRegionsBySection = createAsyncThunk<
 // NewsResponse,
 //     { sectionName: string; regionName: string },
@@ -312,7 +341,7 @@ const newsSlice = createSlice({
             })
             .addCase(fetchPutReaction.fulfilled, (state, action) => {
                 state.status = 'success';
-                state.selectedNews = action.payload;
+                state.message = action.payload.message;
             })
             .addCase(fetchPutReaction.rejected, (state, action) => {
                 state.status = 'error';
@@ -363,7 +392,7 @@ const newsSlice = createSlice({
                 }
             })
             .addCase(deleteComment.fulfilled, (state, action) => {
-                state.comments = state.comments.filter(comment => comment.id !== action.meta.arg.commentId);
+                state.comments = state.comments.filter(comment => comment.id !== action.payload);
             })
             .addCase(addComment.pending, (state) => {
                 state.status = 'loading';

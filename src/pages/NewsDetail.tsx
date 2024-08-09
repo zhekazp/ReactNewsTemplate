@@ -61,9 +61,17 @@ const NewsDetail: FC = () => {
         setEditedComment(comment);
     };
 
+    // const handleDeleteComment = async (commentId: number) => {
+    //     try {
+    //         await dispatch(deleteComment({ commentId })).unwrap();
+    //         setUpdateTrigger((prev) => prev + 1);
+    //     } catch (error) {
+    //         console.error("Failed to delete comment:", error);
+    //     }
+    // };
     const handleDeleteComment = async (commentId: number) => {
         try {
-            await dispatch(deleteComment({ commentId })).unwrap();
+            await dispatch(deleteComment(commentId)).unwrap();
             setUpdateTrigger((prev) => prev + 1);
         } catch (error) {
             console.error("Failed to delete comment:", error);
@@ -79,7 +87,7 @@ const NewsDetail: FC = () => {
             console.log("Editing Comment ID:", editingCommentId); // Логирование ID комментария
             console.log("Edited Comment:", editedComment);
             try {
-                await dispatch(editComment({ id: editingCommentId, comment: editedComment })).unwrap();
+                await dispatch(editComment({ id: editingCommentId, comment: editedComment, newsId: Number(id) })).unwrap();
                 setEditingCommentId(null); // Close the edit form
                 setEditedComment(''); // Clear the edited comment text
                 setCommentError(null); // Clear any previous error
@@ -175,18 +183,18 @@ const NewsDetail: FC = () => {
                             <div className='comment-content p-4'>
                                 <h2 className='newsTopTitle'>Comments:</h2>
                                 {newsItem.commentsCount === 0 && <p className='empty-comments p-5 text-center'>There are no comments yet</p>}
-                                {comments.map(comment => {
+                                {comments.slice().reverse().map(comment => {
                                     console.log("isPublishedByCurrentUser:", comment.isPublishedByCurrentUser);
                                     return (
                                         <div key={comment.id} className="comment">
-                                            <div className='comment-header d-flex justify-content-between'><strong>{comment.authorName}</strong> {formatDate(comment.commentDate)} </div>
-                                            <p>{comment.comment}</p>
+                                            <div className='comment-header d-flex justify-content-between'><strong>{comment.authorName}</strong>   
                                             {comment.isPublishedByCurrentUser && (
                                                 <div className="comments-action">
                                                     <button className="comment-edit" onClick={() => handleEditComment(comment.id, comment.comment)}><FontAwesomeIcon icon={faPenToSquare} /></button>
                                                     <button className="comment-delete" onClick={() => handleDeleteComment(comment.id)}><FontAwesomeIcon icon={faTrash} /></button>
                                                 </div>
-                                            )}
+                                            )} {formatDate(comment.commentDate)}</div>
+                                            <p>{comment.comment}</p>
                                             {editingCommentId === comment.id && (
                                                 <form className="edit-comment-form" onSubmit={(e) => { e.preventDefault(); handleEditCommentText(); }}>
                                                     <div className='form-group'>

@@ -29,7 +29,7 @@ const initialState: InitialFormState = {
 export const sendForm = createAsyncThunk<void, IForm, {state:RootState}>('form/sendForm',
     async (form, { rejectWithValue}) => {
         try {
-            const response = await axios.post('', form, {
+            const response = await axios.post('/api/contact', form, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

@@ -75,3 +75,11 @@ export interface AddCommentResponse {
 export interface AddCommentError {
     message: string;
 }
+export interface ReactionResponse {
+    message: string;
+    updatedNewsItem: INewsItem; 
+}
+export interface AddCommentResponse {
+    message: string;
+    newCommentId: number;
+}
