@@ -49,6 +49,7 @@ export interface initialNewsState {
     newsArr: INewsItem[];
     newsStk: INewsItemFullPage | null;
     status: 'idle' | "loading" | "success" | "error";
+    statusCommentAdding: 'idle' | "loading" | "success" | "error";
     selectedNews: INewsItem | null;
     pageCount: number;
     error: string | null;
