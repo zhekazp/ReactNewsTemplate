@@ -1,0 +1,114 @@
+.contactUs {
+    p {
+        color: #fff;
+    }
+    textarea{
+        min-height: 120px;
+    }
+}
+
+.contact-info-item,
+.contact-form {
+    background-color: #292b2d;
+    color: #fff;
+    border-radius: 4px; 
+}
+.contact-form{
+    .newsTopTitle{
+        margin-top: 0;
+    }
+}
+.contact-info-item {
+    padding: 30px;
+   
+    margin-bottom: 30px;
+    align-items: center;
+
+}
+ .form-control::-webkit-input-placeholder {
+    color:#fff;
+}
+.form-control::-moz-placeholder {
+    color:#fff;
+}
+.form-control:-ms-input-placeholder {
+    color:#fff;
+}
+.form-control:-moz-placeholder {
+    color:#fff;
+}
+.contact-input-group{
+    input, textarea{
+        width: 100%;
+    }
+   
+}
+.form-input {
+    color: #fff;
+    background-color: #0D0D0D;
+    border-color: #0D0D0D;
+    height: 45px;
+    border-radius: 4px;
+    padding: 6px 20px;
+    margin-bottom: 30px;
+    border: 1px solid #D8E2E9;
+    outline: none !important;
+    text-decoration: none !important;
+    box-shadow: none !important;
+    width: 100%;
+    &:focus{
+        background-color: transparent;
+        border-color: #ff0000;
+        color: #fff;
+    }
+    
+}
+.contact-icon{
+    font-size: 30px;
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    border-radius: 100%;
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #fff;
+    background-color: #ff0000;
+    align-items: center;
+}
+.contact-text{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    span{
+        font-size: 1.75rem;
+        font-weight: 500;
+    }
+    a{
+        color: #fff;
+        text-decoration: none;
+        &:hover{
+            color: #ff0000;
+        } 
+    }
+}
+.submit-btn{
+    outline: none;
+    background-color: #0D0D0D;
+    border: 1px solid #ff0000;
+    color: #ff0000;
+    padding: 10px 25px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    &:hover{
+        background-color: #ff0000;
+        color: #fff;
+    }
+}
+@media screen and (max-width: 800px) {
+    .contact-icon{
+        width: 50px;
+        height: 50px;
+        font-size: 25px;
+    }
+    
+}

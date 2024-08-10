@@ -2,7 +2,7 @@ import Carousel from 'react-bootstrap/Carousel';
 import Weather from '../components/weather/Weather';
 import Ad from '../components/advertising/Ad';
 import News from '../components/news/News';
-import { news, worldNews, sprotNews } from '../util/news';
+import { news, worldNews, sprotNews } from '../config/news';
 import NewsInfo from '../components/news/NewsInfo';
 import Title from '../components/news/Title';
 import { uid } from 'uid';

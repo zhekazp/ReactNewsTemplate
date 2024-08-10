@@ -29,7 +29,11 @@ const initialState: InitialFormState = {
 export const sendForm = createAsyncThunk<void, IForm, {state:RootState}>('form/sendForm',
     async (form, { rejectWithValue}) => {
         try {
+<<<<<<< HEAD
             const response = await axios.post('', form, {
+=======
+            const response = await axios.post('/api/contact', form, {
+>>>>>>> 161292b5d4fbb932f5678b4924c3aa9712feb9db
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -37,7 +41,11 @@ export const sendForm = createAsyncThunk<void, IForm, {state:RootState}>('form/s
             return response.data;
         } catch(error) {
             // throw new Error(error.response.data.message || 'Something went wrong');
+<<<<<<< HEAD
             let errorMessage = 'Something went wrong';
+=======
+            let errorMessage = 'Etwas ist schief gelaufen';
+>>>>>>> 161292b5d4fbb932f5678b4924c3aa9712feb9db
             if (axios.isAxiosError(error) && error.response) {
                 errorMessage = error.response.data.message || errorMessage;
             }
