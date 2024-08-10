@@ -1,25 +1,4 @@
 import React, { FC } from 'react'
-<<<<<<< HEAD
-import { INewsItem } from './newsSlice';
-import { NavLink } from 'react-router-dom';
-
-interface IProps {
-    newsItem: INewsItem;
-  }
-
-const NewsComponent: FC<IProps> = ({newsItem}) => {
-
-
-      
-  return (
-    <NavLink to={`/news/${newsItem.id}`}>
-            <img src={newsItem.titleImageSquare} alt={newsItem.title} />
-            <h3>{newsItem.title}</h3>
-            <p>{newsItem.date}</p>
-            {/* <span>{newsItem.likesCounter}</span>
-            <span>{newsItem.dislikesCounter}</span> */}
-        </NavLink>
-=======
 import { formatDate } from './newsSlice';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -52,13 +31,10 @@ const NewsComponent: FC<IProps> = ({ newsItem }) => {
         </div>
       </NavLink>
     </div>
->>>>>>> 161292b5d4fbb932f5678b4924c3aa9712feb9db
+
 
   )
 }
 
 export default NewsComponent
-<<<<<<< HEAD
- 
-=======
->>>>>>> 161292b5d4fbb932f5678b4924c3aa9712feb9db
+
