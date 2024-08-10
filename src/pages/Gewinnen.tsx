@@ -5,7 +5,7 @@ function Gewinnen() {
   return (
     <div>
 	<main>
-	<div class="container mainBlock textColorMain textCenter">
+	<div className="container mainBlock textColorMain textCenter">
 	
      <p> <h2>Hier könnte Ihre Werbung sein!</h2></p>
 	  <p><h4>Um Ihre Werbung auf dieser Seite zu platzieren, wenden Sie sich bitte&nbsp; 
