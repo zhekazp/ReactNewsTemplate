@@ -67,7 +67,11 @@ const TopElement: FC = () => {
               ) : (
                 <>
                   <Link to="/login">
-                    <span className="loginButton">Login/Registration</span>
+                    <span className="loginButton">Login </span>
+                  </Link>
+                      /
+                  <Link to="/signup">
+                    <span className="loginButton"> Registration</span>
                   </Link>
                 </>
               )}
