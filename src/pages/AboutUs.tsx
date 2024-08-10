@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import React from 'react'
-
-const AboutUs = () => {
-  return (
-    <div>AboutUs</div>
-  )
-}
-
-export default AboutUs
-=======
 import React, { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -96,4 +85,4 @@ const AboutUs = () => {
 };
 
 export default AboutUs;
->>>>>>> 161292b5d4fbb932f5678b4924c3aa9712feb9db
+
