@@ -72,19 +72,19 @@ function Gewinn() {
       </div>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {selectedAdDetails && (
-        <Modal show={showModal} onHide={handleClose}>
+        <Modal size='lg' show={showModal} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title><p><strong>Title:</strong> {selectedAdDetails?.title}</p></Modal.Title>
           </Modal.Header>
           <Modal.Body>
 		   <div>
     
-    <p><strong>Advertiser Name:</strong> {selectedAdDetails?.advertiserName}</p>
-    <p><strong>Advertiser Email:</strong> {selectedAdDetails?.advertiserEmail}</p>
-    <p><strong>Advertiser Phone:</strong> {selectedAdDetails?.advertiserPhone}</p>
-    <p><strong>Discount:</strong> {selectedAdDetails?.discount}</p>
-    <p><strong>Description of the Coupon:</strong> {selectedAdDetails?.descriptionOfTheCoupon}</p>
-    <p><strong>Description:</strong> {selectedAdDetails?.description}</p>
+    <p> {selectedAdDetails?.advertiserName}</p>
+    <p> {selectedAdDetails?.advertiserEmail}</p>
+    <p> {selectedAdDetails?.advertiserPhone}</p>
+    <p> {selectedAdDetails?.discount}</p>
+    <p> {selectedAdDetails?.descriptionOfTheCoupon}</p>
+    <p> {selectedAdDetails?.description}</p>
   </div>
 		  
 		  
