@@ -74,7 +74,7 @@ function Gewinn() {
       {selectedAdDetails && (
         <Modal size='lg' show={showModal} onHide={handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title><p><strong>Title:</strong> {selectedAdDetails?.title}</p></Modal.Title>
+            <Modal.Title><p>{selectedAdDetails?.title}</p></Modal.Title>
           </Modal.Header>
           <Modal.Body>
 		   <div>
