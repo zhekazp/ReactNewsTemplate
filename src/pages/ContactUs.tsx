@@ -3,17 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import React from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-<<<<<<< HEAD
-import { faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import { AppDispatch, RootState } from "../store";
-import { sendForm, updateForm } from "../features/contactUs/contactUsSlice";
-// import style from '../styles/ContactUs.module.css'
-=======
 import { faPhone, faEnvelope, faShare, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { AppDispatch, RootState } from "../store";
 import { sendForm, updateForm } from "../features/contactUs/contactUsSlice";
 import '../style/contactUs.css'
->>>>>>> 161292b5d4fbb932f5678b4924c3aa9712feb9db
 
 interface Errors {
     name?: string;
@@ -84,37 +77,6 @@ const ContactUs = () => {
     };
 
     return (
-<<<<<<< HEAD
-        <div>
-            <section className="contactUs">
-                <div className="contact-title">
-                    <div className="container">
-                        <h1>Contact Us</h1>
-                        <p>You can contact us any way that is convenient for you. We are available 24/7 via email. You can also use a quick contact form below or visit our office personally. We would be happy to answer your questions. </p>
-                    </div>
-                </div>
-                <div className="container d-flex">
-                    <div className="contact-info w-50 p-5 list-group">
-                        <div className="list-group-item"><FontAwesomeIcon icon={faPhone} /><span> Phone:</span><a href="tel:+491239876543">+49(123)9876543</a></div>
-                        <div className="list-group-item"><FontAwesomeIcon icon={faEnvelope} /><span> E-mail:</span><a href="mailto:example@gmail.com">example@gmail.com</a></div>
-                    </div>
-                    <div className="w-50 p-5">
-                        <p>If you have any ideas or suggestions for improving our Web-site, please contact us by filling the form.</p>
-                        <form onSubmit={handleSendForm} className="input-group d-flex flex-column">
-                            <label htmlFor="name">name
-                                <input type="text" className="form-control" required value={form.name} name='name' onChange={handleInputChange} placeholder='Enter your name' />
-                                {errors.name && <div className="error">{errors.name}</div>}
-                            </label>
-                            <label htmlFor="email">e-mail
-                                <input type="text" className="form-control" required value={form.email} name='email' onChange={handleInputChange} placeholder='Enter your e-mail' />
-                                {errors.email && <div className="error">{errors.email}</div>}
-                            </label>
-                            <label htmlFor="message">Message
-                                <textarea value={form.message} name='message' required className="form-control" onChange={handleInputChange} placeholder='enter your message'></textarea>
-                                {errors.message && <div className="error">{errors.message}</div>}
-                            </label>
-                            {/* <ReCAPTCHA
-=======
 
         <section className="contactUs">
             <div className="container">
@@ -169,24 +131,12 @@ const ContactUs = () => {
                             {errors.message && <div className="error">{errors.message}</div>}
                         </label>
                         {/* <ReCAPTCHA
->>>>>>> 161292b5d4fbb932f5678b4924c3aa9712feb9db
+
                                 ref={recaptchaRef}
                                 size="invisible"
                                 sitekey="Your client site key"
                             /> */}
-<<<<<<< HEAD
-                            <button type="submit" className="btn btn-info">
-                                {status === 'loading' ? 'Sending...' : 'Send'}
-                            </button>
-                            {status === 'success' && <div>Form submitted successfully!</div>}
-                            {status === 'error' && <div>Failed to submit the form.</div>}
-                        </form>
-                    </div>
-                </div>
-            </section>
-            
-        </div>
-=======
+
                         <button type="submit" className="submit-btn">
                             {status === 'loading' ? 'Sendung...' : 'Senden'}
                         </button>
@@ -198,7 +148,6 @@ const ContactUs = () => {
         </section>
 
 
->>>>>>> 161292b5d4fbb932f5678b4924c3aa9712feb9db
     )
 }
 
