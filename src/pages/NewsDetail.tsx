@@ -7,6 +7,7 @@ import { addComment, deleteComment, editComment, fetchComments, fetchNewsById, f
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faComment, faPenToSquare, faThumbsDown, faThumbsUp, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { topSlice } from '../layout/header/topElSlice';
+import { Spinner } from 'react-bootstrap';
 
 
 
@@ -18,6 +19,9 @@ const NewsDetail: FC = () => {
 
     const newsItem = useSelector((state: RootState) => state.news.selectedNews);
     const status = useSelector((state: RootState) => state.news.status);
+    const statusAdd = useSelector((state: RootState) => state.news.statusCommentAdding);
+
+
 
 
     const comments = useSelector((state: RootState) => state.news.comments);
@@ -114,7 +118,7 @@ const NewsDetail: FC = () => {
                 console.log("Sending comment data:", { newsId: Number(id), comment });
                 await dispatch(addComment({ newsId: Number(id), comment })).unwrap();
                 setComment("");
-                setCommentError(null);
+                setCommentError(null);  
                 // setUpdateTrigger((prev) => prev + 1);
             } catch (error) {
                 console.error("Fehler beim Hinzufügen des Kommentars:", error);
@@ -168,6 +172,7 @@ const NewsDetail: FC = () => {
                                             className='form-control'
                                         />
                                     </div> */}
+                                
                                 <div className='form-group'>
                                     <label htmlFor='comment'>Enter your comment:</label>
                                     <textarea
@@ -179,13 +184,16 @@ const NewsDetail: FC = () => {
                                     />
                                 </div>
                                 {commentError && <p className="error">{commentError}</p>}
+                                {statusAdd === 'loading' ? <Spinner /> :
                                 <button type='submit' className='submit-btn' disabled={submitting} onClick={handleAddComment}>
                                     {submitting ? 'Submitting...' : 'Submit'}
-                                </button>
+                                </button>}
                             </form>
                             <div className='comment-content p-4'>
                                 <h2 className='newsTopTitle'>Comments:</h2>
-                                {newsItem.commentsCount === 0 && <p className='empty-comments p-5 text-center'>There are no comments yet</p>}
+                                {comments.length=== 0 ? <p className='empty-comments p-5 text-center'>There are no comments yet</p>:
+                                <></>
+                                }
                                 {comments.slice().reverse().map(comment => {
                                     console.log("isPublishedByCurrentUser:", comment.isPublishedByCurrentUser);
                                     return (

@@ -10,6 +10,7 @@ const initialState: initialNewsState = {
     newsArr: [],
     newsStk: null,
     status: 'idle',
+    statusCommentAdding: 'idle',
     selectedNews: null,
     pageCount: 0,
     error: null,
@@ -329,10 +330,10 @@ const newsSlice = createSlice({
             })
 
             .addCase(fetchComments.pending, (state) => {
-                state.status = 'loading';
+              //  state.status = 'loading';
             })
             .addCase(fetchComments.fulfilled, (state, action) => {
-                state.status = 'success';
+                state.statusCommentAdding = 'success';
                 state.comments = action.payload.comments || [];
             })
             .addCase(fetchComments.rejected, (state, action) => {
@@ -399,21 +400,22 @@ const newsSlice = createSlice({
                 state.comments = state.comments.filter(comment => comment.id !== action.payload);
             })
             .addCase(addComment.pending, (state) => {
-                state.status = 'loading';
+               // state.status = 'loading';
+               state.statusCommentAdding = 'loading';
             })
             .addCase(addComment.fulfilled, (state, action) => {
-                state.status = 'success';
-                state.message = 'Comment added successfully';
+                 state.status = 'success';
+                 state.message = 'Comment added successfully';
 
                 // if (state.newsStk) {
                 //     state.newsStk.comments.unshift(action.payload as unknown as IComment);
                 // }
 
                 // state.comments.unshift(action.payload.comment as IComment);
-                const newComment = action.payload.comment;
-                if (newComment) {
-                    state.comments.unshift(newComment); // Убедитесь, что newComment не undefined
-                }
+                // const newComment = action.payload.comment;
+                // if (newComment) {
+                //     state.comments.unshift(newComment); // Убедитесь, что newComment не undefined
+                // }
 
             })
             .addCase(addComment.rejected, (state, action) => {
