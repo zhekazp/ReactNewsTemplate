@@ -1,58 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../store';
-<<<<<<< HEAD
-
-
-export interface INewsItem {
-    id: number;
-    regionId: number;
-    regionName: string;
-    sectionName: string;
-    title: string;
-    date: string;
-    titleImageSquare: string;
-    titleImageWide: string;
-    content: string;
-    likeCount: number;
-    commentsCount: number
-    unlikesCount: number;
-    likes?: number | null;
-    dislikes?: number | null;
-    isUserLikes?: boolean;
-    isUserDislikes?: boolean;
-    likedBy?: number[];
-}
-
-export interface initialNewsState {
-    newsArr: INewsItem[];
-    status: null | "loading" | "success" | "error";
-    selectedNews: INewsItem | null;
-    sections: string[];
-}
-const initialState: initialNewsState = {
-    newsArr: [],
-    status: null,
-    selectedNews: null,
-    sections: [],
-};
-export const fetchNews = createAsyncThunk<INewsItem[], void, { state: RootState }>(
-    'news/fetchNews', async () => {
-        const data = (await axios.get<INewsItem[]>('/api/news')).data;
-        return data;
-    });
-export const fetchNewsById = createAsyncThunk<INewsItem, number, { state: RootState }>(
-    'news/fetchNewsById', async (id) => {
-        const data = (await axios.get<INewsItem>(`/api/news/${id}`)).data;
-        return data;
-    }
-);
-export const fetchNewsBySection = createAsyncThunk<INewsItem[], string, { state: RootState }>(
-    'news/fetchNewsBySection', async (sectionName) => {
-        const data = (await axios.get<INewsItem[]>(`/api/news/section/${sectionName}`)).data;
-        return data;
-    });
-=======
 import { format, parseISO } from 'date-fns';
 import { AddCommentResponse, CommentsResponse, IComment, INewsCommentRequest, INewsItem, INewsItemFullPage, initialNewsState, IRegionsResponse, ISectionResponse, NewsResponse, ReactionPayload, ReactionResponse } from './newsTypes';
 import authorizedFetch from '../blog/blogs/authorizedFetch';
@@ -330,7 +278,7 @@ export const deleteComment = createAsyncThunk(
 //         return data;
 //     }
 // );
->>>>>>> 161292b5d4fbb932f5678b4924c3aa9712feb9db
+
 
 const newsSlice = createSlice({
     name: 'news',
@@ -343,13 +291,7 @@ const newsSlice = createSlice({
             })
             .addCase(fetchNews.fulfilled, (state, action) => {
                 state.status = 'success';
-<<<<<<< HEAD
-                state.newsArr = action.payload;
-                state.sections = Array.from(new Set(action.payload.map(news => news.sectionName)));
-            })
-            .addCase(fetchNews.rejected, (state, action) => {
-                state.status = 'error';
-=======
+
                 // state.newsArr = action.payload;
                 // state.sections = Array.from(new Set(action.payload.map(news => news.sectionName)));
 
@@ -369,7 +311,7 @@ const newsSlice = createSlice({
             .addCase(fetchNews.rejected, (state, action) => {
                 state.status = 'error';
                 state.error = action.error.message || null;
->>>>>>> 161292b5d4fbb932f5678b4924c3aa9712feb9db
+
                 console.error("Failed to fetch news:", action.error.message);
             })
             .addCase(fetchNewsById.pending, (state) => {
@@ -381,22 +323,7 @@ const newsSlice = createSlice({
             })
             .addCase(fetchNewsById.rejected, (state, action) => {
                 state.status = 'error';
-<<<<<<< HEAD
-                console.error("Failed to fetch news by ID:", action.error.message);
-            })
 
-            .addCase(fetchNewsBySection.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(fetchNewsBySection.fulfilled, (state, action) => {
-                state.status = 'success';
-                state.newsArr = action.payload;
-            })
-            .addCase(fetchNewsBySection.rejected, (state, action) => {
-                state.status = 'error';
-                console.error("Failed to fetch news by section:", action.error.message);
-            });
-=======
                 state.error = action.error.message || null;
                 console.error("Failed to fetch news by ID:", action.error.message);
             })
@@ -493,15 +420,10 @@ const newsSlice = createSlice({
                 state.status = 'error';
                 state.error = action.payload as string || 'An error occurred';
             })
->>>>>>> 161292b5d4fbb932f5678b4924c3aa9712feb9db
+
 
     }
 })
 
 export default newsSlice.reducer;
-<<<<<<< HEAD
-=======
 
-
-
->>>>>>> 161292b5d4fbb932f5678b4924c3aa9712feb9db
