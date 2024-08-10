@@ -27,3 +27,10 @@
 .modal-content {
   background-color: grey; /* Цвет фона для модального окна */
 }
+
+.custom-modal .modal-content .modal-dialog{
+ 
+    width: 100%;   /* Occupy the 90% of the screen width */
+    max-width: 100%;
+} ; 
+
