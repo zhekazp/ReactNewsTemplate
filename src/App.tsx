@@ -16,6 +16,7 @@ import CookieConsentModal from "./features/cookie/CookieConsentModal";
 import LogIn from './pages/LogIn';
 import SignUp from './pages/SignUp';
 import './style/logInSignUp.css';
+import './style/anzeige.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AddBlog from "./features/blog/blogs/AddBlog";
 import BlogDetails from "./features/blog/blogs/BlogDetails";
@@ -23,6 +24,10 @@ import { fetchBlogs } from "./features/blog/blogs/blogSlice";
 import Confirm from "./pages/Confirm";
 import Gewinnen from "./pages/Gewinnen";
 import Restore from "./pages/Restore";
+import AnzeigeList from "./pages/AnzeigeListe";
+import AnzeigeDetails from './features/anzeige/AnzeigeDetails';
+import AnzeigeAufgeben from './features/anzeige/AnzeigeAufgeben';
+import Meins from './features/anzeige/Meins'
 
 
 
@@ -58,6 +63,10 @@ function App() {
           <Route path="/confirm" element={<Confirm />} />
           <Route path="/recover" element={<Restore />} />
           <Route path="/" element={<LogIn />} />
+          <Route path="/anzeige" element={<AnzeigeList />} />
+        <Route path="/anzeige/:id" element={<AnzeigeDetails />} />
+        <Route path="/anzeigeAufgeben" element={<AnzeigeAufgeben />} />
+        <Route path="/meins" element={<Meins />} />
         </Route>
       </Routes>
     </>

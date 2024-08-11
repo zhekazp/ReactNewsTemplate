@@ -3,6 +3,8 @@ import newsReducer from "./features/news/newsSlice";
 import contactUsReducer from "./features/contactUs/contactUsSlice";
 import blogReducer from "./features/blog/blogs/blogSlice";
 import  topSliceReducer  from "./layout/header/topElSlice";
+import rentReducer from "./features/anzeige/rentSlice";
+
 
 
 const store = configureStore({
@@ -10,7 +12,9 @@ const store = configureStore({
     news: newsReducer,
     contactForm: contactUsReducer,
     blogs: blogReducer,
-    top: topSliceReducer
+    top: topSliceReducer,
+    rentProducts: rentReducer,
+
   },
 });
 
