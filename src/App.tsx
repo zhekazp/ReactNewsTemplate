@@ -52,8 +52,7 @@ function App() {
           <Route path="news/:id" element={<NewsDetail />} />
           <Route path="blogs" element={<BlogPage />} />
           <Route path="blogs/:id" element={<BlogDetails />} />
-          <Route path="/add-blog" element={<AddBlog />} />
-          <Route path="advertisement" element={<Advertisement />} />
+          <Route path="/add-blog" element={<AddBlog />} />         
           <Route path="about" element={<AboutUs />} />
           <Route path="contact" element={<ContactUs />} />
           <Route path="*" element={<Page_404 />} /> {/* Обрабатываем все несуществующие пути */}
