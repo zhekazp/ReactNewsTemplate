@@ -120,7 +120,7 @@ const LogIn: React.FC = () => {
         const result = await response.json();
         if (result.token) {
           localStorage.setItem("token", result.token);
-
+          localStorage.setItem("role", result.role);
           dispatch(
             topSlice.actions.setUserData({
               useRole: result.role === "ROLE_ADMIN",
