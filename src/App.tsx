@@ -42,7 +42,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="/api/ads" element={<Gewinnen/>} /> 
+          <Route path="/ads" element={<Gewinnen/>} /> 
           <Route path="news" element={<News />} />
           <Route path="news/:id" element={<NewsDetail />} />
           <Route path="blogs" element={<BlogPage />} />

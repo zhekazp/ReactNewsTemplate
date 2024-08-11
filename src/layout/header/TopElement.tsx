@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 const TopElement: FC = () => {
   const { currentPage, user } = useSelector((state: RootState) => state.top);
   const dispatch = useDispatch();
+  
   useEffect(() => {
    
     dispatch(
