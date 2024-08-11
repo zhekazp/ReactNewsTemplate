@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../redux/store";
-import { fetchCategories, fetchProducts } from "../redux/rentSlice";
-import { IProduct } from "../redux/rentSlice";
-import Spinner from "../features/components/spinner/Spinner";
-import Anzeige from "./Anzeige";
+import { AppDispatch, RootState } from "../store";
+import { fetchCategories, fetchProducts } from "../features/anzeige/rentSlice";
+import { IProduct } from "../features/anzeige/rentSlice";
+import Anzeige from "../features/anzeige/Anzeige";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import Spinner from "../features/mainPage/components/spinner/Spinner";
 
 const regions = [
   "Baden-Württemberg",
