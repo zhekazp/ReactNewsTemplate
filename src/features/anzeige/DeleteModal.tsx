@@ -1,14 +1,14 @@
 import React from "react";
 import Modal from "react-modal";
 
-interface LöschenModalProps {
+interface DeleteModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
   productName: string;
 }
 
-const LöschenModal: React.FC<LöschenModalProps> = ({
+const DeleteModal: React.FC<DeleteModalProps> = ({
   isOpen,
   onClose,
   onConfirm,
@@ -72,4 +72,4 @@ const LöschenModal: React.FC<LöschenModalProps> = ({
   );
 };
 
-export default LöschenModal;
+export default DeleteModal;

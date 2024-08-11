@@ -251,7 +251,7 @@ const AnzeigeList: React.FC = () => {
             type="button"
             className="btn btn-secondary"
             style={{ background: "#393838", borderColor: "#393838" }}
-            onClick={() => navigate("/Meins")}
+            onClick={() => navigate("/meins")}
           >
             Meins <i className="fa-solid fa-user"></i>
           </button>          

@@ -189,20 +189,25 @@ export const deleteProduct = createAsyncThunk<
 
 export const addNewProduct = createAsyncThunk<
   IProduct,
-  IProductCreateRequestDto,
+  FormData,
   { state: RootState }
->("products/addNewProduct", async (newProduct, { rejectWithValue }) => {
+>("products/addNewProduct", async (formData, { rejectWithValue }) => {
   try {
     const response = await authorizedFetchAnzeige("/api/rent", {
       method: 'POST',
-      body: JSON.stringify(newProduct),
+      body: formData,
     });
-    return response.data; 
+
+    if (response && response.data) {
+      return response.data as IProduct;
+    } else {
+      throw new Error("Die Antwort vom Server ist nicht korrekt strukturiert.");
+    }
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
       return rejectWithValue({
-        message: "Fehler beim Hinzufügen des neuen Produkts",
-        fieldErrors: [],
+        message: error.response.data.message || "Fehler beim Hinzufügen des neuen Produkts",
+        fieldErrors: error.response.data.fieldErrors || [],
       });
     } else {
       return rejectWithValue({

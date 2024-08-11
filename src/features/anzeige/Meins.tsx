@@ -7,16 +7,16 @@ import {
   updateProduct,
   IProduct,
 } from "./rentSlice";
-// import UserAvatar from './images/';
+// import UserAvatar from '../../img/';
 import { useNavigate } from "react-router-dom";
-import LöschenModal from "./LöschenModal";
+import DeleteModal from "./DeleteModal";
 import AnmeldeModal from "./AnmeldeModal";
 import Spinner from "../mainPage/components/spinner/Spinner";
 
 const placeholderImage =
   "https://placehold.co/250x250/grey/red?text=kein+Bild+verfügbar";
 
-  const UserAvatar = "https://via.placeholder.com/150/gray/808080?text=User";
+  const UserAvatar = "https://www.lerned.top/imj/kurses/User1.png";
 
 const Meins: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -149,7 +149,7 @@ const Meins: React.FC = () => {
         justifyContent: "center",
       }}
     >
-      <LöschenModal
+      <DeleteModal
         isOpen={isModalOpen}
         onClose={closeDeleteModal}
         onConfirm={confirmDelete}
