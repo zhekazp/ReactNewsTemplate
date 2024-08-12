@@ -39,7 +39,7 @@ const AnzeigeAufgeben: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState<string>("");
-  
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -57,7 +57,7 @@ const AnzeigeAufgeben: React.FC = () => {
     e.preventDefault();
 
     const token = localStorage.getItem("token");
-    
+
     if (!token) {
       setModalMessage("Sie müssen sich anmelden, um ein Produkt hinzuzufügen.");
       setIsModalOpen(true);
@@ -73,8 +73,7 @@ const AnzeigeAufgeben: React.FC = () => {
       region,
     };
 
-    formData.append('product',JSON.stringify(newProduct));
-
+    formData.append("product", JSON.stringify(newProduct));
 
     imageFiles.forEach((file) => {
       formData.append("image", file);
@@ -82,21 +81,27 @@ const AnzeigeAufgeben: React.FC = () => {
 
     const config = {
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'content-type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        "content-type": "multipart/form-data",
       },
     };
 
-    axios.post("/api/rent", formData, config)
+    axios
+      .post("/api/rent", formData, config)
       .then((response) => {
+        setSuccessMessage("Produkt erfolgreich hinzugefügt!");
+        navigate("/anzeige");
       })
       .catch((error) => {
         console.error("Error uploading files: ", error);
+        setError(
+          "Fehler beim Hochladen des Produkts. Bitte versuchen Sie es später erneut."
+        );
       });
-      navigate("/anzeige");  
-    } 
+  };
+
   const handleClose = () => {
-    navigate("/anzeige"); 
+    navigate("/anzeige");
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,20 +122,24 @@ const AnzeigeAufgeben: React.FC = () => {
           width: "1000px",
         }}
       >
-        <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Anzeige aufgeben</h2>
+        <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+          Anzeige aufgeben
+        </h2>
 
-        {error && (
-          <p style={{ color: "red", textAlign: "center" }}>{error}</p>
-        )}
+        {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
 
         {successMessage && (
           <p style={{ color: "red", textAlign: "center" }}>{successMessage}</p>
         )}
 
-
-<form onSubmit={handleSubmit} style={{ maxWidth: "600px", margin: "0 auto" }}>
+        <form
+          onSubmit={handleSubmit}
+          style={{ maxWidth: "600px", margin: "0 auto" }}
+        >
           <div className="mb-3">
-            <label htmlFor="name" className="form-label">Produkt</label>
+            <label htmlFor="name" className="form-label">
+              Produkt
+            </label>
             <input
               type="text"
               className="form-control"
@@ -152,11 +161,17 @@ const AnzeigeAufgeben: React.FC = () => {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="imageFiles" className="form-label">Bilder hinzufügen</label>
+            <label htmlFor="imageFiles" className="form-label">
+              Bilder hinzufügen
+            </label>
             <input
               type="file"
               className="form-control"
-              style={{ backgroundColor: "black", border: "black", color: "white" }}
+              style={{
+                backgroundColor: "black",
+                border: "black",
+                color: "white",
+              }}
               id="imageFiles"
               onChange={handleImageChange}
               accept="image/*"
@@ -178,7 +193,9 @@ const AnzeigeAufgeben: React.FC = () => {
           )}
 
           <div className="mb-3">
-            <label htmlFor="category" className="form-label">Kategorie</label>
+            <label htmlFor="category" className="form-label">
+              Kategorie
+            </label>
             <select
               id="category"
               className="form-select"
@@ -193,13 +210,17 @@ const AnzeigeAufgeben: React.FC = () => {
             >
               <option value="">Kategorie auswählen</option>
               {categories.map((cat) => (
-                <option key={cat.name} value={cat.name}>{cat.name}</option>
+                <option key={cat.name} value={cat.name}>
+                  {cat.name}
+                </option>
               ))}
             </select>
           </div>
 
           <div className="mb-3">
-            <label htmlFor="price" className="form-label">Preis</label>
+            <label htmlFor="price" className="form-label">
+              Preis
+            </label>
             <input
               type="number"
               className="form-control"
@@ -216,7 +237,9 @@ const AnzeigeAufgeben: React.FC = () => {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="description" className="form-label">Beschreibung</label>
+            <label htmlFor="description" className="form-label">
+              Beschreibung
+            </label>
             <textarea
               className="form-control"
               style={{
@@ -231,7 +254,9 @@ const AnzeigeAufgeben: React.FC = () => {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="region" className="form-label">Region</label>
+            <label htmlFor="region" className="form-label">
+              Region
+            </label>
             <select
               id="region"
               className="form-select"
@@ -246,13 +271,14 @@ const AnzeigeAufgeben: React.FC = () => {
             >
               <option value="">Bundesland auswählen</option>
               {regions.map((region) => (
-                <option key={region} value={region}>{region}</option>
+                <option key={region} value={region}>
+                  {region}
+                </option>
               ))}
             </select>
           </div>
 
-
-<div className="d-flex flex-column align-items-center">
+          <div className="d-flex flex-column align-items-center">
             <button
               type="submit"
               className="btn btn-danger mt-3"
@@ -263,15 +289,16 @@ const AnzeigeAufgeben: React.FC = () => {
                 marginBottom: "10px",
               }}
             >
-              Produkt hinzufügen <i className="fa-solid fa-file-circle-plus"></i>
+              Produkt hinzufügen{" "}
+              <i className="fa-solid fa-file-circle-plus"></i>
             </button>
 
             <button
               type="button"
               className="btn btn-secondary mt-2"
               style={{
-                background: 'black',
-                border: '1px solid #ccc',
+                background: "black",
+                border: "1px solid #ccc",
                 padding: "10px 20px",
                 fontSize: "16px",
               }}
@@ -295,5 +322,3 @@ const AnzeigeAufgeben: React.FC = () => {
 };
 
 export default AnzeigeAufgeben;
-
-

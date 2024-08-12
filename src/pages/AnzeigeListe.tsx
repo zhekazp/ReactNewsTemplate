@@ -6,7 +6,7 @@ import { IProduct } from "../features/anzeige/rentSlice";
 import Anzeige from "../features/anzeige/Anzeige";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Spinner from "../features/mainPage/components/spinner/Spinner";
-import ResponsivePagination from 'react-responsive-pagination';
+import ResponsivePagination from "react-responsive-pagination";
 
 const regions = [
   "Baden-Württemberg",
@@ -139,22 +139,20 @@ const AnzeigeList: React.FC = () => {
   };
 
   const handlePageChange = (newPage: number) => {
-    
-      // setSearchParams({
-      //   name: searchName,
-      //   category: searchCategory,
-      //   region: searchRegion,
-      //   page: (newPage).toString(), // меняет номер страницы с 0 на 1 в url
-      // });
-      dispatch(
-        fetchProducts({
-          name: searchName,
-          category: searchCategory,
-          region: searchRegion,
-          page: newPage,
-        })
-      );
-    
+    // setSearchParams({
+    //   name: searchName,
+    //   category: searchCategory,
+    //   region: searchRegion,
+    //   page: (newPage).toString(), // меняет номер страницы с 0 на 1 в url
+    // });
+    dispatch(
+      fetchProducts({
+        name: searchName,
+        category: searchCategory,
+        region: searchRegion,
+        page: newPage,
+      })
+    );
   };
 
   // логика расчета страниц для отображения
@@ -252,15 +250,16 @@ const AnzeigeList: React.FC = () => {
             onClick={() => navigate("/meins")}
           >
             Meins <i className="fa-solid fa-user"></i>
-          </button>          
-          
+          </button>
         </div>
       </div>
 
       {status === "loading" ? (
         <Spinner show={true} color="red" />
       ) : status === "error" ? (
-        <p style={{ color: "red", textAlign:'center' }}>Keine Produkte für die angegebenen Kriterien gefunden</p>
+        <p style={{ color: "red", textAlign: "center" }}>
+          Keine Produkte für die angegebenen Kriterien gefunden
+        </p>
       ) : status === "success" ? (
         <div
           className="products-list"
@@ -272,26 +271,22 @@ const AnzeigeList: React.FC = () => {
             marginTop: "30px",
           }}
         >
-         
-          {
-          
-          products
-            
-            .map((product) => (
-              <Anzeige key={product.id} product={product} />
-            ))}
+          {products.map((product) => (
+            <Anzeige key={product.id} product={product} />
+          ))}
         </div>
       ) : (
         <p style={{ color: "red" }}>Keine Produkte gefunden</p>
       )}
 
-{ totalPages > 1 &&(<ResponsivePagination
-                current={currentPage + 1}  
-                total={totalPages}        
-                onPageChange={(newPage) => handlePageChange(newPage - 1)} 
-                maxWidth={10}
-                 
-              />)}
+      {totalPages > 1 && (
+        <ResponsivePagination
+          current={currentPage + 1}
+          total={totalPages}
+          onPageChange={(newPage) => handlePageChange(newPage - 1)}
+          maxWidth={10}
+        />
+      )}
     </div>
   );
 };

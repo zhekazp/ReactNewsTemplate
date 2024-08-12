@@ -71,7 +71,7 @@ const initialState: ProductState = {
 
 // export const fetchProducts = createAsyncThunk<
 //   {
-//    products: IProduct[]; totalPages: number; currentPage: number 
+//    products: IProduct[]; totalPages: number; currentPage: number
 // },
 //   { name: string; category: string; region: string; page: number },
 //   { state: RootState; rejectValue: IErrorResponseDto }
@@ -112,8 +112,8 @@ export const fetchProducts = createAsyncThunk<
         params: { name, category, region, page },
       });
       return {
-        products: response.data.products, 
-        totalPages: response.data.totalPages, 
+        products: response.data.products,
+        totalPages: response.data.totalPages,
         currentPage: page,
       };
     } catch (error) {
@@ -128,7 +128,6 @@ export const fetchProducts = createAsyncThunk<
     }
   }
 );
-
 
 export const fetchProductById = createAsyncThunk<
   IProduct,
@@ -173,29 +172,30 @@ export const fetchCategories = createAsyncThunk<
 export const updateProduct = createAsyncThunk<
   IProduct,
   { id: number; updatedProduct: Partial<IProduct> },
-  { state: RootState }
+  { state: RootState; rejectValue: IErrorResponseDto }
 >(
   "products/updateProduct",
   async ({ id, updatedProduct }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`/api/rent/${id}`, updatedProduct, {
+      const response = await authorizedFetch(`/api/rent/${id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify(updatedProduct),
       });
-      return response.data;
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        return rejectWithValue({
-          message: "Fehler beim Aktualisieren des Produkts",
-          fieldErrors: [],
-        });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        return responseData;
       } else {
-        return rejectWithValue({
-          message: "Fehler beim Aktualisieren des Produkts",
-          fieldErrors: [],
-        });
+        throw new Error("Fehler beim Aktualisieren des Produkts");
       }
+    } catch (error) {
+      return rejectWithValue({
+        message: "Fehler beim Aktualisieren des Produkts",
+        fieldErrors: [],
+      });
     }
   }
 );
@@ -205,21 +205,19 @@ export const deleteProduct = createAsyncThunk<
   number,
   { state: RootState }
 >("products/deleteProduct", async (id, { rejectWithValue }) => {
-  
-  
   try {
     const token = localStorage.getItem("token");
-    
+
     if (!token) {
       throw new Error("You need to athuorized.");
     }
-  const config = {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'content-type': 'multipart/form-data',
-    },
-  };
-    await axios.delete(`/api/rent/${id}`,config);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "content-type": "multipart/form-data",
+      },
+    };
+    await axios.delete(`/api/rent/${id}`, config);
     return id;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
@@ -284,7 +282,7 @@ export const fetchUserProducts = createAsyncThunk<
     );
     let responseData;
     if (response.ok) {
-       responseData = await response.json();
+      responseData = await response.json();
     } else {
       throw new Error("List is empty");
     }
@@ -414,7 +412,7 @@ const productSlice = createSlice({
           null;
       })
       .addCase(fetchUserProducts.pending, (state) => {
-         state.status = "loading";
+        state.status = "loading";
       })
       .addCase(fetchUserProducts.fulfilled, (state, action) => {
         state.products = action.payload.products;

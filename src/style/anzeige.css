@@ -1,14 +1,13 @@
 body {
   background-color: black !important;
-  color: rgb(209, 207, 207)
+  color: rgb(209, 207, 207);
 }
-
 
 .pagination {
   display: flex;
   justify-content: center;
   margin-top: 20px;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
 }
 
 .pagination button {
@@ -17,7 +16,7 @@ body {
   border: none;
   border-radius: 4px;
   padding: 10px 15px;
-  margin: 5px; 
+  margin: 5px;
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.3s, color 0.3s;
@@ -38,19 +37,24 @@ body {
   box-shadow: 0 0 0 2px red;
 }
 
-@media (max-width: 768px) {
-  .input-group {
-    flex-direction:row;
-    /* align-items: stretch; */
-   
+/* Специально для очень узких экранов (например, 360px) */
+@media (max-width: 360px) {
+  .items-text {
+    font-size: 12px; /* Уменьшаем размер шрифта для очень узких экранов */
+    padding: 5px; /* Уменьшаем отступы */
   }
 
-  .form-control, .form-select, .btn {
-    max-width: 100%;
-    padding: 15px;
+  .items-text h3 {
+    font-size: 16px; /* Еще больше уменьшаем размер шрифта заголовка */
+    margin-bottom: 8px;
   }
 
+  .items-text p {
+    font-size: 12px; /* Минимальный размер шрифта для узких экранов */
+    margin-bottom: 8px;
+  }
 
-  
-
+  .product-item {
+    gap: 10px; /* Уменьшаем промежутки между элементами */
+  }
 }
