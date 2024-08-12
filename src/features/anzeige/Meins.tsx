@@ -177,9 +177,15 @@ const Meins: React.FC = () => {
             marginBottom: "20px",
           }}
         />
+        
+          {products.length > 0 ?
+          <> 
         <h3 style={{ color: "white" }}>
-          {products.length > 0 ? products[0].owner.name : "User"}
         </h3>
+          {products[0].owner.name} 
+        
+          </> : <></>}
+        
       </div>
 
       <div style={{ width: "80%", maxWidth: "1200px" }}>
