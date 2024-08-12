@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faComment, faPenToSquare, faThumbsDown, faThumbsUp, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { topSlice } from '../layout/header/topElSlice';
 import { Spinner } from 'react-bootstrap';
+import Modal from '../features/blog/blogs/Modal';
 
 
 
@@ -33,12 +34,13 @@ const NewsDetail: FC = () => {
     const [commentError, setCommentError] = useState<string | null>(null);
     const [updateTrigger, setUpdateTrigger] = useState(0);
     const [authError, setAuthError] = useState<string | null>(null);
+    const [showModal, setShowModal] = useState(false);
 
     const currentUserString = localStorage.getItem("user");
     const currentUser = currentUserString ? JSON.parse(currentUserString) : null;
     const token = currentUser ? currentUser.token : null;
 
-
+    const [localCommentsCount, setLocalCommentsCount] = useState<number | null>(null);
 
     useEffect(() => {
         if (id) {
@@ -48,18 +50,22 @@ const NewsDetail: FC = () => {
         dispatch(topSlice.actions.setCurrentPage(1));
     }, [dispatch, id, updateTrigger]);
 
-    // useEffect(() => {
-    //     console.log("NewsDetail status:", status);
-    //     console.log("Selected news item:", newsItem);
-    // }, [status, newsItem]);
-
+    useEffect(() => {
+        if (newsItem) {
+            setLocalCommentsCount(newsItem.commentsCount); // начальное значение счестчика комментариев
+        }
+    }, [newsItem]);
 
     const handleReaction = async (liked: boolean, disliked: boolean) => {
+        if (!currentUser) {
+            setShowModal(true);
+            return;
+        }
         try {
             await dispatch(fetchPutReaction({ newsId: Number(id), liked, disliked }));
         } catch (error) {
             setAuthError(
-                "Sie müssen sich anmelden, um einen neuen Blog hinzuzufügen."
+                "Error to send reaction"
             );
         }
     };
@@ -79,7 +85,7 @@ const NewsDetail: FC = () => {
     const handleDeleteComment = async (commentId: number) => {
         try {
             await dispatch(deleteComment(commentId)).unwrap();
-            setUpdateTrigger((prev) => prev + 1);
+            // setUpdateTrigger((prev) => prev + 1);
         } catch (error) {
             console.error("Failed to delete comment:", error);
         }
@@ -98,7 +104,7 @@ const NewsDetail: FC = () => {
                 setEditingCommentId(null); // Close the edit form
                 setEditedComment(''); // Clear the edited comment text
                 setCommentError(null); // Clear any previous error
-                setUpdateTrigger((prev) => prev + 1); // Trigger a state update to refresh the comments
+                // setUpdateTrigger((prev) => prev + 1); // Trigger a state update to refresh the comments
                 dispatch(fetchComments(Number(id)));
             } catch (error) {
                 console.error("Failed to edit comment:", error);
@@ -109,6 +115,10 @@ const NewsDetail: FC = () => {
         }
     }
     const handleAddComment = async () => {
+        if (!currentUser) {
+            setShowModal(true);
+            return;
+        }
         if (!comment.trim()) {
             setCommentError("Der Kommentar darf nicht leer sein.");
             return;
@@ -118,13 +128,21 @@ const NewsDetail: FC = () => {
                 console.log("Sending comment data:", { newsId: Number(id), comment });
                 await dispatch(addComment({ newsId: Number(id), comment })).unwrap();
                 setComment("");
-                setCommentError(null);  
+                setCommentError(null);
+                if (localCommentsCount !== null) {
+                    setLocalCommentsCount(localCommentsCount + 1);
+                }
                 // setUpdateTrigger((prev) => prev + 1);
             } catch (error) {
                 console.error("Fehler beim Hinzufügen des Kommentars:", error);
                 setCommentError("Failed to add comment");
             }
         }
+    };
+    const handleCancelEdit = () => {
+        setEditingCommentId(null);
+        setEditedComment('');
+        setCommentError(null);
     };
 
     return (
@@ -150,7 +168,7 @@ const NewsDetail: FC = () => {
                                     <button className='activity_sm_block' onClick={() => handleReaction(false, true)}>
                                         <FontAwesomeIcon icon={faThumbsDown} /><span className='activity_counter'> {newsItem.dislikeCount}</span>
                                     </button>
-                                    <span><FontAwesomeIcon icon={faComment} /> {newsItem.commentsCount}</span>
+                                    <span><FontAwesomeIcon icon={faComment} /> {localCommentsCount}</span>
                                 </div>
                                 {authError && <p className="error">{authError}</p>}
                                 <div dangerouslySetInnerHTML={{ __html: newsItem.content }}></div>
@@ -172,7 +190,7 @@ const NewsDetail: FC = () => {
                                             className='form-control'
                                         />
                                     </div> */}
-                                
+
                                 <div className='form-group'>
                                     <label htmlFor='comment'>Enter your comment:</label>
                                     <textarea
@@ -185,26 +203,26 @@ const NewsDetail: FC = () => {
                                 </div>
                                 {commentError && <p className="error">{commentError}</p>}
                                 {statusAdd === 'loading' ? <Spinner /> :
-                                <button type='submit' className='submit-btn' disabled={submitting} onClick={handleAddComment}>
-                                    {submitting ? 'Submitting...' : 'Submit'}
-                                </button>}
+                                    <button type='submit' className='submit-btn' disabled={submitting} onClick={handleAddComment}>
+                                        {submitting ? 'Submitting...' : 'Submit'}
+                                    </button>}
                             </form>
                             <div className='comment-content p-4'>
                                 <h2 className='newsTopTitle'>Comments:</h2>
-                                {comments.length=== 0 ? <p className='empty-comments p-5 text-center'>There are no comments yet</p>:
-                                <></>
+                                {comments.length === 0 ? <p className='empty-comments p-5 text-center'>Es wurden noch keine Kommentare hinterlassen.</p> :
+                                    <></>
                                 }
                                 {comments.slice().reverse().map(comment => {
                                     console.log("isPublishedByCurrentUser:", comment.isPublishedByCurrentUser);
                                     return (
                                         <div key={comment.id} className="comment">
-                                            <div className='comment-header d-flex justify-content-between'><strong>{comment.authorName}</strong>   
-                                            {comment.isPublishedByCurrentUser && (
-                                                <div className="comments-action">
-                                                    <button className="comment-edit" onClick={() => handleEditComment(comment.id, comment.comment)}><FontAwesomeIcon icon={faPenToSquare} /></button>
-                                                    <button className="comment-delete" onClick={() => handleDeleteComment(comment.id)}><FontAwesomeIcon icon={faTrash} /></button>
-                                                </div>
-                                            )} {formatDate(comment.commentDate)}</div>
+                                            <div className='comment-header d-flex justify-content-between'><strong>{comment.authorName}</strong>
+                                                {comment.isPublishedByCurrentUser && (
+                                                    <div className="comments-action">
+                                                        <button className="comment-edit" onClick={() => handleEditComment(comment.id, comment.comment)}><FontAwesomeIcon icon={faPenToSquare} /></button>
+                                                        <button className="comment-delete" onClick={() => handleDeleteComment(comment.id)}><FontAwesomeIcon icon={faTrash} /></button>
+                                                    </div>
+                                                )} {formatDate(comment.commentDate)}</div>
                                             <p>{comment.comment}</p>
                                             {editingCommentId === comment.id && (
                                                 <form className="edit-comment-form" onSubmit={(e) => { e.preventDefault(); handleEditCommentText(); }}>
@@ -218,9 +236,14 @@ const NewsDetail: FC = () => {
                                                             className=' form-input'
                                                         />
                                                     </div>
-                                                    <button type='submit' className='submit-btn'>
-                                                        Save
-                                                    </button>
+                                                    <div className='btns-bottom'>
+                                                        <button type='submit' className='submit-btn'>
+                                                            Save
+                                                        </button>
+                                                        <button type='button' className='submit-btn' onClick={handleCancelEdit}>
+                                                            Cancel
+                                                        </button>
+                                                    </div>
                                                 </form>
                                             )}
                                         </div>
@@ -235,6 +258,13 @@ const NewsDetail: FC = () => {
                 )}
                 {status === "error" && (
                     <>Error load newsItem!</>
+                )}
+                {showModal && (
+                    <Modal
+                        title="Genehmigung erforderlich"
+                        content="Dieser Vorgang kann nur von einem angemeldeten Benutzer durchgeführt werden. Bitte melden Sie sich bei Ihrem Konto an."
+                        onClose={() => setShowModal(false)}
+                    />
                 )}
             </div>
 
