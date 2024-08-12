@@ -12,12 +12,12 @@ import { useNavigate } from "react-router-dom";
 import DeleteModal from "./DeleteModal";
 import AnmeldeModal from "./AnmeldeModal";
 import Spinner from "../mainPage/components/spinner/Spinner";
-import ResponsivePagination from 'react-responsive-pagination';
+import ResponsivePagination from "react-responsive-pagination";
 
 const placeholderImage =
   "https://placehold.co/250x250/grey/red?text=kein+Bild+verfügbar";
 
-  const UserAvatar = "https://www.lerned.top/imj/kurses/User1.png";
+const UserAvatar = "https://www.lerned.top/imj/kurses/User1.png";
 
 const Meins: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -45,7 +45,7 @@ const Meins: React.FC = () => {
     } else {
       dispatch(fetchUserProducts(0));
     }
-  },[] );
+  }, []);
 
   const handleEditClick = (product: IProduct) => {
     setEditingProduct(product);
@@ -128,7 +128,7 @@ const Meins: React.FC = () => {
   };
 
   const handlePageChange = (page: number) => {
-     if (page >= 0 && page < totalPages) {
+    if (page >= 0 && page < totalPages) {
       dispatch(fetchUserProducts(page));
     }
   };
@@ -177,15 +177,14 @@ const Meins: React.FC = () => {
             marginBottom: "20px",
           }}
         />
-        
-          {products.length > 0 ?
-          <> 
-        <h3 style={{ color: "white" }}>
-        </h3>
-          {products[0].owner.name} 
-        
-          </> : <></>}
-        
+
+        {products.length > 0 ? (
+          <>
+            <h3 style={{ color: "white" }}>{products[0].owner.name}</h3>
+          </>
+        ) : (
+          <></>
+        )}
       </div>
 
       <div style={{ width: "80%", maxWidth: "1200px" }}>
@@ -342,7 +341,6 @@ const Meins: React.FC = () => {
                               borderRadius: "4px",
                               cursor: "pointer",
                             }}
-
                             onClick={() => handleEditClick(product)}
                           >
                             Bearbeiten
@@ -357,7 +355,6 @@ const Meins: React.FC = () => {
                               borderRadius: "5px",
                               cursor: "pointer",
                             }}
-
                             onClick={() => openDeleteModal(product)}
                           >
                             Löschen
@@ -370,14 +367,15 @@ const Meins: React.FC = () => {
               ))}
             </div>
           )}
-        </div> 
-        { totalPages > 1 &&(<ResponsivePagination
-                current={currentPage + 1}  
-                total={totalPages}        
-                onPageChange={(newPage) => handlePageChange(newPage - 1)} 
-                maxWidth={10}
-                 
-              />)}
+        </div>
+        {totalPages > 1 && (
+          <ResponsivePagination
+            current={currentPage + 1}
+            total={totalPages}
+            onPageChange={(newPage) => handlePageChange(newPage - 1)}
+            maxWidth={10}
+          />
+        )}
       </div>
     </div>
   );

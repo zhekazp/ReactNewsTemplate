@@ -60,8 +60,9 @@ const Anzeige: React.FC<AnzeigeProps> = ({ product }) => {
         alignItems: "right",
       }}
     >
-      <div>{renderImage()}</div>
+      <div className="image-item">{renderImage()}</div>
       <div
+        className="items-text"
         style={{ flex: 1, flexDirection: "column", justifyContent: "flex-end" }}
       >
         <h3 style={{ marginBottom: "20px" }}>{product.name}</h3>
@@ -81,7 +82,7 @@ const Anzeige: React.FC<AnzeigeProps> = ({ product }) => {
         <button
           type="button"
           className="btn btn-danger"
-          style={{ background: 'black', border: '1px solid #ccc' }}
+          style={{ background: "black", border: "1px solid #ccc" }}
           onClick={handleMoreInfo}
         >
           Mehr Info
