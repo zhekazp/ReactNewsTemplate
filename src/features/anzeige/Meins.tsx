@@ -71,9 +71,10 @@ const Meins: React.FC = () => {
         description: editFields.description,
       };
 
-      dispatch(updateProduct({ id: editingProduct.id, updatedProduct })).then(() => {
-        setEditingProduct(null);
-        navigate("/anzeige"); 
+      dispatch(updateProduct({ id: editingProduct.id, updatedProduct })).then(() => {        
+        dispatch(fetchUserProducts(currentPage)).then(() => {
+          setEditingProduct(null);
+        });
       });
     }
   };
