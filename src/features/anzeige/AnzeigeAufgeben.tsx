@@ -173,7 +173,7 @@ const AnzeigeAufgeben: React.FC = () => {
                   key={index}
                   src={URL.createObjectURL(file)}
                   alt={`Preview ${index + 1}`}
-                  style={{ maxWidth: "100%", marginBottom: "10px" }}
+                  style={{ maxWidth: "20%", marginBottom: "10px" }}
                 />
               ))}
             </div>
