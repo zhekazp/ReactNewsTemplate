@@ -82,7 +82,7 @@ const ContactUs = () => {
 
         <section className="contactUs">
             <div className="container">
-                <h1 className='newsTopTitle'>Kontaktiere uns</h1>
+                <h1 className='newsTopTitle'>KONTAKTIREN SIE UNS</h1>
                 <p>Sie können uns auf jede für Sie bequeme Art und Weise kontaktieren. Wir sind rund um die Uhr per E-Mail erreichbar. Sie können auch das unten stehende Schnellkontaktformular verwenden oder uns persönlich im Büro besuchen. Wir beantworten gerne Ihre Fragen.</p>
 
                 <div className="contact-info row">
@@ -144,7 +144,7 @@ const ContactUs = () => {
                 {showModal && (
                     <Modal
                         title=""
-                        content="Danke, dass Du uns geschrieben hast! Wir setzen uns so schnell wie möglich mit Dir in Verbindung."
+                        content="Danke, dass Sie uns geschrieben haben! Wir setzen uns so schnell wie möglich mit Ihnen in Verbindung."
                         onClose={() => setShowModal(false)}
                     />
                 )}

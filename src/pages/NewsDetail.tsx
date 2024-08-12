@@ -240,7 +240,7 @@ const NewsDetail: FC = () => {
                                                         ändern
                                                         </button>
                                                         <button type='button' className='submit-btn' onClick={handleCancelEdit}>
-                                                            Löschen
+                                                        ABBRECHEN
                                                         </button>
                                                     </div>
                                                 </form>
