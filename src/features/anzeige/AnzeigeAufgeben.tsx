@@ -57,7 +57,6 @@ const AnzeigeAufgeben: React.FC = () => {
     e.preventDefault();
 
     const token = localStorage.getItem("token");
-    console.log(token);
     
     if (!token) {
       setModalMessage("Sie müssen sich anmelden, um ein Produkt hinzuzufügen.");
