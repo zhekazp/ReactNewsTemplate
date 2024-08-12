@@ -78,7 +78,7 @@ const AnzeigeAufgeben: React.FC = () => {
 
 
     imageFiles.forEach((file) => {
-      formData.append("images", file);
+      formData.append("image", file);
     });
 
     const config = {
