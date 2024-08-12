@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
-import { addNewProduct } from "./rentSlice";
 import { useNavigate } from "react-router-dom";
 import AnmeldeModal from "./AnmeldeModal";
+import axios from "axios";
 
 const regions = [
   "Baden-Württemberg",
@@ -30,7 +30,7 @@ const AnzeigeAufgeben: React.FC = () => {
   const { categories } = useSelector((state: RootState) => state.rentProducts);
 
   const [name, setName] = useState<string>("");
-  const [imageUrl, setImageUrl] = useState<string>("");
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [category, setCategory] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
   const [description, setDescription] = useState<string>("");
@@ -39,7 +39,7 @@ const AnzeigeAufgeben: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState<string>("");
-
+  
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -57,14 +57,16 @@ const AnzeigeAufgeben: React.FC = () => {
     e.preventDefault();
 
     const token = localStorage.getItem("token");
+    console.log(token);
+    
     if (!token) {
       setModalMessage("Sie müssen sich anmelden, um ein Produkt hinzuzufügen.");
       setIsModalOpen(true);
       return;
     }
 
+    const formData = new FormData();
     const newProduct = {
-      imageUrl,
       name,
       category: { name: category },
       price,
@@ -73,19 +75,37 @@ const AnzeigeAufgeben: React.FC = () => {
       region: { regionName: region },
     };
 
-    try {
-      await dispatch(addNewProduct(newProduct)).unwrap();
-      setSuccessMessage("Produkt wurde erfolgreich hinzugefügt.");
-      setTimeout(() => {
-        navigate("/anzeige");
-      }, 2000);
-    } catch (error) {
-      setError("Fehler beim Hinzufügen des Produkts. Bitte versuchen Sie es erneut.");
-    }
-  };
+    formData.append('product',JSON.stringify(newProduct));
 
+
+    imageFiles.forEach((file) => {
+      formData.append("images", file);
+    });
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'content-type': 'multipart/form-data',
+      },
+    };
+
+    axios.post("/api/rent", formData, config)
+      .then((response) => {
+      })
+      .catch((error) => {
+        console.error("Error uploading files: ", error);
+      });
+      navigate("/anzeige");  
+    }
   const handleClose = () => {
     navigate("/anzeige"); 
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const filesArray = Array.from(e.target.files);
+      setImageFiles(filesArray);
+    }
   };
 
   return (
@@ -109,9 +129,10 @@ const AnzeigeAufgeben: React.FC = () => {
           <p style={{ color: "red", textAlign: "center" }}>{successMessage}</p>
         )}
 
-        <form onSubmit={handleSubmit} style={{ maxWidth: "600px", margin: "0 auto" }}>
+
+<form onSubmit={handleSubmit} style={{ maxWidth: "600px", margin: "0 auto" }}>
           <div className="mb-3">
-            <label htmlFor="name" className="form-label">Name</label>
+            <label htmlFor="name" className="form-label">Produkt</label>
             <input
               type="text"
               className="form-control"
@@ -133,34 +154,28 @@ const AnzeigeAufgeben: React.FC = () => {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="imageUrl" className="form-label">Bild hinzufügen</label>
+            <label htmlFor="imageFiles" className="form-label">Bilder hinzufügen</label>
             <input
               type="file"
               className="form-control"
-              style={{
-                backgroundColor: "black",
-                border: "black",
-                color: "white",
-              }}
-              id="imageFile"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  const reader = new FileReader();
-                  reader.onloadend = () => {
-                    setImageUrl(reader.result as string);
-                  };
-                  reader.readAsDataURL(file);
-                }
-              }}
+              style={{ backgroundColor: "black", border: "black", color: "white" }}
+              id="imageFiles"
+              onChange={handleImageChange}
               accept="image/*"
               required
             />
           </div>
 
-          {imageUrl && (
+          {imageFiles.length > 0 && (
             <div className="mb-3">
-              <img src={imageUrl} alt="Preview" style={{ maxWidth: "100%" }} />
+              {imageFiles.map((file, index) => (
+                <img
+                  key={index}
+                  src={URL.createObjectURL(file)}
+                  alt={`Preview ${index + 1}`}
+                  style={{ maxWidth: "100%", marginBottom: "10px" }}
+                />
+              ))}
             </div>
           )}
 
@@ -186,7 +201,7 @@ const AnzeigeAufgeben: React.FC = () => {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="price" className="form-label">Preis pro Tag</label>
+            <label htmlFor="price" className="form-label">Preis</label>
             <input
               type="number"
               className="form-control"
@@ -238,7 +253,8 @@ const AnzeigeAufgeben: React.FC = () => {
             </select>
           </div>
 
-          <div className="d-flex flex-column align-items-center">
+
+<div className="d-flex flex-column align-items-center">
             <button
               type="submit"
               className="btn btn-danger mt-3"
@@ -281,4 +297,5 @@ const AnzeigeAufgeben: React.FC = () => {
 };
 
 export default AnzeigeAufgeben;
+
 

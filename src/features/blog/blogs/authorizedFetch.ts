@@ -2,7 +2,6 @@
 
 export const authorizedFetch = async (url: string, options: RequestInit = {}) => {
   const token = localStorage.getItem('token');
-  console.log('Token used for request:', localStorage.getItem('token'));
   if (!token) {
     throw new Error('Sie müssen sich anmelden, um diese Aktion auszuführen.');
   }

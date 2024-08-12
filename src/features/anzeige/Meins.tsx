@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import DeleteModal from "./DeleteModal";
 import AnmeldeModal from "./AnmeldeModal";
 import Spinner from "../mainPage/components/spinner/Spinner";
+import ResponsivePagination from 'react-responsive-pagination';
 
 const placeholderImage =
   "https://placehold.co/250x250/grey/red?text=kein+Bild+verfügbar";
@@ -42,9 +43,9 @@ const Meins: React.FC = () => {
       setModalMessage("Sie müssen sich anmelden, um Ihre Produkte anzuzeigen.");
       setIsLoginModalOpen(true);
     } else {
-      dispatch(fetchUserProducts(currentPage));
+      dispatch(fetchUserProducts(0));
     }
-  }, [dispatch, currentPage, navigate]);
+  },[] );
 
   const handleEditClick = (product: IProduct) => {
     setEditingProduct(product);
@@ -127,6 +128,8 @@ const Meins: React.FC = () => {
   };
 
   const handlePageChange = (page: number) => {
+    console.log(page);
+    
     if (page >= 0 && page < totalPages) {
       dispatch(fetchUserProducts(page));
     }
@@ -364,18 +367,13 @@ const Meins: React.FC = () => {
             </div>
           )}
         </div>
-        <div className="pagination">
-          {Array.from({ length: totalPages }).map((_, index) => (
-            <button
-              className={`page-number ${index === currentPage ? 'current' : ''}`}
-              key={index}
-              onClick={() => handlePageChange(index)}
-              disabled={index === currentPage}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
+        { totalPages > 1 &&(<ResponsivePagination
+                current={currentPage + 1}  
+                total={totalPages}        
+                onPageChange={(newPage) => handlePageChange(newPage - 1)} 
+                maxWidth={10}
+                 
+              />)}
       </div>
     </div>
   );
