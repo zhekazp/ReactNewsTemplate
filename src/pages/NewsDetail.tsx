@@ -203,7 +203,7 @@ const NewsDetail: FC = () => {
                                 {commentError && <p className="error">{commentError}</p>}
                                 {statusAdd === 'loading' ?  <Spinner show={loading} color="red" /> :
                                     <button type='submit' className='submit-btn' disabled={submitting} onClick={handleAddComment}>
-                                        {submitting ? 'Einreichen...' : 'Bearbeiten'}
+                                        {submitting ? 'Einreichen...' : 'Hinzufügen'}
                                     </button>}
                             </form>
                             <div className='comment-content p-4'>
@@ -237,7 +237,7 @@ const NewsDetail: FC = () => {
                                                     </div>
                                                     <div className='btns-bottom'>
                                                         <button type='submit' className='submit-btn'>
-                                                        Bearbeiten
+                                                        ändern
                                                         </button>
                                                         <button type='button' className='submit-btn' onClick={handleCancelEdit}>
                                                             Löschen
