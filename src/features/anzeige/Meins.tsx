@@ -128,9 +128,7 @@ const Meins: React.FC = () => {
   };
 
   const handlePageChange = (page: number) => {
-    console.log(page);
-    
-    if (page >= 0 && page < totalPages) {
+     if (page >= 0 && page < totalPages) {
       dispatch(fetchUserProducts(page));
     }
   };
