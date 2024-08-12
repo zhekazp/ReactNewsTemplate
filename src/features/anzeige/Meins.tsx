@@ -366,7 +366,7 @@ const Meins: React.FC = () => {
               ))}
             </div>
           )}
-        </div>
+        </div> 
         { totalPages > 1 &&(<ResponsivePagination
                 current={currentPage + 1}  
                 total={totalPages}        

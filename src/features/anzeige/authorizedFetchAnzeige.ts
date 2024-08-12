@@ -10,7 +10,7 @@ export const authorizedFetch = async (url: string, options: RequestInit = {}) =>
   const headers = {
     ...options.headers,
     'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json', 
   };
   const response = await fetch(url, {
     ...options,

@@ -96,7 +96,7 @@ const AnzeigeAufgeben: React.FC = () => {
         console.error("Error uploading files: ", error);
       });
       navigate("/anzeige");  
-    }
+    } 
   const handleClose = () => {
     navigate("/anzeige"); 
   };

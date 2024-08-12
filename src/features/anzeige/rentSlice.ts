@@ -217,7 +217,7 @@ try {
     });
   }
 }
-});
+}); 
 
 
 export const fetchUserProducts = createAsyncThunk<
