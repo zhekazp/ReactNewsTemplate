@@ -66,10 +66,39 @@ const initialState: ProductState = {
   totalPages: 0,
 };
 
+// export const fetchProducts = createAsyncThunk<
+//   {
+//    products: IProduct[]; totalPages: number; currentPage: number 
+// },
+//   { name: string; category: string; region: string; page: number },
+//   { state: RootState; rejectValue: IErrorResponseDto }
+// >(
+//   "products/fetchProducts",
+//   async ({ name, category, region, page }, { rejectWithValue }) => {
+//     try {
+//       const response = await axios.get(`/api/rents`, {
+//         params: { name, category, region, page },
+//       });
+//       return response.data;
+//     } catch (error) {
+//       if (axios.isAxiosError(error) && error.response) {
+//         return rejectWithValue(error.response.data as IErrorResponseDto);
+//       } else {
+//         return rejectWithValue({
+//           message: "ehler beim Abrufen der Produkte",
+//           fieldErrors: [],
+//         });
+//       }
+//     }
+//   }
+// );
+
 export const fetchProducts = createAsyncThunk<
   {
-   products: IProduct[]; totalPages: number; currentPage: number 
-},
+    products: IProduct[]; 
+    totalPages: number; 
+    currentPage: number; 
+  },
   { name: string; category: string; region: string; page: number },
   { state: RootState; rejectValue: IErrorResponseDto }
 >(
@@ -79,19 +108,24 @@ export const fetchProducts = createAsyncThunk<
       const response = await axios.get(`/api/rents`, {
         params: { name, category, region, page },
       });
-      return response.data;
+      return {
+        products: response.data.products, 
+        totalPages: response.data.totalPages, 
+        currentPage: page,
+      };
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         return rejectWithValue(error.response.data as IErrorResponseDto);
       } else {
         return rejectWithValue({
-          message: "ehler beim Abrufen der Produkte",
+          message: "Fehler beim Abrufen der Produkte",
           fieldErrors: [],
         });
       }
     }
   }
 );
+
 
 export const fetchProductById = createAsyncThunk<
   IProduct,
@@ -202,7 +236,7 @@ try {
   if (response && response.data) {
     return response.data as IProduct;
   } else {
-    throw new Error("Ответ от сервера имеет неверную структуру.");
+    throw new Error("Die Antwort vom Server ist nicht korrekt strukturiert.");
   }
 } catch (error) {
   if (axios.isAxiosError(error) && error.response) {

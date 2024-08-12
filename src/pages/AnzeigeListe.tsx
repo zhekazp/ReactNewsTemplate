@@ -169,7 +169,7 @@ const AnzeigeList: React.FC = () => {
       <div
         className="search-panel"
         style={{
-          width: "1400px",
+          maxWidth: "1400px",
           margin: "15px auto 10px",
           padding: "15px",
           backgroundColor: "#393838",
@@ -242,7 +242,7 @@ const AnzeigeList: React.FC = () => {
             type="button"
             className="btn btn-secondary"
             style={{ background: "#393838", borderColor: "#393838" }}
-            onClick={() => navigate("/AnzeigeAufgeben")}
+            onClick={() => navigate("/anzeigeAufgeben")}
           >
             <i className="fa-solid fa-file-circle-plus"></i> Anzeige aufgeben
           </button>
@@ -262,7 +262,7 @@ const AnzeigeList: React.FC = () => {
       {status === "loading" ? (
         <Spinner show={true} color="red" />
       ) : status === "error" ? (
-        <p style={{ color: "red" }}>Fehler beim Laden der Produkte: {error}</p>
+        <p style={{ color: "red", textAlign:'center' }}>Keine Produkte für die angegebenen Kriterien gefunden</p>
       ) : status === "success" ? (
         <div
           className="products-list"
