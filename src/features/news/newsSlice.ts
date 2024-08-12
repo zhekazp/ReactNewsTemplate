@@ -391,10 +391,11 @@ const newsSlice = createSlice({
                 console.error("Failed to fetch sections:", action.error.message);
             })
             .addCase(editComment.fulfilled, (state, action) => {
-                const index = state.comments.findIndex(comment => comment.id === action.payload.id);
-                if (index !== -1) {
-                    state.comments[index] = action.payload;
-                }
+                state.status = 'success';
+                // const index = state.comments.findIndex(comment => comment.id === action.payload.id);
+                // if (index !== -1) {
+                //     state.comments[index] = action.payload;
+                // }
             })
             .addCase(deleteComment.fulfilled, (state, action) => {
                 state.comments = state.comments.filter(comment => comment.id !== action.payload);

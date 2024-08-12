@@ -340,7 +340,9 @@ const BlogDetails: FC = () => {
               </button>
             </div>
             {status === "loading" && (
-              <div className="status-message loading">Loading...</div>
+              <div className="spinner-border text-danger" role="status">
+                <span className="visually-hidden">Laden...</span>
+              </div>
             )}
             {status === "error" && (
               <div>
