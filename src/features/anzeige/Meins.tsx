@@ -73,6 +73,7 @@ const Meins: React.FC = () => {
 
       dispatch(updateProduct({ id: editingProduct.id, updatedProduct }));
       setEditingProduct(null);
+      navigate("/anzeige");
     }
   };
 

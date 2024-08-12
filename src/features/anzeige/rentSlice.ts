@@ -208,7 +208,7 @@ export const deleteProduct = createAsyncThunk<
     const token = localStorage.getItem("token");
 
     if (!token) {
-      throw new Error("You need to athuorized.");
+      throw new Error("Sie müssen autorisiert sein.");
     }
     const config = {
       headers: {
@@ -248,7 +248,7 @@ export const addNewProduct = createAsyncThunk<
     if (response && response.data) {
       return response.data as IProduct;
     } else {
-      throw new Error("Ответ от сервера имеет неверную структуру.");
+      throw new Error("Die Antwort vom Server ist nicht korrekt strukturiert.");
     }
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
