@@ -4,6 +4,7 @@ import axios from "axios";
 import authorizedFetchAnzeige from "./authorizedFetchAnzeige";
 
 import authorizedFetch from "../blog/blogs/authorizedFetch";
+import { act } from "react";
 
 export interface ICategoryCreateRequestDto {
   name: string;
@@ -135,7 +136,7 @@ export const fetchProductById = createAsyncThunk<
   { state: RootState }
 >("products/fetchProductById", async (id, { rejectWithValue }) => {
   try {
-    const response = await axios.get(`/api/rents/${id}`);
+    const response = await axios.get(`/api/rents/${id}`);    
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
@@ -325,9 +326,9 @@ const productSlice = createSlice({
       .addCase(
         fetchProductById.fulfilled,
         (state, action: PayloadAction<IProduct>) => {
-          state.products = state.products.map((product) =>
-            product.id === action.payload.id ? action.payload : product
-          );
+          
+          
+          state.products.push (action.payload);
           state.status = "success";
           state.error = null;
         }

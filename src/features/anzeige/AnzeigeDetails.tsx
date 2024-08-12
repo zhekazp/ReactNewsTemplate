@@ -21,6 +21,8 @@ const AnzeigeDetails: FC = () => {
   const product: IProduct | undefined = products.find(p => p.id === Number(id));
 
   useEffect(() => {
+   
+    
     if (!product) {
       dispatch(fetchProductById(Number(id)));
     }

@@ -58,7 +58,6 @@ const Home = () => {
       .then((res) => res.json())
       .then((data) => setWeather(data))
       .catch(() => setStatus(false));
-
   }, []);
 
   return (
@@ -66,13 +65,14 @@ const Home = () => {
       {data === null ? (
         <>
           <Spinner show={loading} color="red" />
-          <ModalComponent  show={errorResponse}
-             title="Error"
-             content="Die Antwort des Servers ist ein Fehler. Versuchen Sie es später erneut."
-             buttonContent="ok"
-             danger = {true}
-             onClose={()=>setError(false)}
-             />
+          <ModalComponent
+            show={errorResponse}
+            title="Error"
+            content="Die Antwort des Servers ist ein Fehler. Versuchen Sie es später erneut."
+            buttonContent="ok"
+            danger={true}
+            onClose={() => setError(false)}
+          />
         </>
       ) : (
         <>
@@ -118,7 +118,9 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <Ad text="Bestes Web-Erstellungsteam – klicken Sie hier, um einen Rabatt zu erhalten" />
+            <Link to="/ads">
+              <Ad text="Bestes Web-Erstellungsteam – klicken Sie hier, um einen Rabatt zu erhalten" />
+            </Link>
             <div className="row">
               <div className="col-12 smallWidth">
                 <Title title="Bundesland Nachrichten" />
@@ -138,7 +140,9 @@ const Home = () => {
                   <div className="col-6 halfScreen">
                     <Title title="Neueste Anzeige" />
                     {data.rent.map((item) => (
-                      <InfoComponent key={uid()} info={item} />
+                      <Link key={uid()} to={"/anzeige/"+item.id}>
+                        <InfoComponent  info={item} />
+                      </Link>
                     ))}
                   </div>
                   <div className="col-6 halfScreen">
@@ -156,8 +160,9 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <Ad text="Hier kann Ihre Werbung platziert werden" />
-
+            <Link to="/ads">
+              <Ad text="Hier kann Ihre Werbung platziert werden" />
+            </Link>
             <div className="row">
               <div className="col-6 newSlider">
                 <Title title="Sport Nachrichten" />
@@ -185,7 +190,7 @@ const Home = () => {
               <div className="col-6 newSlider">
                 <Title title="Blogs" />
                 {data.blogs.map((item) => (
-                  <Link key={uid()} to={"/blogs/"+item.id}>
+                  <Link key={uid()} to={"/blogs/" + item.id}>
                     <Blog info={item} />
                   </Link>
                 ))}
