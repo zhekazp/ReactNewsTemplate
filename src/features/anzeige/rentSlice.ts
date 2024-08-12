@@ -3,7 +3,7 @@ import { RootState } from "../../store";
 import axios from "axios";
 import authorizedFetchAnzeige from "./authorizedFetchAnzeige";
 
-import authorizedFetch from '../blog/blogs/authorizedFetch';
+import authorizedFetch from "../blog/blogs/authorizedFetch";
 
 export interface ICategoryCreateRequestDto {
   name: string;
@@ -70,20 +70,20 @@ const initialState: ProductState = {
 
 export const fetchProducts = createAsyncThunk<
   {
-   products: IProduct[]; totalPages: number; currentPage: number 
-},
+    products: IProduct[];
+    totalPages: number;
+    currentPage: number;
+  },
   { name: string; category: string; region: string; page: number },
   { state: RootState; rejectValue: IErrorResponseDto }
 >(
   "products/fetchProducts",
   async ({ name, category, region, page }, { rejectWithValue }) => {
     try {
-      console.log({ name, category, region, page },"=========start");
-      
       const response = await axios.get(`/api/rents`, {
         params: { name, category, region, page },
       });
-       return response.data;
+      return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         return rejectWithValue(error.response.data as IErrorResponseDto);
@@ -190,73 +190,66 @@ export const deleteProduct = createAsyncThunk<
   }
 });
 
-
 export const addNewProduct = createAsyncThunk<
-IProduct,
-IProductCreateRequestDto,
-{ state: RootState }
+  IProduct,
+  IProductCreateRequestDto,
+  { state: RootState }
 >("products/addNewProduct", async (newProduct, { rejectWithValue }) => {
-try {
-  const response = await authorizedFetchAnzeige("/api/rent", {
-    method: 'POST',
-    body: JSON.stringify(newProduct),
-  });
-
-  // Проверка структуры данных
-  if (response && response.data) {
-    return response.data as IProduct;
-  } else {
-    throw new Error("Ответ от сервера имеет неверную структуру.");
-  }
-} catch (error) {
-  if (axios.isAxiosError(error) && error.response) {
-    return rejectWithValue({
-      message: error.response.data.message || "Fehler beim Hinzufügen des neuen Produkts",
-      fieldErrors: error.response.data.fieldErrors || [],
+  try {
+    const response = await authorizedFetchAnzeige("/api/rent", {
+      method: "POST",
+      body: JSON.stringify(newProduct),
     });
-  } else {
-    return rejectWithValue({
-      message: "Fehler beim Hinzufügen des neuen Produkts",
-      fieldErrors: [],
-    });
-  }
-}
-}); 
 
+    // Проверка структуры данных
+    if (response && response.data) {
+      return response.data as IProduct;
+    } else {
+      throw new Error("Ответ от сервера имеет неверную структуру.");
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      return rejectWithValue({
+        message:
+          error.response.data.message ||
+          "Fehler beim Hinzufügen des neuen Produkts",
+        fieldErrors: error.response.data.fieldErrors || [],
+      });
+    } else {
+      return rejectWithValue({
+        message: "Fehler beim Hinzufügen des neuen Produkts",
+        fieldErrors: [],
+      });
+    }
+  }
+});
 
 export const fetchUserProducts = createAsyncThunk<
   { products: IProduct[]; totalPages: number; currentPage: number },
   number,
   { state: RootState; rejectValue: IErrorResponseDto }
->(
-  "products/fetchUserProducts",
-  async (currentPage, { rejectWithValue }) => {
-    
-    try {
-      const response = await authorizedFetch(`/api/rents/my?page=${currentPage}`, {
+>("products/fetchUserProducts", async (currentPage, { rejectWithValue }) => {
+  try {
+    const response = await authorizedFetch(
+      `/api/rents/my?page=${currentPage}`,
+      {
         method: "GET",
-      });
-           
-      const responseData = await response.json();
-      
-      return responseData;
-    } catch (error) {
-  
-      
-      if (axios.isAxiosError(error) && error.response) {
-        return rejectWithValue({
-          message: "Fehler beim Abrufen der Benutzerprodukte",
-          fieldErrors: [],
-        });
-      } else {
-        return rejectWithValue({
-          message: "Fehler beim Abrufen der Benutzerprodukte",
-          fieldErrors: [],
-        });
       }
+    );
+    let responseData;
+    if (response.ok) {
+       responseData = await response.json();
+    } else {
+      throw new Error("List is empty");
     }
+    return responseData;
+  } catch (error) {
+    return rejectWithValue({
+      message: "Fehler beim Abrufen der Benutzerprodukte",
+      fieldErrors: [],
+    });
   }
-);
+});
 
 const productSlice = createSlice({
   name: "products",
@@ -268,11 +261,11 @@ const productSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
-         state.currentPage = action.payload.currentPage;
+        state.currentPage = action.payload.currentPage;
         state.products = action.payload.products;
         state.totalPages = action.payload.totalPages;
         state.status = "success";
-        state.error =  null;
+        state.error = null;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.status = "error";
@@ -365,7 +358,8 @@ const productSlice = createSlice({
           state.products.push(action.payload);
           state.status = "success";
           state.error = null;
-        })
+        }
+      )
       .addCase(addNewProduct.rejected, (state, action) => {
         state.status = "error";
         state.error =
@@ -374,17 +368,17 @@ const productSlice = createSlice({
           null;
       })
       .addCase(fetchUserProducts.pending, (state) => {
-        state.status = "loading";
+         state.status = "loading";
       })
       .addCase(fetchUserProducts.fulfilled, (state, action) => {
-         state.products = action.payload.products;
+        state.products = action.payload.products;
         state.currentPage = action.payload.currentPage;
         state.totalPages = action.payload.totalPages;
         state.status = "success";
         state.error = null;
       })
       .addCase(fetchUserProducts.rejected, (state, action) => {
-             
+        state.products = [];
         state.status = "error";
         state.error =
           (action.payload as IErrorResponseDto)?.message ||

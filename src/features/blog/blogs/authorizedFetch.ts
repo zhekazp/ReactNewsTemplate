@@ -15,7 +15,7 @@ export const authorizedFetch = async (url: string, options: RequestInit = {}) =>
   const response = await fetch(url, {
     ...options,
     headers,
-  }); 
+  });
 
   return response;
 };
