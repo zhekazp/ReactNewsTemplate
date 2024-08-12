@@ -67,11 +67,10 @@ const AnzeigeAufgeben: React.FC = () => {
     const formData = new FormData();
     const newProduct = {
       name,
-      category: { name: category },
+      category,
       price,
       description,
-      isInStock: true,
-      region: { regionName: region },
+      region,
     };
 
     formData.append('product',JSON.stringify(newProduct));
