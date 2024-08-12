@@ -6,6 +6,7 @@ import { IProduct } from "../features/anzeige/rentSlice";
 import Anzeige from "../features/anzeige/Anzeige";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Spinner from "../features/mainPage/components/spinner/Spinner";
+import ResponsivePagination from 'react-responsive-pagination';
 
 const regions = [
   "Baden-Württemberg",
@@ -122,7 +123,6 @@ const AnzeigeList: React.FC = () => {
       setSearchCategory("");
       setSearchRegion("");
     } else {
-      setIsFiltering(true);
       setSearchName(name);
       setSearchCategory(category);
       setSearchRegion(region);
@@ -139,15 +139,13 @@ const AnzeigeList: React.FC = () => {
   };
 
   const handlePageChange = (newPage: number) => {
-    if (isFiltering) {
-      setFilteredPage(newPage);
-    } else {
-      setSearchParams({
-        name: searchName,
-        category: searchCategory,
-        region: searchRegion,
-        page: (newPage + 1).toString(), // меняет номер страницы с 0 на 1 в url
-      });
+    
+      // setSearchParams({
+      //   name: searchName,
+      //   category: searchCategory,
+      //   region: searchRegion,
+      //   page: (newPage).toString(), // меняет номер страницы с 0 на 1 в url
+      // });
       dispatch(
         fetchProducts({
           name: searchName,
@@ -156,7 +154,7 @@ const AnzeigeList: React.FC = () => {
           page: newPage,
         })
       );
-    }
+    
   };
 
   // логика расчета страниц для отображения
@@ -274,11 +272,11 @@ const AnzeigeList: React.FC = () => {
             marginTop: "30px",
           }}
         >
-          {(isFiltering ? filteredProducts : products)
-            .slice(
-              currentPageToDisplay * PAGE_SIZE,
-              (currentPageToDisplay + 1) * PAGE_SIZE
-            )
+         
+          {
+          
+          products
+            
             .map((product) => (
               <Anzeige key={product.id} product={product} />
             ))}
@@ -287,24 +285,13 @@ const AnzeigeList: React.FC = () => {
         <p style={{ color: "red" }}>Keine Produkte gefunden</p>
       )}
 
-      <div
-        className="pagination"
-        style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
-      >
-        {Array.from({ length: totalPagesToDisplay }, (_, index) => index).map(
-          (page) => (
-            <button
-              className={`page-number ${
-                page === currentPageToDisplay ? "current" : ""
-              }`}
-              key={page}
-              onClick={() => handlePageChange(page)}
-            >
-              {page + 1}
-            </button>
-          )
-        )}
-      </div>
+{ totalPages > 1 &&(<ResponsivePagination
+                current={currentPage + 1}  
+                total={totalPages}        
+                onPageChange={(newPage) => handlePageChange(newPage - 1)} 
+                maxWidth={10}
+                 
+              />)}
     </div>
   );
 };
