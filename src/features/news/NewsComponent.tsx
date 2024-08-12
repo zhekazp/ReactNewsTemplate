@@ -12,7 +12,7 @@ interface IProps {
 }
 const NewsComponent: FC<IProps> = ({ newsItem }) => {
 
-  const displayRegionName = newsItem.regionName === 'non-region' ? 'Alle Bundesländer' : newsItem.regionName;
+  const displayRegionName = newsItem.regionName === 'non-region' ? ' Alle Regionen' : newsItem.regionName;
 
   return (
     <div className='col-md-4 col-sm-6 p-2 newsBlock'>

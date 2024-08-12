@@ -7,7 +7,7 @@ import { addComment, deleteComment, editComment, fetchComments, fetchNewsById, f
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faComment, faPenToSquare, faThumbsDown, faThumbsUp, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { topSlice } from '../layout/header/topElSlice';
-import { Spinner } from 'react-bootstrap';
+import Spinner from '../features/mainPage/components/spinner/Spinner';
 import Modal from '../features/blog/blogs/Modal';
 
 
@@ -35,6 +35,7 @@ const NewsDetail: FC = () => {
     const [updateTrigger, setUpdateTrigger] = useState(0);
     const [authError, setAuthError] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const currentUserString = localStorage.getItem("user");
     const currentUser = currentUserString ? JSON.parse(currentUserString) : null;
@@ -146,12 +147,10 @@ const NewsDetail: FC = () => {
     };
 
     return (
-        <section>
+        <section className='news-detail'>
             <div className='container'>
                 {status === "loading" && (
-                    <div className="spinner-border text-warning" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </div>
+                   <Spinner show={loading} color="red" />
                 )}
                 {status === 'success' && newsItem && (
                     <div>
@@ -177,7 +176,7 @@ const NewsDetail: FC = () => {
                         </div>
                         <div className='news_comments'>
 
-                            <h3 className='newsTopTitle'>Leave a Comment:</h3>
+                            <h3 className='newsTopTitle'>Kommentar hinzufügen:</h3>
                             <form className='comment-form p-4'>
                                 {/* <div className='form-group'>
                                         <label htmlFor='authorName'>Name:</label>
@@ -192,7 +191,7 @@ const NewsDetail: FC = () => {
                                     </div> */}
 
                                 <div className='form-group'>
-                                    <label htmlFor='comment'>Enter your comment:</label>
+                                    <label htmlFor='comment'>Einen Kommentar hinzufügen:</label>
                                     <textarea
                                         id='comment'
                                         value={comment}
@@ -202,13 +201,13 @@ const NewsDetail: FC = () => {
                                     />
                                 </div>
                                 {commentError && <p className="error">{commentError}</p>}
-                                {statusAdd === 'loading' ? <Spinner /> :
+                                {statusAdd === 'loading' ?  <Spinner show={loading} color="red" /> :
                                     <button type='submit' className='submit-btn' disabled={submitting} onClick={handleAddComment}>
-                                        {submitting ? 'Submitting...' : 'Submit'}
+                                        {submitting ? 'Einreichen...' : 'Bearbeiten'}
                                     </button>}
                             </form>
                             <div className='comment-content p-4'>
-                                <h2 className='newsTopTitle'>Comments:</h2>
+                                <h2 className='newsTopTitle'> Alle Kommentare:</h2>
                                 {comments.length === 0 ? <p className='empty-comments p-5 text-center'>Es wurden noch keine Kommentare hinterlassen.</p> :
                                     <></>
                                 }
@@ -227,7 +226,7 @@ const NewsDetail: FC = () => {
                                             {editingCommentId === comment.id && (
                                                 <form className="edit-comment-form" onSubmit={(e) => { e.preventDefault(); handleEditCommentText(); }}>
                                                     <div className='form-group'>
-                                                        <label htmlFor='editComment'>Edit your comment:</label>
+                                                        <label htmlFor='editComment'>Bearbeiten Sie Ihren Kommentar:</label>
                                                         <textarea
                                                             id='editComment'
                                                             value={editedComment}
@@ -238,10 +237,10 @@ const NewsDetail: FC = () => {
                                                     </div>
                                                     <div className='btns-bottom'>
                                                         <button type='submit' className='submit-btn'>
-                                                            Save
+                                                        Bearbeiten
                                                         </button>
                                                         <button type='button' className='submit-btn' onClick={handleCancelEdit}>
-                                                            Cancel
+                                                            Löschen
                                                         </button>
                                                     </div>
                                                 </form>
@@ -261,7 +260,7 @@ const NewsDetail: FC = () => {
                 )}
                 {showModal && (
                     <Modal
-                        title="Genehmigung erforderlich"
+                        title="Anmeldung erforderlich"
                         content="Dieser Vorgang kann nur von einem angemeldeten Benutzer durchgeführt werden. Bitte melden Sie sich bei Ihrem Konto an."
                         onClose={() => setShowModal(false)}
                     />

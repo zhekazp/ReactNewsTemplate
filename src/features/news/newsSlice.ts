@@ -105,18 +105,12 @@ export const fetchComments = createAsyncThunk<CommentsResponse, number, { state:
                 console.log("Comment ID:", comment.id, "isPublishedByCurrentUser:", comment.isPublishedByCurrentUser);
             });
 
-            if (response.status === 204 || !response.data || response.data.length === 0) {
-
-                return { comments: [] };
-            }
             return { comments: response.data };
+           
         } catch (error) {
-            if (axios.isAxiosError(error) && error.response?.status === 404) {
-                //если ненайдено, то возвращаем 404. и присваеваем пустой массив комментариев
-                return { comments: [] };
-            } else {
+        
                 return rejectWithValue(error.message);
-            }
+            
         }
     }
 );
@@ -334,7 +328,7 @@ const newsSlice = createSlice({
             })
             .addCase(fetchComments.fulfilled, (state, action) => {
                 state.statusCommentAdding = 'success';
-                state.comments = action.payload.comments || [];
+                state.comments = action.payload.comments;
             })
             .addCase(fetchComments.rejected, (state, action) => {
                 state.status = 'error';

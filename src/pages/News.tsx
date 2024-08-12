@@ -13,7 +13,7 @@ const News = () => {
   const dispatch: AppDispatch = useDispatch();
 
 
-  const { newsArr, status, pageCount, currentPage, sections, regions } = useSelector((state: RootState) => state.news);
+  const { newsArr, status, error, pageCount, currentPage, sections, regions } = useSelector((state: RootState) => state.news);
 
   const [selectedSection, setSelectedSection] = useState<string | undefined>(undefined);
   const [selectedRegion, setSelectedRegion] = useState<string | undefined>(undefined);
@@ -71,7 +71,7 @@ const News = () => {
             ))}
           </div>
           <div className={`filter_block filter-region ${selectedSection !== 'inland' ? 'hidden' : ''}`}>
-            <h4 className='newsTopTitle' style={{"width":"100%"}}>Filter nach Region</h4>
+            <h4 className='newsTopTitle' style={{"width":"100%"}}>Filter nach Bundesland</h4>
             <div className='row d-flex flex-wrap'>
             {regions
               .filter(region => region !== 'non-region' && region !== 'Deutschland')
@@ -91,32 +91,31 @@ const News = () => {
           {status === 'idle' || status === "loading" ? (
             <Spinner show={loading} color="red" />
           ) : status === 'success' ? (
-            <div className='d-flex flex-wrap'>
+            <>
+            {newsArr.length === 0 ? (
+              <div className='no-news-message'>
+                 {error}
+              </div>
+            ) : (
+              <div className='d-flex flex-wrap'>
+                {newsArr.map((newsItem) => (
+                  <NewsComponent
+                    key={newsItem.id}
+                    newsItem={newsItem}
+                  />
+                ))}
 
-              {newsArr.map((newsItem) => (
-                <NewsComponent
-                  key={newsItem.id}
-                  newsItem={newsItem}
-                />)
-              )}
-                {/* {Array.from({ length: pageCount }).map((_, index) => (
-                  <button className={`page-number ${index === currentPage ? 'current' : ''}`}
-                    key={index}
-                    onClick={() => handlePageChange(index)}
-                    disabled={index === currentPage}
-                  >
-                    {index + 1}
-                  </button>
-                ))} */}
-                { pageCount > 1 &&(<ResponsivePagination
-                current={currentPage + 1}  
-                total={pageCount}        
-                onPageChange={(newPage) => handlePageChange(newPage - 1)} 
-                maxWidth={10}
-                 // Переключение страниц (нумерация начинается с 0)
-              />)}
-             
-            </div>
+                {pageCount > 1 && (
+                  <ResponsivePagination
+                    current={currentPage + 1}
+                    total={pageCount}
+                    onPageChange={(newPage) => handlePageChange(newPage - 1)}
+                    maxWidth={10}
+                  />
+                )}
+              </div>
+            )}
+          </>
           ) : (
 
             <>Error!</>
