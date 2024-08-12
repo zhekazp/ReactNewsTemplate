@@ -188,35 +188,37 @@ export const deleteProduct = createAsyncThunk<
 
 
 export const addNewProduct = createAsyncThunk<
-  IProduct,
-  FormData,
-  { state: RootState }
->("products/addNewProduct", async (formData, { rejectWithValue }) => {
-  try {
-    const response = await authorizedFetchAnzeige("/api/rent", {
-      method: 'POST',
-      body: formData,
-    });
+IProduct,
+IProductCreateRequestDto,
+{ state: RootState }
+>("products/addNewProduct", async (newProduct, { rejectWithValue }) => {
+try {
+  const response = await authorizedFetchAnzeige("/api/rent", {
+    method: 'POST',
+    body: JSON.stringify(newProduct),
+  });
 
-    if (response && response.data) {
-      return response.data as IProduct;
-    } else {
-      throw new Error("Die Antwort vom Server ist nicht korrekt strukturiert.");
-    }
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
-      return rejectWithValue({
-        message: error.response.data.message || "Fehler beim Hinzufügen des neuen Produkts",
-        fieldErrors: error.response.data.fieldErrors || [],
-      });
-    } else {
-      return rejectWithValue({
-        message: "Fehler beim Hinzufügen des neuen Produkts",
-        fieldErrors: [],
-      });
-    }
+  // Проверка структуры данных
+  if (response && response.data) {
+    return response.data as IProduct;
+  } else {
+    throw new Error("Ответ от сервера имеет неверную структуру.");
   }
+} catch (error) {
+  if (axios.isAxiosError(error) && error.response) {
+    return rejectWithValue({
+      message: error.response.data.message || "Fehler beim Hinzufügen des neuen Produkts",
+      fieldErrors: error.response.data.fieldErrors || [],
+    });
+  } else {
+    return rejectWithValue({
+      message: "Fehler beim Hinzufügen des neuen Produkts",
+      fieldErrors: [],
+    });
+  }
+}
 });
+
 
 export const fetchUserProducts = createAsyncThunk<
   { products: IProduct[]; totalPages: number; currentPage: number },

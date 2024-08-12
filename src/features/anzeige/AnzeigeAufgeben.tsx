@@ -30,7 +30,7 @@ const AnzeigeAufgeben: React.FC = () => {
   const { categories } = useSelector((state: RootState) => state.rentProducts);
 
   const [name, setName] = useState<string>("");
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imageUrl, setImageUrl] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
   const [description, setDescription] = useState<string>("");
@@ -39,7 +39,7 @@ const AnzeigeAufgeben: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState<string>("");
-  
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -63,19 +63,18 @@ const AnzeigeAufgeben: React.FC = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("category", category);
-    formData.append("price", price.toString());
-    formData.append("description", description);
-    formData.append("region", region);
-
-    imageFiles.forEach((file) => {
-      formData.append("images", file);
-    });
+    const newProduct = {
+      imageUrl,
+      name,
+      category: { name: category },
+      price,
+      description,
+      isInStock: true,
+      region: { regionName: region },
+    };
 
     try {
-      await dispatch(addNewProduct(formData)).unwrap();
+      await dispatch(addNewProduct(newProduct)).unwrap();
       setSuccessMessage("Produkt wurde erfolgreich hinzugefügt.");
       setTimeout(() => {
         navigate("/anzeige");
@@ -87,13 +86,6 @@ const AnzeigeAufgeben: React.FC = () => {
 
   const handleClose = () => {
     navigate("/anzeige"); 
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const filesArray = Array.from(e.target.files);
-      setImageFiles(filesArray);
-    }
   };
 
   return (
@@ -141,29 +133,34 @@ const AnzeigeAufgeben: React.FC = () => {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="imageFiles" className="form-label">Bilder hinzufügen</label>
+            <label htmlFor="imageUrl" className="form-label">Bild hinzufügen</label>
             <input
               type="file"
               className="form-control"
-              style={{ backgroundColor: "black", border: "black", color: "white" }}
-              id="imageFiles"
-              onChange={handleImageChange}
+              style={{
+                backgroundColor: "black",
+                border: "black",
+                color: "white",
+              }}
+              id="imageFile"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    setImageUrl(reader.result as string);
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
               accept="image/*"
-              multiple
               required
             />
           </div>
 
-          {imageFiles.length > 0 && (
+          {imageUrl && (
             <div className="mb-3">
-              {imageFiles.map((file, index) => (
-                <img
-                  key={index}
-                  src={URL.createObjectURL(file)}
-                  alt={`Preview ${index + 1}`}
-                  style={{ maxWidth: "100%", marginBottom: "10px" }}
-                />
-              ))}
+              <img src={imageUrl} alt="Preview" style={{ maxWidth: "100%" }} />
             </div>
           )}
 
@@ -284,3 +281,4 @@ const AnzeigeAufgeben: React.FC = () => {
 };
 
 export default AnzeigeAufgeben;
+
