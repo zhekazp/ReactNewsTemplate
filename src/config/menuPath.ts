@@ -7,4 +7,5 @@ export const menuPath = [
 	{ index: 5, path:'ads' },
     { index: 6, path: 'contact' },
     { index: 2, path: 'add-blog' },
+    { index: 3, path: 'meins' },
   ];
