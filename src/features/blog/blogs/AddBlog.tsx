@@ -1,19 +1,21 @@
-import React, { useState, useEffect, FC } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../../store';
-import { addBlog, fetchRegions } from './blogSlice';
-import Breadcrumb from './Breadcrumb';
-import { IAddBlogRequest } from './types';
-import './blogsStyles/addBlog.css';
-import { useNavigate } from 'react-router-dom';
-import Modal from './Modal';
+import React, { useState, useEffect, FC } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../store";
+import { addBlog, fetchRegions } from "./blogSlice";
+import Breadcrumb from "./Breadcrumb";
+import { IAddBlogRequest } from "./types";
+import "./blogsStyles/addBlog.css";
+import { useNavigate } from "react-router-dom";
+import Modal from "./Modal";
 
 const AddBlog: FC = () => {
   const dispatch: AppDispatch = useDispatch();
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [region, setRegion] = useState('');
-  const { regions, status, error } = useSelector((state: RootState) => state.blogs);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [region, setRegion] = useState("");
+  const { regions, status, error } = useSelector(
+    (state: RootState) => state.blogs
+  );
   const [titleError, setTitleError] = useState<string | null>(null);
   const [regionError, setRegionError] = useState<string | null>(null);
   const [contentError, setContentError] = useState<string | null>(null);
@@ -30,53 +32,57 @@ const AddBlog: FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (status === 'success' && blogAdded) {
+    if (status === "success" && blogAdded) {
       setIsModalOpen(true);
-      setBlogAdded(false); 
+      setBlogAdded(false);
     }
   }, [status, blogAdded]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     let isValid = true;
-    
+
     if (title.length < 2) {
-      setTitleError('Der Titel muss mindestens 2 Zeichen lang sein.');
+      setTitleError("Der Titel muss mindestens 2 Zeichen lang sein.");
       isValid = false;
     } else if (title.length > 200) {
-      setTitleError('Der Titel darf höchstens 200 Zeichen lang sein.');
+      setTitleError("Der Titel darf höchstens 200 Zeichen lang sein.");
       isValid = false;
     } else {
       setTitleError(null);
     }
-    
+
     if (!region) {
-      setRegionError('Bitte wählen Sie eine Region aus.');
+      setRegionError("Bitte wählen Sie eine Region aus.");
       isValid = false;
     } else {
       setRegionError(null);
     }
-    
+
     if (!content.trim()) {
-      setContentError('Der Inhalt darf nicht leer sein.');
+      setContentError("Der Inhalt darf nicht leer sein.");
       isValid = false;
     } else {
       setContentError(null);
     }
-    
+
     if (isValid && title && content && region) {
-      const blogData: IAddBlogRequest = { title, content, region: Number(region) };
+      const blogData: IAddBlogRequest = {
+        title,
+        content,
+        region: Number(region),
+      };
       dispatch(addBlog(blogData));
-      setTitle('');
-      setContent('');
-      setRegion('');
+      setTitle("");
+      setContent("");
+      setRegion("");
       setBlogAdded(true);
     }
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    navigate('/blogs');
+    navigate("/blogs");
   };
 
   return (
@@ -103,10 +109,7 @@ const AddBlog: FC = () => {
             {contentError && <p className="error">{contentError}</p>}
           </div>
           <div>
-            <select
-              value={region}
-              onChange={(e) => setRegion(e.target.value)}
-            >
+            <select value={region} onChange={(e) => setRegion(e.target.value)}>
               <option value="">Region auswählen</option>
               {regions.map((region) => (
                 <option key={region.id} value={region.id}>
@@ -116,13 +119,25 @@ const AddBlog: FC = () => {
             </select>
             {regionError && <p className="error">{regionError}</p>}
           </div>
-          <div className='add-blog_buttons'>
-            <button className='add-blog_button' type="submit">Blog hinzufügen</button>
-            <button className='cancel-blog_button' type="button" onClick={handleCancelBlogClick}>Abbrechen</button>
+          <div className="add-blog_buttons">
+            <button className="add-blog_button" type="submit">
+              Blog hinzufügen
+            </button>
+            <button
+              className="cancel-blog_button"
+              type="button"
+              onClick={handleCancelBlogClick}
+            >
+              Abbrechen
+            </button>
           </div>
         </form>
-        {status === 'loading' && <p className="status-message loading">Laden...</p>}
-        {status === 'error' && <p className="status-message error">{error}</p>}
+        {status === "loading" && (
+          <div className="spinner-border text-danger" role="status">
+            <span className="visually-hidden">Laden...</span>
+          </div>
+        )}
+        {status === "error" && <p className="status-message error">{error}</p>}
       </div>
 
       {isModalOpen && (
