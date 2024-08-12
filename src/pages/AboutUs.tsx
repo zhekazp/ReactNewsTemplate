@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { uid } from "uid";
 
 const AboutUs = () => {
   interface ITeamMember {
@@ -62,17 +63,17 @@ const AboutUs = () => {
         <h3 className="modalComponentTitle">Unser Team</h3>
         <div className="row">
           {members?.team.map((item) => (
-            <div className="col-md-6 col-lg-3">
+            <div key={uid()} className="col-md-6 col-lg-3">
               <div className="d-flex justify-content-around aboutMargin">
                 <Card data-bs-theme="dark" style={{ width: "15rem" }}>
                   <Card.Img variant="top" src={item.photoUrl} />
                   <Card.Body className="textCenter">
                     <Card.Title>{item.name}</Card.Title>
-                    <Card.Text>
-                      <h6>{item.role}</h6>
-                      <p style={{height:"72px"}}>{item.description}</p>
-                      <Link to={item.url}>member page</Link>
+                    <Card.Text>{item.role}</Card.Text>
+                    <Card.Text style={{ height: "72px" }}>
+                      {item.description}
                     </Card.Text>
+                    <Link to={item.url}>member page</Link>
                   </Card.Body>
                 </Card>
               </div>
