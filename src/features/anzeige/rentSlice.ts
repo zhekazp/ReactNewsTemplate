@@ -3,6 +3,7 @@ import { RootState } from "../../store";
 import axios from "axios";
 import authorizedFetchAnzeige from "./authorizedFetchAnzeige";
 
+
 export interface ICategoryCreateRequestDto {
   name: string;
 }
