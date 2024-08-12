@@ -3,6 +3,7 @@ import { RootState } from "../../store";
 import axios from "axios";
 import authorizedFetchAnzeige from "./authorizedFetchAnzeige";
 
+import authorizedFetch from '../blog/blogs/authorizedFetch';
 
 export interface ICategoryCreateRequestDto {
   name: string;
@@ -218,7 +219,7 @@ try {
     });
   }
 }
-});
+}); 
 
 
 export const fetchUserProducts = createAsyncThunk<
@@ -227,13 +228,19 @@ export const fetchUserProducts = createAsyncThunk<
   { state: RootState; rejectValue: IErrorResponseDto }
 >(
   "products/fetchUserProducts",
-  async (_, { rejectWithValue }) => {
+  async (currentPage, { rejectWithValue }) => {
+    
     try {
-      const response = await authorizedFetchAnzeige("/api/rents/my", {
+      const response = await authorizedFetch(`/api/rents/my?page=${currentPage}`, {
         method: "GET",
       });
-      return response.data;
+           
+      const responseData = await response.json();
+      
+      return responseData;
     } catch (error) {
+  
+      
       if (axios.isAxiosError(error) && error.response) {
         return rejectWithValue({
           message: "Fehler beim Abrufen der Benutzerprodukte",
@@ -367,13 +374,14 @@ const productSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchUserProducts.fulfilled, (state, action) => {
-        state.products = action.payload.products;
+         state.products = action.payload.products;
         state.currentPage = action.payload.currentPage;
         state.totalPages = action.payload.totalPages;
         state.status = "success";
         state.error = null;
       })
       .addCase(fetchUserProducts.rejected, (state, action) => {
+             
         state.status = "error";
         state.error =
           (action.payload as IErrorResponseDto)?.message ||
