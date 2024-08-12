@@ -78,10 +78,12 @@ export const fetchProducts = createAsyncThunk<
   "products/fetchProducts",
   async ({ name, category, region, page }, { rejectWithValue }) => {
     try {
+      console.log({ name, category, region, page },"=========start");
+      
       const response = await axios.get(`/api/rents`, {
         params: { name, category, region, page },
       });
-      return response.data;
+       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         return rejectWithValue(error.response.data as IErrorResponseDto);
@@ -266,6 +268,7 @@ const productSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
+         state.currentPage = action.payload.currentPage;
         state.products = action.payload.products;
         state.totalPages = action.payload.totalPages;
         state.status = "success";
