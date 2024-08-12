@@ -65,7 +65,9 @@ const BlogList: FC = () => {
       return;
     }
     setShowUserBlogs(true);
-    setFilters((prev) => ({ ...prev, page: "0" }));
+    // setFilters((prev) => ({ ...prev, page: "0" }));
+    // setSearchParams({ region: "0", page: "0" });
+    setFilters({ region: "0", page: "0" });
     setSearchParams({ region: "0", page: "0" });
   };
 
