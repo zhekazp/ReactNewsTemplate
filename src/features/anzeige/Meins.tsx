@@ -316,7 +316,7 @@ const Meins: React.FC = () => {
                           Kategorie: {product.category.name}
                         </p>
                         <p style={{ color: "rgb(209, 207, 207)" }}>
-                          Preis pro Tag: {"    "}
+                          Preis: {"    "}
                           <span
                             style={{
                               color: "red",

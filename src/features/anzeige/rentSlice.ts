@@ -172,8 +172,21 @@ export const deleteProduct = createAsyncThunk<
   number,
   { state: RootState }
 >("products/deleteProduct", async (id, { rejectWithValue }) => {
+  
+  
   try {
-    await axios.delete(`/api/rent/${id}`);
+    const token = localStorage.getItem("token");
+    
+    if (!token) {
+      throw new Error("You need to athuorized.");
+    }
+  const config = {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'content-type': 'multipart/form-data',
+    },
+  };
+    await axios.delete(`/api/rent/${id}`,config);
     return id;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
@@ -379,6 +392,7 @@ const productSlice = createSlice({
       })
       .addCase(fetchUserProducts.rejected, (state, action) => {
         state.products = [];
+        state.totalPages = 0;
         state.status = "error";
         state.error =
           (action.payload as IErrorResponseDto)?.message ||
