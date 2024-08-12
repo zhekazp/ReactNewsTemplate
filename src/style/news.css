@@ -269,7 +269,7 @@ a,
     display: flex;
     justify-content: flex-end;
 }
-.submit-btn {
+.submit-btn{
     outline: none;
     background-color: #0D0D0D;
     border: 1px solid #ff0000;
@@ -282,6 +282,19 @@ a,
     &:hover {
         background-color: #ff0000;
         color: #fff;
+    }
+}
+.news-detail .modal-content button{
+    max-width: 50%;
+    background-color: #0D0D0D;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: #ffffff;
+    padding: 10px 25px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    &:hover{
+        background-color: #ff0000;
+        border: 1px solid #ff0000;
     }
 }
 #editComment{
@@ -327,4 +340,13 @@ a,
 
 .edit-comment-form {
     padding-bottom: 10px;
+}
+
+
+/*Modal*/
+.news-detail .modal-content{
+    max-width: 450px;
+    background-color: #292b2d;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    align-items: center;
 }

@@ -5,9 +5,9 @@ import { RootState } from "../../store";
 
 
 export interface IForm {
-    name: string;
-    email: string;
-    message: string;
+    contactName: string;
+    contactEmail: string;
+    contactMessage: string;
 }
 
 export interface InitialFormState {
@@ -18,9 +18,9 @@ export interface InitialFormState {
 }
 const initialState: InitialFormState = {
     form: {
-        name: '',
-        email: '',
-        message: '',
+        contactName: '',
+        contactEmail: '',
+        contactMessage: '',
     },
     status: null,
      errorMessage: null
@@ -28,6 +28,7 @@ const initialState: InitialFormState = {
 
 export const sendForm = createAsyncThunk<void, IForm, {state:RootState}>('form/sendForm',
     async (form, { rejectWithValue}) => {
+        console.log('Sending form data:', form);
         try {
 
             const response = await axios.post('/api/contact', form, {
@@ -36,6 +37,7 @@ export const sendForm = createAsyncThunk<void, IForm, {state:RootState}>('form/s
                     'Content-Type': 'application/json',
                 },
             });
+            console.log('Response:', response.data);
             return response.data;
         } catch(error) {
             // throw new Error(error.response.data.message || 'Something went wrong');
@@ -45,6 +47,7 @@ export const sendForm = createAsyncThunk<void, IForm, {state:RootState}>('form/s
             if (axios.isAxiosError(error) && error.response) {
                 errorMessage = error.response.data.message || errorMessage;
             }
+            console.log('Error:', errorMessage);
             return rejectWithValue(errorMessage);
         }
     }
@@ -54,32 +57,35 @@ const contactUsSlice = createSlice({
     name: 'contactForm',
     initialState,
     reducers: {
-        updateForm(state, action: PayloadAction<IForm>){
+        updateForm(state, action: PayloadAction<Partial<IForm>>){
             state.form = {
                 ...state.form,
                 ...action.payload,
               };
         },
         clearForm(state){
-            state.form = {name: '', email: '', message: ''};
-
+            state.form = {contactName: '', contactEmail: '', contactMessage: ''};
+            state.status = null;
+            state.errorMessage = null;
         }
     },
     extraReducers: (builder) => {
         builder
         .addCase(sendForm.pending, (state) => {
-            state.status = 'loading'
+            state.status = 'loading';
+            state.errorMessage = null;
         })
         .addCase(sendForm.fulfilled, (state) =>{
             state.status = 'success'
             state.form = {
-                name: '',
-                email: '',
-                message: '',
+                contactName: '',
+                contactEmail: '',
+                contactMessage: '',
               };
         })
-        .addCase(sendForm.rejected, (state) => {
-            state.status = 'error'
+        .addCase(sendForm.rejected, (state, action) => {
+            state.status = 'error';
+            state.errorMessage = action.payload as string;
         })
     }
 })

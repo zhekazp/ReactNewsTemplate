@@ -5,19 +5,21 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faEnvelope, faShare, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { AppDispatch, RootState } from "../store";
-import { sendForm, updateForm } from "../features/contactUs/contactUsSlice";
+import { clearForm, sendForm, updateForm } from "../features/contactUs/contactUsSlice";
 import '../style/contactUs.css'
+import Modal from "../features/blog/blogs/Modal";
 
 interface Errors {
-    name?: string;
-    email?: string;
-    message?: string;
+    contactName?: string;
+    contactEmail?: string;
+    contactMessage?: string;
     recaptcha?: string;
 }
 
 const ContactUs = () => {
-    const { form, status } = useSelector((state: RootState) => state.contactForm);
+    const { form, status, errorMessage  } = useSelector((state: RootState) => state.contactForm);
     const dispatch: AppDispatch = useDispatch();
+    const [showModal, setShowModal] = useState(false);
 
     const [errors, setErrors] = useState<Errors>({});
 
@@ -25,24 +27,24 @@ const ContactUs = () => {
 
     const validateForm = () => {
         const newErrors: Errors = {
-            name: "",
-            email: "",
-            message: ""
+            contactName: "",
+            contactEmail: "",
+            contactMessage: ""
         };
-        if (!form.name.trim()) {
-            newErrors.name = "Name is required and cannot be empty";
-        } else if (!/^[a-zA-Z\s]+$/.test(form.name)) {
-            newErrors.name = "Name can only contain letters and spaces";
+        if (!form.contactName.trim()) {
+            newErrors.contactName = "Name is required and cannot be empty";
+        } else if (!/^[a-zA-Z\s]+$/.test(form.contactName)) {
+            newErrors.contactName = "Name can only contain letters and spaces";
         }
-        if (!form.email.trim()) {
-            newErrors.email = "Email is required and cannot be empty";
-        } else if (!/\S+@\S+\.\S+/.test(form.email)) {
-            newErrors.email = "Email must be a valid email address";
+        if (!form.contactEmail.trim()) {
+            newErrors.contactEmail = "Email is required and cannot be empty";
+        } else if (!/\S+@\S+\.\S+/.test(form.contactEmail)) {
+            newErrors.contactEmail = "Email must be a valid email address";
         }
-        if (!form.message.trim()) {
-            newErrors.message = "Message is required and cannot be empty";
-        } else if (form.message.length > 500) {
-            newErrors.message = "Message cannot exceed 500 characters";
+        if (!form.contactMessage.trim()) {
+            newErrors.contactMessage = "Message is required and cannot be empty";
+        } else if (form.contactMessage.length > 500) {
+            newErrors.contactMessage = "Message cannot exceed 500 characters";
         }
         return newErrors;
     }
@@ -50,30 +52,30 @@ const ContactUs = () => {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        dispatch(updateForm({ ...form, [name]: value }));
+        dispatch(updateForm({ [name]: value }));
     };
 
 
-    const handleSendForm = (e: React.FormEvent) => {
-        e.preventDefault(); // Отменяем стандартное поведение отправки формы
+    const handleSendForm = async (e: React.FormEvent) => {
+        e.preventDefault();
 
-        const validationErrors = validateForm(); // Выполняем валидацию формы
+        const validationErrors = validateForm();
+        console.log('Validation Errors:', validationErrors);
 
-        if (Object.keys(validationErrors).length > 0) { // Проверяем, есть ли ошибки валидации
-            setErrors(validationErrors); // Устанавливаем ошибки в состояние компонента
-            return; // Прекращаем выполнение функции, если есть ошибки
-        }
-        // const recaptchaValue = recaptchaRef.current?.getValue();
-        // if (!recaptchaValue) {
-        //     setErrors((prevErrors) => ({ ...prevErrors, recaptcha: "Please verify that you are not a robot" }));
+        // if (Object.keys(validationErrors).length > 0) { 
+        //     setErrors(validationErrors); 
         //     return;
         // }
-
-
-        setErrors({}); // Если ошибок нет, очищаем состояние ошибок
-
-        dispatch(sendForm(form)); // Отправляем данные формы на сервер через Redux
-        // recaptchaRef.current?.reset(); // Сбрасываем ReCAPTCHA после успешной отправки
+        console.log('Form Data to be Sent:', form);
+        try {
+            console.log('Dispatching sendForm with data:', form);
+            await dispatch(sendForm(form)).unwrap();
+            console.log('Form sent successfully');
+            setShowModal(true);
+            dispatch(clearForm());
+        } catch (error) {
+            console.error("Error sending form:", error);
+        }
     };
 
     return (
@@ -117,25 +119,20 @@ const ContactUs = () => {
                     <p className='newsTopTitle'>Wir freuen uns über Ihre Ideen und Vorschläge zur Verbesserung unserer Website. Bitte nutzen Sie das Formular, um uns zu kontaktieren.</p>
                     <form onSubmit={handleSendForm} className="contact-input-group">
                         <div className="row">
-                            <label className="col-lg-6" htmlFor="name">
-                                <input type="text" className="form-input" required value={form.name} name='name' onChange={handleInputChange} placeholder='Geben Sie Ihren Namen ein' />
-                                {errors.name && <div className="error">{errors.name}</div>}
+                            <label className="col-lg-6" htmlFor="contactName">
+                                <input type="text" className="form-input" required value={form.contactName} name='contactName' onChange={handleInputChange} placeholder='Geben Sie Ihren Namen ein' />
+                                {errors.contactName && <div className="error">{errors.contactName}</div>}
                             </label>
-                            <label className="col-lg-6" htmlFor="email">
-                                <input type="text" className="form-input" required value={form.email} name='email' onChange={handleInputChange} placeholder='Geben Sie Ihre E-Mail-Adresse ein' />
-                                {errors.email && <div className="error">{errors.email}</div>}
+                            <label className="col-lg-6" htmlFor="contactEmail">
+                                <input type="text" className="form-input" required value={form.contactEmail} name='contactEmail' onChange={handleInputChange} placeholder='Geben Sie Ihre E-Mail-Adresse ein' />
+                                {errors.contactEmail && <div className="error">{errors.contactEmail}</div>}
                             </label>
                         </div>
-                        <label className="col-12" htmlFor="message">
-                            <textarea value={form.message} name='message' required className="form-input" onChange={handleInputChange} placeholder='Geben Sie Ihre Nachricht ein'></textarea>
-                            {errors.message && <div className="error">{errors.message}</div>}
+                        <label className="col-12" htmlFor="contactMessage">
+                            <textarea value={form.contactMessage} name='contactMessage' required className="form-input" onChange={handleInputChange} placeholder='Geben Sie Ihre Nachricht ein'></textarea>
+                            {errors.contactMessage && <div className="error">{errors.contactMessage}</div>}
                         </label>
-                        {/* <ReCAPTCHA
-
-                                ref={recaptchaRef}
-                                size="invisible"
-                                sitekey="Your client site key"
-                            /> */}
+                        
 
                         <button type="submit" className="submit-btn">
                             {status === 'loading' ? 'Sendung...' : 'Senden'}
@@ -144,6 +141,13 @@ const ContactUs = () => {
                         {status === 'error' && <div>Das Formular konnte nicht übermittelt werden.</div>}
                     </form>
                 </div>
+                {showModal && (
+                    <Modal
+                        title=""
+                        content="Danke, dass Du uns geschrieben hast! Wir setzen uns so schnell wie möglich mit Dir in Verbindung."
+                        onClose={() => setShowModal(false)}
+                    />
+                )}
             </div>
         </section>
 
