@@ -116,7 +116,7 @@ const ContactUs = () => {
                             <div className="contact-icon d-flex justify-content-center"><FontAwesomeIcon icon={faLocationDot} /></div>
                             <div className="contact-text">
                                 <span>Adresse</span>
-                                <span>Berlin</span>
+                                <p style={{marginBottom: "0"}}>Berlin</p>
                             </div>
                         </div>
                     </div>
