@@ -38,17 +38,6 @@ const AboutUs = () => {
           talentierten Mitgliedern diese Seite von Grund auf neu entwickelt.
         </p>
         <p>
-          Unser Team setzte sich aus einem Backend-Team von vier Personen und
-          einem Frontend-Team von fünf Personen zusammen. Für die
-          Backend-Entwicklung kamen Technologien wie Java, Spring Boot, Maven,
-          MySQL, REST API, externe APIs, Spring Security, JUnit, Mockito und
-          MockitoMVC zum Einsatz. Das Frontend-Team nutzte moderne Technologien
-          wie React, TypeScript und Redux, um eine ansprechende und
-          leistungsfähige Benutzeroberfläche zu schaffen. Die Versionierung und
-          das Projektmanagement wurden dabei durch die Nutzung von Git
-          unterstützt.
-        </p>
-        <p>
           Wir laden Sie ein, die Ergebnisse unserer Arbeit zu erkunden und sich
           von den Möglichkeiten inspirieren zu lassen, die eine fundierte
           IT-Ausbildung bieten kann.
@@ -60,27 +49,7 @@ const AboutUs = () => {
         </p>
       </div>
       <div className="container">
-        <h3 className="modalComponentTitle">Unser Team</h3>
-        <div className="row">
-          {members?.team.map((item) => (
-            <div key={uid()} className="col-md-6 col-lg-3">
-              <div className="d-flex justify-content-around aboutMargin">
-                <Card data-bs-theme="dark" style={{ width: "15rem" }}>
-                  <Card.Img variant="top" src={item.photoUrl} />
-                  <Card.Body className="textCenter">
-                    <Card.Title>{item.name}</Card.Title>
-                    <Card.Text>{item.role}</Card.Text>
-                    <Card.Text style={{ height: "72px" }}>
-                      {item.description}
-                    </Card.Text>
-                    <Link to={item.url}>member page</Link>
-                  </Card.Body>
-                </Card>
-              </div>
-            </div>
-          ))}
-        </div>
-        <h3 className="modalComponentTitle">Unser Technologiepaket</h3>
+      <h3 className="modalComponentTitle">Unser Technologiepaket</h3>
         <div className="technology">
           <img
             src="https://www.lerned.top/imj/kurses/b1.png"
@@ -112,7 +81,32 @@ const AboutUs = () => {
             alt=""
             width="60px"
           />
-          
+          <img
+            src="https://www.lerned.top/imj/kurses/b7.png"
+            alt=""
+            width="60px"
+          />
+          <img
+            src="https://www.lerned.top/imj/kurses/b8.png"
+            alt=""
+            width="60px"
+          />
+          <img
+            src="https://www.lerned.top/imj/kurses/b9.png"
+            alt=""
+            width="60px"
+          />
+          <img
+            src="https://www.lerned.top/imj/kurses/b10.png"
+            alt=""
+            width="60px"
+          />
+          <img
+            src="https://www.lerned.top/imj/kurses/b11.png"
+            alt=""
+            width="60px"
+          />
+                  
         </div>
         <div className="technology">
           <img
@@ -147,6 +141,27 @@ const AboutUs = () => {
           />
           
         </div>
+        <h3 className="modalComponentTitle">Unser Team</h3>
+        <div className="row">
+          {members?.team.map((item) => (
+            <div key={uid()} className="col-md-6 col-lg-3">
+              <div className="d-flex justify-content-around aboutMargin">
+                <Card data-bs-theme="dark" style={{ width: "15rem" }}>
+                  <Card.Img variant="top" src={item.photoUrl} />
+                  <Card.Body className="textCenter">
+                    <Card.Title>{item.name}</Card.Title>
+                    <Card.Text>{item.role}</Card.Text>
+                    <Card.Text style={{ height: "72px" }}>
+                      {item.description}
+                    </Card.Text>
+                    <Link to={item.url}>member page</Link>
+                  </Card.Body>
+                </Card>
+              </div>
+            </div>
+          ))}
+        </div>
+        
       </div>
     </>
   );
