@@ -110,7 +110,7 @@ const ContactUs = () => {
                             <div className="contact-icon d-flex justify-content-center"><FontAwesomeIcon icon={faLocationDot} /></div>
                             <div className="contact-text">
                                 <span>Adresse</span>
-                                <a href="https://maps.app.goo.gl/ivcTYdP5QQ8rjyqJ6" target="_blank">Georgenstraße 35, 10117 Berlin</a>
+                                <span>Berlin</span>
                             </div>
                         </div>
                     </div>
