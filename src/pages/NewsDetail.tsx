@@ -36,15 +36,16 @@ const NewsDetail: FC = () => {
     const [updateTrigger, setUpdateTrigger] = useState(0);
     const [authError, setAuthError] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
+    const [showModalErr, setShowModalErr] = useState(false);
     const [loading, setLoading] = useState<boolean>(true);
     const [likeUser, setLikeUser] = useState<boolean>(false);
     const [dislikeUser, setDisLikeUser] = useState<boolean>(false);
-        
+
     const currentUserString = localStorage.getItem("user");
     const currentUser = currentUserString ? JSON.parse(currentUserString) : null;
     const token = currentUser ? currentUser.token : null;
 
-    
+
     useEffect(() => {
         if (id) {
             dispatch(resetSelectedNews());
@@ -55,19 +56,19 @@ const NewsDetail: FC = () => {
         dispatch(topSlice.actions.setCurrentPage(1));
     }, [dispatch, id]);
 
-  
+
     const handleReaction = async (like: boolean) => {
-       
+
         if (!currentUser) {
             setShowModal(true);
             return;
         }
         let liked = false;
         let disliked = false;
-        
-        if(like){
-             liked = !reaction.like;
-        } else 
+
+        if (like) {
+            liked = !reaction.like;
+        } else
             disliked = !reaction?.dislike;
         try {
             await dispatch(fetchPutReaction({ newsId: Number(id), liked, disliked }));
@@ -125,8 +126,13 @@ const NewsDetail: FC = () => {
             setShowModal(true);
             return;
         }
-        if (!comment.trim()) {
-            setCommentError("Der Kommentar darf nicht leer sein.");
+        // if (!comment.trim()) {
+        //     setCommentError("Der Kommentar darf nicht leer sein.");
+        //     return;
+        // }
+        if (comment.trim().length < 4) {
+            setCommentError("Der Kommentar darf nicht leer und mindestens 4 Zeichen lang sein.");
+            setShowModalErr(true);
             return;
         }
         if (id) {
@@ -134,7 +140,7 @@ const NewsDetail: FC = () => {
                 await dispatch(addComment({ newsId: Number(id), comment })).unwrap();
                 setComment("");
                 setCommentError(null);
-               
+
             } catch (error) {
                 console.error("Fehler beim Hinzufügen des Kommentars:", error);
                 setCommentError("Failed to add comment");
@@ -151,27 +157,27 @@ const NewsDetail: FC = () => {
         <section className='news-detail'>
             <div className='container'>
                 {status === "loading" && (
-                   <Spinner show={loading} color="red" />
+                    <Spinner show={loading} color="red" />
                 )}
                 {status === 'success' && newsItem && (
                     <div>
-                        {authError && <p className="error">{authError}</p>}
+                        {/* {authError && <p className="error">{authError}</p>} */}
                         <div className='newsItem_content'>
                             <img width='100%' src={newsItem.titleImageWide} alt={newsItem.title} />
                             <div className='newsItem-content p-4'>
                                 <h1 className='newsItem-title'>{newsItem.title}</h1>
                                 <div className='news-meta d-flex align-items-center my-4'>
                                     <p className='m-0'><FontAwesomeIcon icon={faClock} /> {formatDate(newsItem.date)}</p>
-                                    <button className={ reaction.like ?'activity_sm_block_reacted' :'activity_sm_block'} onClick={() => handleReaction(true)}>
+                                    <button className={reaction.like ? 'activity_sm_block_reacted' : 'activity_sm_block'} onClick={() => handleReaction(true)}>
                                         <FontAwesomeIcon icon={faThumbsUp} />
                                         <span className='activity_counter'> {reaction.likeCount}</span>
                                     </button>
-                                    <button className={ reaction.dislike ?'activity_sm_block_reacted' :'activity_sm_block'} onClick={() => handleReaction(false)}>
+                                    <button className={reaction.dislike ? 'activity_sm_block_reacted' : 'activity_sm_block'} onClick={() => handleReaction(false)}>
                                         <FontAwesomeIcon icon={faThumbsDown} /><span className='activity_counter'> {reaction.dislikeCount}</span>
                                     </button>
                                     <span><FontAwesomeIcon icon={faComment} /> {comments.length}</span>
                                 </div>
-                                {authError && <p className="error">{authError}</p>}
+                                {/* {authError && <p className="error">{authError}</p>} */}
                                 <div dangerouslySetInnerHTML={{ __html: newsItem.content }}></div>
                             </div>
 
@@ -202,8 +208,8 @@ const NewsDetail: FC = () => {
                                         className=' form-input'
                                     />
                                 </div>
-                                {commentError && <p className="error">{commentError}</p>}
-                                {statusAdd === 'loading' ?  <Spinner show={loading} color="red" /> :
+                                {/* {commentError && <p className="error">{commentError}</p>} */}
+                                {statusAdd === 'loading' ? <Spinner show={loading} color="red" /> :
                                     <button type='submit' className='submit-btn' disabled={submitting} onClick={handleAddComment}>
                                         {submitting ? 'Einreichen...' : 'Hinzufügen'}
                                     </button>}
@@ -238,10 +244,10 @@ const NewsDetail: FC = () => {
                                                     </div>
                                                     <div className='btns-bottom'>
                                                         <button type='submit' className='submit-btn'>
-                                                        ändern
+                                                            ändern
                                                         </button>
                                                         <button type='button' className='submit-btn' onClick={handleCancelEdit}>
-                                                        ABBRECHEN
+                                                            ABBRECHEN
                                                         </button>
                                                     </div>
                                                 </form>
@@ -264,6 +270,13 @@ const NewsDetail: FC = () => {
                         title="Anmeldung erforderlich"
                         content="Dieser Vorgang kann nur von einem angemeldeten Benutzer durchgeführt werden. Bitte melden Sie sich bei Ihrem Konto an."
                         onClose={() => setShowModal(false)}
+                    />
+                )}
+                {showModalErr && commentError && (
+                    <Modal
+                        title="Fehler"
+                        content={commentError}
+                        onClose={() => setShowModalErr(false)}
                     />
                 )}
             </div>
