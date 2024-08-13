@@ -52,3 +52,82 @@ body {
   color: white;
 }
 
+@media (max-width: 768px) {
+  .form {
+    width: 95%;
+    margin: 20px auto;
+    padding: 15px;
+  }
+
+  .form-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .form-group button {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .input-group-text {
+    padding: 5px;
+  }
+
+  .form-group {
+    margin-top: 10px;
+  }
+
+  .form-control {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+}
+
+/* Медиазапросы для экранов шириной до 480 пикселей */
+@media (max-width: 480px) {
+  .form-header h1 {
+    font-size: 1.2rem;
+  }
+
+  .form-content {
+    padding: 10px;
+  }
+  
+  .form {
+    padding: 10px;
+  }
+}
+
+/* Медиазапросы для экранов шириной до 360 пикселей */
+@media (max-width: 360px) {
+  .form {
+    width: 100%;
+    margin: 10px auto;
+    padding: 10px;
+  }
+
+  .form-header h1 {
+    font-size: 1rem;
+  }
+
+  .form-group {
+    margin-top: 8px;
+  }
+
+  .form-control {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+
+  .form-group button {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .input-group-text {
+    padding: 4px;
+  }
+
+  .errorLoginMessage {
+    font-size: 0.8rem;
+  }
+}

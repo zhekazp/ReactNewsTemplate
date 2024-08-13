@@ -22,7 +22,7 @@ main{
   min-height: calc(100vh - 440px);
 }
 .topBlock {
-  background-color: #ff0000;
+  background-color: #700700;
   width: 100%;
   color: white;
   height: 55px;
