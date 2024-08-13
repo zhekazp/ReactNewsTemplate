@@ -41,6 +41,10 @@ const NewsDetail: FC = () => {
     const currentUser = currentUserString ? JSON.parse(currentUserString) : null;
     const token = currentUser ? currentUser.token : null;
 
+    const [likes, setLikes] = useState<number>(newsItem?.likeCount || 0);
+    const [dislikes, setDislikes] = useState<number>(newsItem?.dislikeCount || 0);
+    const [userReaction, setUserReaction] = useState<'like' | 'dislike' | null>(null);
+
     const [localCommentsCount, setLocalCommentsCount] = useState<number | null>(null);
 
     useEffect(() => {
@@ -49,27 +53,68 @@ const NewsDetail: FC = () => {
             dispatch(fetchComments(Number(id)));
         }
         dispatch(topSlice.actions.setCurrentPage(1));
-    }, [dispatch, id, updateTrigger]);
+    }, [dispatch, id]);
 
     useEffect(() => {
         if (newsItem) {
             setLocalCommentsCount(newsItem.commentsCount); // начальное значение счестчика комментариев
+            setLikes(newsItem.likeCount); // Обновляем количество лайков из данных
+            setDislikes(newsItem.dislikeCount);
         }
     }, [newsItem]);
 
-    const handleReaction = async (liked: boolean, disliked: boolean) => {
+    // const handleReaction = async (liked: boolean, disliked: boolean) => {
+    //     if (!currentUser) {
+    //         setShowModal(true);
+    //         return;
+    //     }
+    //     try {
+    //         await dispatch(fetchPutReaction({ newsId: Number(id), liked, disliked }));
+    //     } catch (error) {
+    //         setAuthError(
+    //             "Error to send reaction"
+    //         );
+    //     }
+    // };
+    const handleReaction = async (reactionType: 'like' | 'dislike') => {
+        console.log(`Handling reaction: ${reactionType}`);
         if (!currentUser) {
             setShowModal(true);
             return;
         }
         try {
-            await dispatch(fetchPutReaction({ newsId: Number(id), liked, disliked }));
+            let liked = reactionType === 'like';
+            let disliked = reactionType === 'dislike';
+            console.log(`Liked: ${liked}, Disliked: ${disliked}`);
+            if ((reactionType === 'like' && userReaction === 'like') ||
+                (reactionType === 'dislike' && userReaction === 'dislike')) {
+                liked = false;
+                disliked = false;
+            }
+            const response = await dispatch(fetchPutReaction({ newsId: Number(id), liked, disliked })).unwrap();
+            console.log('Server response:', response);
+            // Обновляем состояние на основе реакции
+            if (reactionType === 'like') {
+                console.log(`Current userReaction: ${userReaction}`);
+                setLikes(likes + (userReaction === 'like' ? -1 : 1));
+                setDislikes(dislikes - (userReaction === 'dislike' ? 1 : 0));
+                setUserReaction(userReaction === 'like' ? null : 'like');
+                console.log(`Updated likes: ${likes}, dislikes: ${dislikes}, userReaction: ${userReaction}`);
+
+            } else {
+                console.log(`Current userReaction: ${userReaction}`);
+                setDislikes(dislikes + (userReaction === 'dislike' ? -1 : 1));
+                setLikes(likes - (userReaction === 'like' ? 1 : 0));
+                setUserReaction(userReaction === 'dislike' ? null : 'dislike');
+                console.log(`Updated dislikes: ${dislikes}, likes: ${likes}, userReaction: ${userReaction}`);
+
+            }
         } catch (error) {
-            setAuthError(
-                "Error to send reaction"
-            );
+            setAuthError("Error to send reaction");
+            console.error("Error to send reaction:", error);
         }
     };
+
     const handleEditComment = (id: number, comment: string) => {
         setEditingCommentId(id);
         setEditedComment(comment);
@@ -98,8 +143,8 @@ const NewsDetail: FC = () => {
             return;
         }
         if (editingCommentId !== null) {
-            console.log("Editing Comment ID:", editingCommentId); // Логирование ID комментария
-            console.log("Edited Comment:", editedComment);
+            // console.log("Editing Comment ID:", editingCommentId); // Логирование ID комментария
+            // console.log("Edited Comment:", editedComment);
             try {
                 await dispatch(editComment({ id: editingCommentId, comment: editedComment, newsId: Number(id) })).unwrap();
                 setEditingCommentId(null); // Close the edit form
@@ -150,7 +195,7 @@ const NewsDetail: FC = () => {
         <section className='news-detail'>
             <div className='container'>
                 {status === "loading" && (
-                   <Spinner show={loading} color="red" />
+                    <Spinner show={loading} color="red" />
                 )}
                 {status === 'success' && newsItem && (
                     <div>
@@ -161,10 +206,10 @@ const NewsDetail: FC = () => {
                                 <h1 className='newsItem-title'>{newsItem.title}</h1>
                                 <div className='news-meta d-flex align-items-center my-4'>
                                     <p className='m-0'><FontAwesomeIcon icon={faClock} /> {formatDate(newsItem.date)}</p>
-                                    <button className='activity_sm_block' onClick={() => handleReaction(true, false)}>
+                                    <button className='activity_sm_block' onClick={() => handleReaction('like')}>
                                         <FontAwesomeIcon icon={faThumbsUp} /><span className='activity_counter'> {newsItem.likeCount}</span>
                                     </button>
-                                    <button className='activity_sm_block' onClick={() => handleReaction(false, true)}>
+                                    <button className='activity_sm_block' onClick={() => handleReaction('dislike')}>
                                         <FontAwesomeIcon icon={faThumbsDown} /><span className='activity_counter'> {newsItem.dislikeCount}</span>
                                     </button>
                                     <span><FontAwesomeIcon icon={faComment} /> {localCommentsCount}</span>
@@ -201,7 +246,7 @@ const NewsDetail: FC = () => {
                                     />
                                 </div>
                                 {commentError && <p className="error">{commentError}</p>}
-                                {statusAdd === 'loading' ?  <Spinner show={loading} color="red" /> :
+                                {statusAdd === 'loading' ? <Spinner show={loading} color="red" /> :
                                     <button type='submit' className='submit-btn' disabled={submitting} onClick={handleAddComment}>
                                         {submitting ? 'Einreichen...' : 'Hinzufügen'}
                                     </button>}
@@ -237,10 +282,10 @@ const NewsDetail: FC = () => {
                                                     </div>
                                                     <div className='btns-bottom'>
                                                         <button type='submit' className='submit-btn'>
-                                                        ändern
+                                                            ändern
                                                         </button>
                                                         <button type='button' className='submit-btn' onClick={handleCancelEdit}>
-                                                        ABBRECHEN
+                                                            ABBRECHEN
                                                         </button>
                                                     </div>
                                                 </form>

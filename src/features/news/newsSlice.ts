@@ -65,6 +65,8 @@ export const fetchNewsById = createAsyncThunk<INewsItem, number, { state: RootSt
 );
 export const fetchPutReaction = createAsyncThunk<ReactionResponse, ReactionPayload, { state: RootState }>(
     'news/fetchPutReaction', async (payload, { rejectWithValue, dispatch }) => {
+        // console.log(`Sending PUT request for newsId: ${newsId}, liked: ${liked}, disliked: ${disliked}`);
+
         try {
             const { newsId, liked, disliked } = payload;
             const response = await authorizedFetch(`/api/news/reaction`, {
@@ -78,6 +80,7 @@ export const fetchPutReaction = createAsyncThunk<ReactionResponse, ReactionPaylo
             }
             //  return response;
             const responseData = await response.json();
+            console.log('Server response data:', responseData);
             await dispatch(fetchNewsById(newsId));
             return responseData;
         } catch (error) {
