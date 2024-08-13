@@ -44,8 +44,7 @@ const NewsDetail: FC = () => {
     const currentUser = currentUserString ? JSON.parse(currentUserString) : null;
     const token = currentUser ? currentUser.token : null;
 
-    const [localCommentsCount, setLocalCommentsCount] = useState<number | null>(null);
-
+    
     useEffect(() => {
         if (id) {
             dispatch(fetchNewsById(Number(id)));
@@ -54,12 +53,7 @@ const NewsDetail: FC = () => {
         dispatch(topSlice.actions.setCurrentPage(1));
     }, [dispatch, id, updateTrigger]);
 
-    useEffect(() => {
-        if (newsItem) {
-            setLocalCommentsCount(newsItem.commentsCount); // начальное значение счестчика комментариев
-        }
-    }, [newsItem]);
-
+  
     const handleReaction = async (like: boolean) => {
        
         if (!currentUser) {
@@ -138,10 +132,7 @@ const NewsDetail: FC = () => {
                 await dispatch(addComment({ newsId: Number(id), comment })).unwrap();
                 setComment("");
                 setCommentError(null);
-                if (localCommentsCount !== null) {
-                    setLocalCommentsCount(localCommentsCount + 1);
-                }
-                // setUpdateTrigger((prev) => prev + 1);
+               
             } catch (error) {
                 console.error("Fehler beim Hinzufügen des Kommentars:", error);
                 setCommentError("Failed to add comment");
@@ -176,7 +167,7 @@ const NewsDetail: FC = () => {
                                     <button className={ reaction.dislike ?'activity_sm_block_reacted' :'activity_sm_block'} onClick={() => handleReaction(false)}>
                                         <FontAwesomeIcon icon={faThumbsDown} /><span className='activity_counter'> {reaction.dislikeCount}</span>
                                     </button>
-                                    <span><FontAwesomeIcon icon={faComment} /> {localCommentsCount}</span>
+                                    <span><FontAwesomeIcon icon={faComment} /> {comments.length}</span>
                                 </div>
                                 {authError && <p className="error">{authError}</p>}
                                 <div dangerouslySetInnerHTML={{ __html: newsItem.content }}></div>
