@@ -79,7 +79,7 @@ const AnzeigeList: React.FC = () => {
           (!searchRegion || product.region.regionName === searchRegion)
       );
       setFilteredProducts(filtered);
-      setFilteredPage(0); // сброс фильтров
+      setFilteredPage(0); 
     }
   }, [products, isFiltering, searchName, searchCategory, searchRegion]);
 
@@ -123,6 +123,7 @@ const AnzeigeList: React.FC = () => {
       setSearchCategory("");
       setSearchRegion("");
     } else {
+      setIsFiltering(true);
       setSearchName(name);
       setSearchCategory(category);
       setSearchRegion(region);
