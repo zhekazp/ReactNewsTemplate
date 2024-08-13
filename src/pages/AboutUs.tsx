@@ -97,11 +97,6 @@ const AboutUs = () => {
             width="60px"
           />
           <img
-            src="https://www.lerned.top/imj/kurses/b10.png"
-            alt=""
-            width="60px"
-          />
-          <img
             src="https://www.lerned.top/imj/kurses/b11.png"
             alt=""
             width="60px"
