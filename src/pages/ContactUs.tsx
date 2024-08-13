@@ -13,15 +13,16 @@ interface Errors {
     contactName?: string;
     contactEmail?: string;
     contactMessage?: string;
-    recaptcha?: string;
 }
 
 const ContactUs = () => {
-    const { form, status, errorMessage  } = useSelector((state: RootState) => state.contactForm);
+    const { form, status} = useSelector((state: RootState) => state.contactForm);
     const dispatch: AppDispatch = useDispatch();
     const [showModal, setShowModal] = useState(false);
+    const [showModalErr, setShowModalErr] = useState(false);
 
     const [errors, setErrors] = useState<Errors>({});
+    const [errorMessage, setErrorMessage] = useState<string>("");
 
     // const recaptchaRef = React.createRef<ReCAPTCHA>();
 
@@ -32,19 +33,19 @@ const ContactUs = () => {
             contactMessage: ""
         };
         if (!form.contactName.trim()) {
-            newErrors.contactName = "Name is required and cannot be empty";
+            newErrors.contactName = "Name ist erforderlich und darf nicht leer sein.";
         } else if (!/^[a-zA-Z\s]+$/.test(form.contactName)) {
-            newErrors.contactName = "Name can only contain letters and spaces";
+            newErrors.contactName = "Name darf nur Buchstaben und Leerzeichen enthalten.";
         }
         if (!form.contactEmail.trim()) {
-            newErrors.contactEmail = "Email is required and cannot be empty";
+            newErrors.contactEmail = "E-Mail ist erforderlich und darf nicht leer sein";
         } else if (!/\S+@\S+\.\S+/.test(form.contactEmail)) {
-            newErrors.contactEmail = "Email must be a valid email address";
+            newErrors.contactEmail = "E-Mail muss eine gültige E-Mail-Adresse sein.";
         }
         if (!form.contactMessage.trim()) {
-            newErrors.contactMessage = "Message is required and cannot be empty";
+            newErrors.contactMessage = "Nachricht ist erforderlich und darf nicht leer sein.";
         } else if (form.contactMessage.length > 500) {
-            newErrors.contactMessage = "Message cannot exceed 500 characters";
+            newErrors.contactMessage = "Nachricht darf 500 Zeichen nicht überschreiten.";
         }
         return newErrors;
     }
@@ -60,17 +61,22 @@ const ContactUs = () => {
         e.preventDefault();
 
         const validationErrors = validateForm();
-        console.log('Validation Errors:', validationErrors);
+        // console.log('Validation Errors:', validationErrors);
+        setErrors(validationErrors);
 
-        // if (Object.keys(validationErrors).length > 0) { 
-        //     setErrors(validationErrors); 
-        //     return;
-        // }
-        console.log('Form Data to be Sent:', form);
+        const errorMessages = Object.values(validationErrors).filter(Boolean).join("\n");
+
+        if (errorMessages) {
+            setErrorMessage(errorMessages);
+            setShowModalErr(true);
+            return;
+        }
+
+        // console.log('Form Data to be Sent:', form);
         try {
-            console.log('Dispatching sendForm with data:', form);
+            // console.log('Dispatching sendForm with data:', form);
             await dispatch(sendForm(form)).unwrap();
-            console.log('Form sent successfully');
+            // console.log('Form sent successfully');
             setShowModal(true);
             dispatch(clearForm());
         } catch (error) {
@@ -121,18 +127,18 @@ const ContactUs = () => {
                         <div className="row">
                             <label className="col-lg-6" htmlFor="contactName">
                                 <input type="text" className="form-input" required value={form.contactName} name='contactName' onChange={handleInputChange} placeholder='Geben Sie Ihren Namen ein' />
-                                {errors.contactName && <div className="error">{errors.contactName}</div>}
+                                {/* {errors.contactName && <div className="error">{errors.contactName}</div>} */}
                             </label>
                             <label className="col-lg-6" htmlFor="contactEmail">
                                 <input type="text" className="form-input" required value={form.contactEmail} name='contactEmail' onChange={handleInputChange} placeholder='Geben Sie Ihre E-Mail-Adresse ein' />
-                                {errors.contactEmail && <div className="error">{errors.contactEmail}</div>}
+                                {/* {errors.contactEmail && <div className="error">{errors.contactEmail}</div>} */}
                             </label>
                         </div>
                         <label className="col-12" htmlFor="contactMessage">
                             <textarea value={form.contactMessage} name='contactMessage' required className="form-input" onChange={handleInputChange} placeholder='Geben Sie Ihre Nachricht ein'></textarea>
-                            {errors.contactMessage && <div className="error">{errors.contactMessage}</div>}
+                            {/* {errors.contactMessage && <div className="error">{errors.contactMessage}</div>} */}
                         </label>
-                        
+
 
                         <button type="submit" className="submit-btn">
                             {status === 'loading' ? 'Sendung...' : 'Senden'}
@@ -146,6 +152,13 @@ const ContactUs = () => {
                         title=""
                         content="Danke, dass Du uns geschrieben hast! Wir setzen uns so schnell wie möglich mit Dir in Verbindung."
                         onClose={() => setShowModal(false)}
+                    />
+                )}
+                {showModalErr && (
+                    <Modal
+                        title="Fehler"
+                        content={errorMessage}
+                        onClose={() => setShowModalErr(false)}
                     />
                 )}
             </div>
