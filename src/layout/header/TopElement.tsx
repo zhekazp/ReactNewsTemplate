@@ -26,6 +26,8 @@ const TopElement: FC = () => {
       authorized: false}));
       localStorage.removeItem("role");
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      location.reload();
     }
   return (
     <div className="topBlock">

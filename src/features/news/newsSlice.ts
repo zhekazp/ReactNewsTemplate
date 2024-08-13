@@ -10,7 +10,6 @@ import {
   INewsItem,
   INewsItemFullPage,
   initialNewsState,
-  initialReaction,
   IRegionsResponse,
   ISectionResponse,
   NewsResponse,
@@ -72,12 +71,7 @@ export const fetchNewsById = createAsyncThunk<
         Authorization: token,
       },
     });
-    console.log("Full API response:", response);
-    console.log("Blog data:", response.data);
-    console.log(
-      "isPublishedByCurrentUser:",
-      response.data.isPublishedByCurrentUser
-    );
+    
     return response.data;
   } catch (error) {
     console.error("Error in fetchBlogById:", error);
@@ -128,16 +122,7 @@ export const fetchComments = createAsyncThunk<
         },
       }
     );
-    console.log("Full API response from Comments:", response);
-    console.log("Blog data from Comments:", response.data);
-    response.data.forEach((comment) => {
-      console.log(
-        "Comment ID:",
-        comment.id,
-        "isPublishedByCurrentUser:",
-        comment.isPublishedByCurrentUser
-      );
-    });
+
 
     return { comments: response.data };
   } catch (error) {
@@ -200,8 +185,7 @@ export const addComment = createAsyncThunk<
   "news/addComment",
   async (commentData: INewsCommentRequest, { rejectWithValue, dispatch }) => {
     try {
-      console.log("Sending to API:", commentData);
-      const response = await authorizedFetch(`/api/news/comment`, {
+     const response = await authorizedFetch(`/api/news/comment`, {
         method: "POST",
         body: JSON.stringify(commentData),
         headers: { "Content-Type": "application/json" },
@@ -349,10 +333,14 @@ const newsSlice = createSlice({
         console.error("Failed to fetch news:", action.error.message);
       })
       .addCase(fetchNewsById.pending, (state) => {
+        if(firstTime){
         state.status = "loading";
+        }
       })
       .addCase(fetchNewsById.fulfilled, (state, action) => {
         state.status = "success";
+        
+        
         if (firstTime) {
           state.selectedNews = action.payload;
         }
@@ -385,11 +373,13 @@ const newsSlice = createSlice({
         );
       })
       .addCase(fetchPutReaction.pending, (state) => {
-        state.status = "loading";
+        //state.status = "loading";
       })
       .addCase(fetchPutReaction.fulfilled, (state, action) => {
-        state.status = "success";
+       // state.status = "success";
         state.message = action.payload.message;
+       
+        
       })
       .addCase(fetchPutReaction.rejected, (state, action) => {
         state.status = "error";

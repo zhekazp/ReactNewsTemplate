@@ -61,6 +61,7 @@ const NewsDetail: FC = () => {
     }, [newsItem]);
 
     const handleReaction = async (like: boolean) => {
+       
         if (!currentUser) {
             setShowModal(true);
             return;
@@ -108,8 +109,6 @@ const NewsDetail: FC = () => {
             return;
         }
         if (editingCommentId !== null) {
-            console.log("Editing Comment ID:", editingCommentId); // Логирование ID комментария
-            console.log("Edited Comment:", editedComment);
             try {
                 await dispatch(editComment({ id: editingCommentId, comment: editedComment, newsId: Number(id) })).unwrap();
                 setEditingCommentId(null); // Close the edit form
@@ -136,7 +135,6 @@ const NewsDetail: FC = () => {
         }
         if (id) {
             try {
-                console.log("Sending comment data:", { newsId: Number(id), comment });
                 await dispatch(addComment({ newsId: Number(id), comment })).unwrap();
                 setComment("");
                 setCommentError(null);
@@ -223,7 +221,6 @@ const NewsDetail: FC = () => {
                                     <></>
                                 }
                                 {comments.slice().reverse().map(comment => {
-                                    console.log("isPublishedByCurrentUser:", comment.isPublishedByCurrentUser);
                                     return (
                                         <div key={comment.id} className="comment">
                                             <div className='comment-header d-flex justify-content-between'><strong>{comment.authorName}</strong>
