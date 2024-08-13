@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { AppDispatch, RootState } from '../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { addComment, deleteComment, editComment, fetchComments, fetchNewsById, fetchPutReaction, formatDate } from '../features/news/newsSlice';
+import { addComment, deleteComment, editComment, fetchComments, fetchNewsById, fetchPutReaction, formatDate, resetSelectedNews, setFirstTimeFalse } from '../features/news/newsSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faComment, faPenToSquare, faThumbsDown, faThumbsUp, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { topSlice } from '../layout/header/topElSlice';
@@ -47,11 +47,13 @@ const NewsDetail: FC = () => {
     
     useEffect(() => {
         if (id) {
+            dispatch(resetSelectedNews());
+            dispatch(setFirstTimeFalse());
             dispatch(fetchNewsById(Number(id)));
             dispatch(fetchComments(Number(id)));
         }
         dispatch(topSlice.actions.setCurrentPage(1));
-    }, [dispatch, id, updateTrigger]);
+    }, [dispatch, id]);
 
   
     const handleReaction = async (like: boolean) => {
@@ -239,7 +241,7 @@ const NewsDetail: FC = () => {
                                                         ändern
                                                         </button>
                                                         <button type='button' className='submit-btn' onClick={handleCancelEdit}>
-                                                            Löschen
+                                                        ABBRECHEN
                                                         </button>
                                                     </div>
                                                 </form>

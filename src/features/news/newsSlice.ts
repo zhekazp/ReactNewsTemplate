@@ -33,6 +33,7 @@ const initialState: initialNewsState = {
   sections: [],
   regions: [],
   reaction: { like: false, dislike: false, likeCount: 0, dislikeCount: 0 },
+  firstTime: true
 };
 
 let firstTime = true;
@@ -302,7 +303,14 @@ export const deleteComment = createAsyncThunk(
 const newsSlice = createSlice({
   name: "news",
   initialState,
-  reducers: {},
+  reducers: {
+    setFirstTimeFalse(state) {
+      state.firstTime = false;
+    },
+    resetSelectedNews(state) {
+      state.selectedNews = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchNews.pending, (state) => {
@@ -343,6 +351,9 @@ const newsSlice = createSlice({
         
         if (firstTime) {
           state.selectedNews = action.payload;
+          state.firstTime = false;
+        } else {
+          state.selectedNews = action.payload; // Обновляем данные при переходе на другую новость
         }
         firstTime = false;
         state.reaction.like = action.payload.like;
@@ -460,4 +471,5 @@ const newsSlice = createSlice({
   },
 });
 
+export const { setFirstTimeFalse, resetSelectedNews } = newsSlice.actions;
 export default newsSlice.reducer;

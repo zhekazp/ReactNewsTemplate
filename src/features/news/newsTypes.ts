@@ -61,6 +61,7 @@ export interface initialNewsState {
     sections: string[];
     regions: string[];
     reaction: userReaction;
+    firstTime: boolean;
 }
 
 export interface userReaction {
