@@ -50,6 +50,7 @@ export interface initialNewsState {
     newsStk: INewsItemFullPage | null;
     status: 'idle' | "loading" | "success" | "error";
     statusCommentAdding: 'idle' | "loading" | "success" | "error";
+    statusReactionAdding: 'idle' | "loading" | "success" | "error";
     selectedNews: INewsItem | null;
     pageCount: number;
     error: string | null;

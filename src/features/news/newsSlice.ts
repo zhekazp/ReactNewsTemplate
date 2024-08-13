@@ -11,6 +11,7 @@ const initialState: initialNewsState = {
     newsStk: null,
     status: 'idle',
     statusCommentAdding: 'idle',
+    statusReactionAdding: 'idle',
     selectedNews: null,
     pageCount: 0,
     error: null,
@@ -65,8 +66,6 @@ export const fetchNewsById = createAsyncThunk<INewsItem, number, { state: RootSt
 );
 export const fetchPutReaction = createAsyncThunk<ReactionResponse, ReactionPayload, { state: RootState }>(
     'news/fetchPutReaction', async (payload, { rejectWithValue, dispatch }) => {
-        // console.log(`Sending PUT request for newsId: ${newsId}, liked: ${liked}, disliked: ${disliked}`);
-
         try {
             const { newsId, liked, disliked } = payload;
             const response = await authorizedFetch(`/api/news/reaction`, {
@@ -139,30 +138,6 @@ export const fetchRegions = createAsyncThunk<IRegionsResponse[], void, { state: 
         }
     }
 );
-// export const addComment = createAsyncThunk<
-//   { message: string; comment?: IComment },
-//   INewsCommentRequest,
-//   { rejectValue: { message: string } }
-// >(
-//   'news/addComment',
-//   async (commentData, { rejectWithValue }) => {
-//     try {
-//       const response = await authorizedFetch(`/api/news/comment`, {
-//         method: 'POST',
-//         body: JSON.stringify(commentData),
-//         headers: { 'Content-Type': 'application/json' },
-//       });
-
-//       if (!response.ok) {
-//         const data = await response.json();
-//         return rejectWithValue({ message: data.message || 'Failed to add comment' });
-//       }
-//       return data;
-//     } catch (error: any) {
-//       return rejectWithValue({ message: error.message });
-//     }
-//   }
-// );
 export const addComment = createAsyncThunk<AddCommentResponse, INewsCommentRequest, { state: RootState }>(
     'news/addComment',
     async (commentData: INewsCommentRequest, { rejectWithValue, dispatch }) => {
@@ -247,37 +222,6 @@ export const deleteComment = createAsyncThunk(
         }
     }
 );
-// export const deleteComment = createAsyncThunk<void, { commentId: number }, { state: RootState }>(
-//     'news/deleteComment', async ({ commentId }, { rejectWithValue }) => {
-//         // await axios.delete(`/api/news/comment`, { data: { commentId } });
-//         // return { commentId };
-//         try {
-//             const response = await authorizedFetch(`/api/news/comment`, {
-//                 method: 'DELETE',
-//                 headers: { 'Content-Type': 'application/json' },
-//                 body: JSON.stringify({ commentId }),
-//             });
-//             if (!response.ok) {
-//                 throw new Error('Failed to delete comment');
-//             }
-//             return {commentId};
-//         } catch (error) {
-//             return rejectWithValue(error.message);
-//         }
-//     }
-// );
-// export const fetchRegionsBySection = createAsyncThunk<
-// NewsResponse,
-//     { sectionName: string; regionName: string },
-//     { state: RootState }
-// >(
-//     'news/fetchRegionsBySection', async ({ sectionName, regionName }) => {
-//         const data = (await axios.get<NewsResponse[]>(`/api/news/findBy?page=0&section=${sectionName}&region=${regionName}`)).data;
-//         return data;
-//     }
-// );
-
-
 const newsSlice = createSlice({
     name: 'news',
     initialState,
@@ -339,15 +283,18 @@ const newsSlice = createSlice({
                 console.error("Failed to fetch comments by newsID::", action.error.message);
             })
             .addCase(fetchPutReaction.pending, (state) => {
-                state.status = 'loading';
+                // state.status = 'loading';
+                state.statusReactionAdding = 'loading';
             })
             .addCase(fetchPutReaction.fulfilled, (state, action) => {
-                state.status = 'success';
-                state.message = action.payload.message;
+                state.statusReactionAdding = 'success';
+                // state.message = action.payload.message;
             })
             .addCase(fetchPutReaction.rejected, (state, action) => {
-                state.status = 'error';
+                state.statusReactionAdding = 'error';
+                state.error = action.error.message || null;
                 console.error('Failed to put reaction:', action.error.message);
+                // console.error('Failed to put reaction:', action.error.message);
             })
             .addCase(fetchFilteredNews.pending, (state) => {
                 state.status = 'loading';

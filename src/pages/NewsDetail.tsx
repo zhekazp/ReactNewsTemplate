@@ -21,6 +21,7 @@ const NewsDetail: FC = () => {
     const newsItem = useSelector((state: RootState) => state.news.selectedNews);
     const status = useSelector((state: RootState) => state.news.status);
     const statusAdd = useSelector((state: RootState) => state.news.statusCommentAdding);
+    const statusReactionAdd = useSelector((state: RootState) => state.news.statusReactionAdding);
 
 
 
@@ -119,19 +120,9 @@ const NewsDetail: FC = () => {
         setEditingCommentId(id);
         setEditedComment(comment);
     };
-
-    // const handleDeleteComment = async (commentId: number) => {
-    //     try {
-    //         await dispatch(deleteComment({ commentId })).unwrap();
-    //         setUpdateTrigger((prev) => prev + 1);
-    //     } catch (error) {
-    //         console.error("Failed to delete comment:", error);
-    //     }
-    // };
     const handleDeleteComment = async (commentId: number) => {
         try {
             await dispatch(deleteComment(commentId)).unwrap();
-            // setUpdateTrigger((prev) => prev + 1);
         } catch (error) {
             console.error("Failed to delete comment:", error);
         }
@@ -206,15 +197,18 @@ const NewsDetail: FC = () => {
                                 <h1 className='newsItem-title'>{newsItem.title}</h1>
                                 <div className='news-meta d-flex align-items-center my-4'>
                                     <p className='m-0'><FontAwesomeIcon icon={faClock} /> {formatDate(newsItem.date)}</p>
+                                    {statusReactionAdd === 'loading' ?( <Spinner show={loading} color="red" />) :
+                                    (<>
                                     <button className='activity_sm_block' onClick={() => handleReaction('like')}>
-                                        <FontAwesomeIcon icon={faThumbsUp} /><span className='activity_counter'> {newsItem.likeCount}</span>
-                                    </button>
-                                    <button className='activity_sm_block' onClick={() => handleReaction('dislike')}>
-                                        <FontAwesomeIcon icon={faThumbsDown} /><span className='activity_counter'> {newsItem.dislikeCount}</span>
-                                    </button>
+                                    <FontAwesomeIcon icon={faThumbsUp} /><span className='activity_counter'> {newsItem.likeCount}</span>
+                                </button>
+                                <button className='activity_sm_block' onClick={() => handleReaction('dislike')}>
+                                    <FontAwesomeIcon icon={faThumbsDown} /><span className='activity_counter'> {newsItem.dislikeCount}</span>
+                                </button></>)}
+                                    
                                     <span><FontAwesomeIcon icon={faComment} /> {localCommentsCount}</span>
                                 </div>
-                                {authError && <p className="error">{authError}</p>}
+                                {/* {authError && <p className="error">{authError}</p>} */}
                                 <div dangerouslySetInnerHTML={{ __html: newsItem.content }}></div>
                             </div>
 
@@ -223,18 +217,6 @@ const NewsDetail: FC = () => {
 
                             <h3 className='newsTopTitle'>Kommentar hinzufügen:</h3>
                             <form className='comment-form p-4'>
-                                {/* <div className='form-group'>
-                                        <label htmlFor='authorName'>Name:</label>
-                                        <input
-                                            type='text'
-                                            id='authorName'
-                                            value={authorName}
-                                            onChange={(e) => setAuthorName(e.target.value)}
-                                            required
-                                            className='form-control'
-                                        />
-                                    </div> */}
-
                                 <div className='form-group'>
                                     <label htmlFor='comment'>Einen Kommentar hinzufügen:</label>
                                     <textarea
