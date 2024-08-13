@@ -77,44 +77,77 @@ const NewsDetail: FC = () => {
     //         );
     //     }
     // };
-    const handleReaction = async (reactionType: 'like' | 'dislike') => {
-        console.log(`Handling reaction: ${reactionType}`);
+    // const handleReaction = async (reactionType: 'like' | 'dislike') => {
+    //     console.log(`Handling reaction: ${reactionType}`);
+    //     if (!currentUser) {
+    //         setShowModal(true);
+    //         return;
+    //     }
+    //     try {
+    //         let liked = reactionType === 'like';
+    //         let disliked = reactionType === 'dislike';
+    //         console.log(`Liked: ${liked}, Disliked: ${disliked}`);
+    //         if ((reactionType === 'like' && userReaction === 'like') ||
+    //             (reactionType === 'dislike' && userReaction === 'dislike')) {
+    //             liked = false;
+    //             disliked = false;
+    //         }
+    //         const response = await dispatch(fetchPutReaction({ newsId: Number(id), liked, disliked })).unwrap();
+    //         console.log('Server response:', response);
+    //         // Обновляем состояние на основе реакции
+    //         if (reactionType === 'like') {
+    //             console.log(`Current userReaction: ${userReaction}`);
+    //             setLikes(likes + (userReaction === 'like' ? -1 : 1));
+    //             setDislikes(dislikes - (userReaction === 'dislike' ? 1 : 0));
+    //             setUserReaction(userReaction === 'like' ? null : 'like');
+    //             console.log(`Updated likes: ${likes}, dislikes: ${dislikes}, userReaction: ${userReaction}`);
+
+    //         } else {
+    //             console.log(`Current userReaction: ${userReaction}`);
+    //             setDislikes(dislikes + (userReaction === 'dislike' ? -1 : 1));
+    //             setLikes(likes - (userReaction === 'like' ? 1 : 0));
+    //             setUserReaction(userReaction === 'dislike' ? null : 'dislike');
+    //             console.log(`Updated dislikes: ${dislikes}, likes: ${likes}, userReaction: ${userReaction}`);
+
+    //         }
+    //     } catch (error) {
+    //         setAuthError("Error to send reaction");
+    //         console.error("Error to send reaction:", error);
+    //     }
+    // };
+    const handleReaction = async (like: boolean) => {
+
         if (!currentUser) {
             setShowModal(true);
             return;
         }
-        try {
-            let liked = reactionType === 'like';
-            let disliked = reactionType === 'dislike';
-            console.log(`Liked: ${liked}, Disliked: ${disliked}`);
-            if ((reactionType === 'like' && userReaction === 'like') ||
-                (reactionType === 'dislike' && userReaction === 'dislike')) {
+        let liked = false;
+        let disliked = false;
+
+        if (like) {
+            if (liked) {
                 liked = false;
+            } else {
+                liked = !liked;
                 disliked = false;
             }
-            const response = await dispatch(fetchPutReaction({ newsId: Number(id), liked, disliked })).unwrap();
-            console.log('Server response:', response);
-            // Обновляем состояние на основе реакции
-            if (reactionType === 'like') {
-                console.log(`Current userReaction: ${userReaction}`);
-                setLikes(likes + (userReaction === 'like' ? -1 : 1));
-                setDislikes(dislikes - (userReaction === 'dislike' ? 1 : 0));
-                setUserReaction(userReaction === 'like' ? null : 'like');
-                console.log(`Updated likes: ${likes}, dislikes: ${dislikes}, userReaction: ${userReaction}`);
-
+        } else{
+            if (disliked) {
+                disliked = false;
             } else {
-                console.log(`Current userReaction: ${userReaction}`);
-                setDislikes(dislikes + (userReaction === 'dislike' ? -1 : 1));
-                setLikes(likes - (userReaction === 'like' ? 1 : 0));
-                setUserReaction(userReaction === 'dislike' ? null : 'dislike');
-                console.log(`Updated dislikes: ${dislikes}, likes: ${likes}, userReaction: ${userReaction}`);
-
+                disliked = !disliked;
+                liked = false; // При установке дизлайка снимаем лайк
             }
+        }
+        try {
+            await dispatch(fetchPutReaction({ newsId: Number(id), liked, disliked }));
         } catch (error) {
-            setAuthError("Error to send reaction");
-            console.error("Error to send reaction:", error);
+            setAuthError(
+                "Error to send reaction"
+            );
         }
     };
+
 
     const handleEditComment = (id: number, comment: string) => {
         setEditingCommentId(id);
@@ -197,15 +230,15 @@ const NewsDetail: FC = () => {
                                 <h1 className='newsItem-title'>{newsItem.title}</h1>
                                 <div className='news-meta d-flex align-items-center my-4'>
                                     <p className='m-0'><FontAwesomeIcon icon={faClock} /> {formatDate(newsItem.date)}</p>
-                                    {statusReactionAdd === 'loading' ?( <Spinner show={loading} color="red" />) :
-                                    (<>
-                                    <button className='activity_sm_block' onClick={() => handleReaction('like')}>
-                                    <FontAwesomeIcon icon={faThumbsUp} /><span className='activity_counter'> {newsItem.likeCount}</span>
-                                </button>
-                                <button className='activity_sm_block' onClick={() => handleReaction('dislike')}>
-                                    <FontAwesomeIcon icon={faThumbsDown} /><span className='activity_counter'> {newsItem.dislikeCount}</span>
-                                </button></>)}
-                                    
+                                    {statusReactionAdd === 'loading' ? (<Spinner show={loading} color="red" />) :
+                                        (<>
+                                            <button className='activity_sm_block' onClick={() => handleReaction(true)}>
+                                                <FontAwesomeIcon icon={faThumbsUp} /><span className='activity_counter'> {newsItem.likeCount}</span>
+                                            </button>
+                                            <button className='activity_sm_block' onClick={() => handleReaction(false)}>
+                                                <FontAwesomeIcon icon={faThumbsDown} /><span className='activity_counter'> {newsItem.dislikeCount}</span>
+                                            </button></>)}
+
                                     <span><FontAwesomeIcon icon={faComment} /> {localCommentsCount}</span>
                                 </div>
                                 {/* {authError && <p className="error">{authError}</p>} */}
