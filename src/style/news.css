@@ -155,6 +155,24 @@ a,
     }
 }
 
+.activity_sm_block_reacted {
+    margin-left: 7px;
+    transition: .3s ease;
+   
+    &:hover {
+
+        .activity_counter,
+        svg {
+            color: rgba(255, 255, 255, 0.55);
+            transition: .3s ease;
+        }
+
+    }
+}
+
+
+
+
 .pick-block {
     position: absolute;
     top: 6px;
@@ -214,6 +232,12 @@ a,
         outline: none;
         background-color: transparent;
         color: rgba(255, 255, 255, 0.55);
+    }
+     .activity_sm_block_reacted {
+        border: none;
+        outline: none;
+        background-color: transparent;
+        color:  #ff0000;;
     }
 
     h2 {

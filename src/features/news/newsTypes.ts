@@ -13,6 +13,8 @@ export interface INewsItem {
     dislikeCount: number;
     commentsCount: number;
     isPublishedByCurrentUser: boolean;
+    like: boolean;
+    dislike:boolean;
 
 }
 export interface INewsItemFullPage extends INewsItem{
@@ -58,6 +60,14 @@ export interface initialNewsState {
     comments: IComment[];
     sections: string[];
     regions: string[];
+    reaction: userReaction;
+}
+
+export interface userReaction {
+    like: boolean;
+    dislike: boolean;
+    likeCount: number;
+    dislikeCount: number;
 }
 
 export interface IRegionsResponse {

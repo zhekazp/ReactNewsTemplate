@@ -19,6 +19,7 @@ const NewsDetail: FC = () => {
     const { id } = useParams();
 
     const newsItem = useSelector((state: RootState) => state.news.selectedNews);
+    const reaction = useSelector((state: RootState) => state.news.reaction);
     const status = useSelector((state: RootState) => state.news.status);
     const statusAdd = useSelector((state: RootState) => state.news.statusCommentAdding);
 
@@ -36,7 +37,9 @@ const NewsDetail: FC = () => {
     const [authError, setAuthError] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState<boolean>(true);
-
+    const [likeUser, setLikeUser] = useState<boolean>(false);
+    const [dislikeUser, setDisLikeUser] = useState<boolean>(false);
+        
     const currentUserString = localStorage.getItem("user");
     const currentUser = currentUserString ? JSON.parse(currentUserString) : null;
     const token = currentUser ? currentUser.token : null;
@@ -57,11 +60,18 @@ const NewsDetail: FC = () => {
         }
     }, [newsItem]);
 
-    const handleReaction = async (liked: boolean, disliked: boolean) => {
+    const handleReaction = async (like: boolean) => {
         if (!currentUser) {
             setShowModal(true);
             return;
         }
+        let liked = false;
+        let disliked = false;
+        
+        if(like){
+             liked = !reaction.like;
+        } else 
+            disliked = !reaction?.dislike;
         try {
             await dispatch(fetchPutReaction({ newsId: Number(id), liked, disliked }));
         } catch (error) {
@@ -161,11 +171,12 @@ const NewsDetail: FC = () => {
                                 <h1 className='newsItem-title'>{newsItem.title}</h1>
                                 <div className='news-meta d-flex align-items-center my-4'>
                                     <p className='m-0'><FontAwesomeIcon icon={faClock} /> {formatDate(newsItem.date)}</p>
-                                    <button className='activity_sm_block' onClick={() => handleReaction(true, false)}>
-                                        <FontAwesomeIcon icon={faThumbsUp} /><span className='activity_counter'> {newsItem.likeCount}</span>
+                                    <button className={ reaction.like ?'activity_sm_block_reacted' :'activity_sm_block'} onClick={() => handleReaction(true)}>
+                                        <FontAwesomeIcon icon={faThumbsUp} />
+                                        <span className='activity_counter'> {reaction.likeCount}</span>
                                     </button>
-                                    <button className='activity_sm_block' onClick={() => handleReaction(false, true)}>
-                                        <FontAwesomeIcon icon={faThumbsDown} /><span className='activity_counter'> {newsItem.dislikeCount}</span>
+                                    <button className={ reaction.dislike ?'activity_sm_block_reacted' :'activity_sm_block'} onClick={() => handleReaction(false)}>
+                                        <FontAwesomeIcon icon={faThumbsDown} /><span className='activity_counter'> {reaction.dislikeCount}</span>
                                     </button>
                                     <span><FontAwesomeIcon icon={faComment} /> {localCommentsCount}</span>
                                 </div>
