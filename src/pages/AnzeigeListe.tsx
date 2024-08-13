@@ -89,7 +89,7 @@ const AnzeigeList: React.FC = () => {
         name: searchName,
         category: searchCategory,
         region: searchRegion,
-        page: (filteredPage + 1).toString(), // меняет номер страницы с 0 на 1 в url
+        page: (filteredPage + 1).toString(), 
       });
     }
   }, [
@@ -155,7 +155,7 @@ const AnzeigeList: React.FC = () => {
     );
   };
 
-  // логика расчета страниц для отображения
+  
   const totalFilteredPages = Math.ceil(filteredProducts.length / PAGE_SIZE);
   const totalPagesToDisplay = isFiltering ? totalFilteredPages : totalPages;
   const currentPageToDisplay = isFiltering ? filteredPage : currentPage;
@@ -279,7 +279,7 @@ const AnzeigeList: React.FC = () => {
         <p style={{ color: "red" }}>Keine Produkte gefunden</p>
       )}
 
-      {totalPages > 1 && products.length > 0 && (
+      {status !== "error" && products.length > 0 && totalPages > 1 && (
         <ResponsivePagination
           current={currentPage + 1}
           total={totalPages}
