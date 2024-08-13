@@ -89,7 +89,7 @@ const AnzeigeList: React.FC = () => {
         name: searchName,
         category: searchCategory,
         region: searchRegion,
-        page: (filteredPage + 1).toString(), // меняет номер страницы с 0 на 1 в url
+        page: (filteredPage + 1).toString(), 
       });
     }
   }, [
@@ -155,7 +155,7 @@ const AnzeigeList: React.FC = () => {
     );
   };
 
-  // логика расчета страниц для отображения
+  
   const totalFilteredPages = Math.ceil(filteredProducts.length / PAGE_SIZE);
   const totalPagesToDisplay = isFiltering ? totalFilteredPages : totalPages;
   const currentPageToDisplay = isFiltering ? filteredPage : currentPage;
