@@ -219,7 +219,7 @@ const AnzeigeAufgeben: React.FC = () => {
 
           <div className="mb-3">
             <label htmlFor="price" className="form-label">
-              Preis
+              Preis pro Tag
             </label>
             <input
               type="number"

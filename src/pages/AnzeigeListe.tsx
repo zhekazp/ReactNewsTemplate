@@ -279,7 +279,7 @@ const AnzeigeList: React.FC = () => {
         <p style={{ color: "red" }}>Keine Produkte gefunden</p>
       )}
 
-      {totalPages > 1 && (
+      {totalPages > 1 && products.length > 0 && (
         <ResponsivePagination
           current={currentPage + 1}
           total={totalPages}
