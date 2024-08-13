@@ -21,7 +21,7 @@ const AboutUs = () => {
       .then((data: ITeam) => {
         setMembers(data);
       });
-  },[]);
+  }, []);
   return (
     <>
       <div className="container mainBlock textColorMain textCenter">
@@ -80,10 +80,76 @@ const AboutUs = () => {
             </div>
           ))}
         </div>
+        <h3 className="modalComponentTitle">Unser Technologiepaket</h3>
+        <div className="technology">
+          <img
+            src="https://www.lerned.top/imj/kurses/b1.png"
+            alt=""
+            width="60px"
+          />
+          <img
+            src="https://www.lerned.top/imj/kurses/b2.png"
+            alt=""
+            width="60px"
+          />
+          <img
+            src="https://www.lerned.top/imj/kurses/b3.png"
+            alt=""
+            width="60px"
+          />
+          <img
+            src="https://www.lerned.top/imj/kurses/b4.png"
+            alt=""
+            width="60px"
+          />
+          <img
+            src="https://www.lerned.top/imj/kurses/b5.png"
+            alt=""
+            width="60px"
+          />
+          <img
+            src="https://www.lerned.top/imj/kurses/b6.png"
+            alt=""
+            width="60px"
+          />
+          
+        </div>
+        <div className="technology">
+          <img
+            src="https://www.lerned.top/imj/kurses/f1.png"
+            alt=""
+            width="60px"
+          />
+          <img
+            src="https://www.lerned.top/imj/kurses/f2.png"
+            alt=""
+            width="60px"
+          />
+          <img
+            src="https://www.lerned.top/imj/kurses/f3.png"
+            alt=""
+            width="60px"
+          />
+          <img
+            src="https://www.lerned.top/imj/kurses/f4.png"
+            alt=""
+            width="60px"
+          />
+          <img
+            src="https://www.lerned.top/imj/kurses/f5.png"
+            alt=""
+            width="60px"
+          />
+          <img
+            src="https://www.lerned.top/imj/kurses/f6.png"
+            alt=""
+            width="60px"
+          />
+          
+        </div>
       </div>
     </>
   );
 };
 
 export default AboutUs;
-
