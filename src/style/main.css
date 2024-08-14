@@ -302,13 +302,18 @@ main {
 }
 .blog {
   text-align: center;
-  margin-top: 10px;
+  margin-top: 20px;
   cursor: pointer;
 }
 .technology {
   margin-top: 20px;
   display: flex;
   justify-content: space-around;
+}
+.infoVert{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 }
 @media (max-width: 1000px) {
   .col-3 {
