@@ -287,6 +287,7 @@ const AnzeigeAufgeben: React.FC = () => {
                 padding: "10px 20px",
                 fontSize: "16px",
                 marginBottom: "10px",
+                width: "200px",
               }}
             >
               Produkt hinzufügen{" "}
@@ -301,6 +302,7 @@ const AnzeigeAufgeben: React.FC = () => {
                 border: "1px solid #ccc",
                 padding: "10px 20px",
                 fontSize: "16px",
+                width: "200px",
               }}
               onClick={handleClose}
             >
