@@ -37,24 +37,24 @@ body {
   box-shadow: 0 0 0 2px red;
 }
 
-/* Специально для очень узких экранов (например, 360px) */
+
 @media (max-width: 360px) {
   .items-text {
-    font-size: 12px; /* Уменьшаем размер шрифта для очень узких экранов */
-    padding: 5px; /* Уменьшаем отступы */
+    font-size: 12px; 
+    padding: 5px; 
   }
 
   .items-text h3 {
-    font-size: 16px; /* Еще больше уменьшаем размер шрифта заголовка */
+    font-size: 16px; 
     margin-bottom: 8px;
   }
 
   .items-text p {
-    font-size: 12px; /* Минимальный размер шрифта для узких экранов */
+    font-size: 12px; 
     margin-bottom: 8px;
   }
 
   .product-item {
-    gap: 10px; /* Уменьшаем промежутки между элементами */
+    gap: 10px;
   }
 }
