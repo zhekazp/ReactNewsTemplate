@@ -135,6 +135,11 @@ const NewsDetail: FC = () => {
             setShowModalErr(true);
             return;
         }
+        if (comment.trim().length > 250) {
+            setCommentError("Kommentar ist zu lang");
+            setShowModalErr(true);
+            return;
+        }
         if (id) {
             try {
                 await dispatch(addComment({ newsId: Number(id), comment })).unwrap();
