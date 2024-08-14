@@ -247,7 +247,12 @@ const BlogDetails: FC = () => {
                 {blog.publishedDate}
               </p>
               {/* <p className="">{blog.views} views</p> */}
-              <p className="blog-content_inner">{blog.content}</p>
+              {/* <p className="blog-content_inner">{blog.content}</p> */}
+              <div className="blog-content_inner">
+                {blog.content.split("\n\n").map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
+              </div>
               <p className="blog-author-region_inner">
                 <span className="blog-author-name">
                   <FontAwesomeIcon icon={faUser} className="icon" />{" "}

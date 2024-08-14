@@ -54,6 +54,9 @@
   margin-bottom: 10px; 
 }
 
+.blog-content_inner p {
+  margin-bottom: 1em;
+}
 
 .blog-content_inner a {
   color: #1c79b7; 
