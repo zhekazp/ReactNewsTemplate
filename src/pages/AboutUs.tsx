@@ -71,32 +71,32 @@ const AboutUs = () => {
             alt=""
             width="60px"
           />
-          <img
+          <img 
             src="https://www.lerned.top/imj/kurses/b5.png"
             alt=""
             width="60px"
           />
-          <img
+          <img className="technologyItem"
             src="https://www.lerned.top/imj/kurses/b6.png"
             alt=""
             width="60px"
           />
-          <img
+          <img className="technologyItem"
             src="https://www.lerned.top/imj/kurses/b7.png"
             alt=""
             width="60px"
           />
-          <img
+          <img className="technologyItem"
             src="https://www.lerned.top/imj/kurses/b8.png"
             alt=""
             width="60px"
           />
-          <img
+          <img className="technologyItem"
             src="https://www.lerned.top/imj/kurses/b9.png"
             alt=""
             width="60px"
           />
-          <img
+          <img className="technologyItem"
             src="https://www.lerned.top/imj/kurses/b11.png"
             alt=""
             width="60px"
@@ -104,7 +104,7 @@ const AboutUs = () => {
                   
         </div>
         <div className="technology">
-          <img
+          <img className="technologyItem"
             src="https://www.lerned.top/imj/kurses/f1.png"
             alt=""
             width="60px"
