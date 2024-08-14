@@ -139,11 +139,13 @@ const Home = () => {
                 <div className="row">
                   <div className="col-6 halfScreen">
                     <Title title="Neueste Anzeige" />
-                    {data.rent.map((item) => (
-                      <Link key={uid()} to={"/anzeige/"+item.id}>
-                        <InfoComponent  info={item} />
-                      </Link>
-                    ))}
+                    <div className="infoVert">
+                      {data.rent.map((item) => (
+                        <Link key={uid()} to={"/anzeige/" + item.id}>
+                          <InfoComponent info={item} />
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                   <div className="col-6 halfScreen">
                     <Title title="Ausland Nachrichten" />
