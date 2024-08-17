@@ -15,9 +15,18 @@
   width: 100%;
   margin: 10px 0; /* Вертикальные отступы между кнопками */
   font-size: 16px;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   cursor: pointer;
   padding: 10px 0;
+}
+
+.gewinen-modal {
+  background-color: #292b2d;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  width: 70%;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
 }
 
 .gradient-button:hover {
@@ -28,9 +37,7 @@
   background-color: grey; /* Цвет фона для модального окна */
 }
 
-.custom-modal .modal-content .modal-dialog{
- 
-    width: 100%;   /* Occupy the 90% of the screen width */
-    max-width: 100%;
-} ; 
-
+.custom-modal .modal-content .modal-dialog {
+  width: 100%; /* Occupy the 90% of the screen width */
+  max-width: 100%;
+}
