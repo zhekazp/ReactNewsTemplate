@@ -36,11 +36,7 @@ function App() {
 
   const [searchParams] = useSearchParams();
 
-  useEffect(() => {
-    const page = parseInt(searchParams.get('page') || '0', 10);
-    const region = parseInt(searchParams.get('region') || '0', 10);
-    dispatch(fetchBlogs({ page, region }));
-  }, [dispatch, searchParams]);
+
 
   return (
     <>
