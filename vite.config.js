@@ -8,7 +8,8 @@ export default defineConfig({
     open: true,
     proxy: {
       "/api": {
-        target: "http://localhost:8080",
+        target: "https://blb-app-rzsrl.ondigitalocean.app",
+        changeOrigin: true,
       },
     },
   },
